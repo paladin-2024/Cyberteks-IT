@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e72114-1901-4c17-922f-3f284d87e9b3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/biometrics-322f0764-8e24-47f7-baf1-c2b9ae22b0c0.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/biometrics-322f0764-8e24-47f7-baf1-c2b9ae22b0c0.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/cctvs-18d52063-cb54-445e-833f-b97a6cae69a2.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/cctvs-18d52063-cb54-445e-833f-b97a6cae69a2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/dao-marble-logo-a1f1e271-7ba4-4ceb-a8c0-ddbb6a3bbaff.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/dao-marble-logo-a1f1e271-7ba4-4ceb-a8c0-ddbb6a3bbaff.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/digital-camera-663b7aa4-499a-4b3c-b5d5-c82ab58441a5.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/digital-camera-663b7aa4-499a-4b3c-b5d5-c82ab58441a5.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/krishna-construction-logo-e634ca34-80d6-440a-a1a6-5ad2f3953962.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/krishna-construction-logo-e634ca34-80d6-440a-a1a6-5ad2f3953962.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/laptops-d7d8c876-add9-4f6f-b38f-4b65a259cd24.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/laptops-d7d8c876-add9-4f6f-b38f-4b65a259cd24.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/printer-scanner-7e0709da-c271-4a54-970d-86d77c9daea0.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/printer-scanner-7e0709da-c271-4a54-970d-86d77c9daea0.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/sanaa-consulting-3a639a2d-4c5b-4c90-8432-c968ba9afec8.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/sanaa-consulting-3a639a2d-4c5b-4c90-8432-c968ba9afec8.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shree-logo-0357acdd-2e85-44eb-9f80-00463f5c3c53.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shree-logo-0357acdd-2e85-44eb-9f80-00463f5c3c53.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/telecom-mast-6c76b9fd-1903-419e-a87a-76e309d925d6.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/telecom-mast-6c76b9fd-1903-419e-a87a-76e309d925d6.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/vision-fund-8cfd48bb-2f07-4959-8e0c-165dda14ea28.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/vision-fund-8cfd48bb-2f07-4959-8e0c-165dda14ea28.png" afterDir="false" />
+    <list default="true" id="66e72114-1901-4c17-922f-3f284d87e9b3" name="Changes" comment="changing the workspace setting from workspace.xml to AICommit.xml">
       <change beforePath="$PROJECT_DIR$/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -158,7 +146,7 @@
       <workItem from="1772748023248" duration="1860000" />
       <workItem from="1772798219980" duration="15360000" />
       <workItem from="1772836880540" duration="1257000" />
-      <workItem from="1772838192377" duration="495000" />
+      <workItem from="1772838192377" duration="1701000" />
     </task>
     <task id="LOCAL-00001" summary="add initial project files and configurations">
       <option name="closed" value="true" />
@@ -208,7 +196,23 @@
       <option name="project" value="LOCAL" />
       <updated>1772836152024</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="changing the pictures in assets">
+      <option name="closed" value="true" />
+      <created>1772838726705</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1772838726705</updated>
+    </task>
+    <task id="LOCAL-00008" summary="changing the workspace setting from workspace.xml to AICommit.xml">
+      <option name="closed" value="true" />
+      <created>1772841076512</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1772841076512</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -222,7 +226,9 @@
     <MESSAGE value="update Home.jsx with new testimonials and enhance service section styling" />
     <MESSAGE value="add AICommit.xml for project settings configuration" />
     <MESSAGE value="{&#10;    &quot;error&quot;: {&#10;        &quot;message&quot;: &quot;You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.&quot;,&#10;        &quot;type&quot;: &quot;invalid_request_error&quot;,&#10;        &quot;param&quot;: null,&#10;        &quot;code&quot;: null&#10;    }&#10;}" />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="changing the pictures in assets" />
+    <MESSAGE value="changing the workspace setting from workspace.xml to AICommit.xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="changing the workspace setting from workspace.xml to AICommit.xml" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
