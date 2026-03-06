@@ -4,9 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e72114-1901-4c17-922f-3f284d87e9b3" name="Changes" comment="add compiler and GitToolBox project configuration files">
+    <list default="true" id="66e72114-1901-4c17-922f-3f284d87e9b3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/biometrics-322f0764-8e24-47f7-baf1-c2b9ae22b0c0.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/biometrics-322f0764-8e24-47f7-baf1-c2b9ae22b0c0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/cctvs-18d52063-cb54-445e-833f-b97a6cae69a2.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/cctvs-18d52063-cb54-445e-833f-b97a6cae69a2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/dao-marble-logo-a1f1e271-7ba4-4ceb-a8c0-ddbb6a3bbaff.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/dao-marble-logo-a1f1e271-7ba4-4ceb-a8c0-ddbb6a3bbaff.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/digital-camera-663b7aa4-499a-4b3c-b5d5-c82ab58441a5.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/digital-camera-663b7aa4-499a-4b3c-b5d5-c82ab58441a5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/krishna-construction-logo-e634ca34-80d6-440a-a1a6-5ad2f3953962.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/krishna-construction-logo-e634ca34-80d6-440a-a1a6-5ad2f3953962.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/laptops-d7d8c876-add9-4f6f-b38f-4b65a259cd24.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/laptops-d7d8c876-add9-4f6f-b38f-4b65a259cd24.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/printer-scanner-7e0709da-c271-4a54-970d-86d77c9daea0.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/printer-scanner-7e0709da-c271-4a54-970d-86d77c9daea0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/sanaa-consulting-3a639a2d-4c5b-4c90-8432-c968ba9afec8.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/sanaa-consulting-3a639a2d-4c5b-4c90-8432-c968ba9afec8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shree-logo-0357acdd-2e85-44eb-9f80-00463f5c3c53.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shree-logo-0357acdd-2e85-44eb-9f80-00463f5c3c53.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/telecom-mast-6c76b9fd-1903-419e-a87a-76e309d925d6.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/telecom-mast-6c76b9fd-1903-419e-a87a-76e309d925d6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/vision-fund-8cfd48bb-2f07-4959-8e0c-165dda14ea28.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/vision-fund-8cfd48bb-2f07-4959-8e0c-165dda14ea28.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -27,7 +37,7 @@
     </selectedModels>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="47" />
+    <option name="cachedIndexableFilesCount" value="53" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -70,39 +80,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "javascript.preferred.runtime.type.id": "node",
-    "js.debugger.nextJs.config.created.client": "true",
-    "js.debugger.nextJs.config.created.server": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/home/nzabanita/WebstormProjects/cyberteks2.0",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "/snap/webstorm/579/plugins/javascript-plugin/jsLanguageServicesImpl/external"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;js.debugger.nextJs.config.created.client&quot;: &quot;true&quot;,
+    &quot;js.debugger.nextJs.config.created.server&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/nzabanita/WebstormProjects/cyberteks2.0&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/snap/webstorm/579/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": [
-      "directory",
-      "repository"
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;,
+      &quot;repository&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -146,7 +156,9 @@
       <workItem from="1772655947103" duration="90000" />
       <workItem from="1772656543777" duration="2054000" />
       <workItem from="1772748023248" duration="1860000" />
-      <workItem from="1772798219980" duration="14612000" />
+      <workItem from="1772798219980" duration="15360000" />
+      <workItem from="1772836880540" duration="1257000" />
+      <workItem from="1772838192377" duration="495000" />
     </task>
     <task id="LOCAL-00001" summary="add initial project files and configurations">
       <option name="closed" value="true" />
@@ -164,7 +176,39 @@
       <option name="project" value="LOCAL" />
       <updated>1772835731616</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="update README.md with project highlights, tech stack, and structure details">
+      <option name="closed" value="true" />
+      <created>1772836083467</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1772836083467</updated>
+    </task>
+    <task id="LOCAL-00004" summary="{&#10;    &quot;error&quot;: {&#10;        &quot;message&quot;: &quot;You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.&quot;,&#10;        &quot;type&quot;: &quot;invalid_request_error&quot;,&#10;        &quot;param&quot;: null,&#10;        &quot;code&quot;: null&#10;    }&#10;}">
+      <option name="closed" value="true" />
+      <created>1772836106151</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1772836106151</updated>
+    </task>
+    <task id="LOCAL-00005" summary="update Home.jsx with new testimonials and enhance service section styling">
+      <option name="closed" value="true" />
+      <created>1772836137102</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1772836137102</updated>
+    </task>
+    <task id="LOCAL-00006" summary="add AICommit.xml for project settings configuration">
+      <option name="closed" value="true" />
+      <created>1772836152024</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1772836152024</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,6 +218,10 @@
     <MESSAGE value="first commit" />
     <MESSAGE value="add initial project files and configurations" />
     <MESSAGE value="add compiler and GitToolBox project configuration files" />
+    <MESSAGE value="update README.md with project highlights, tech stack, and structure details" />
+    <MESSAGE value="update Home.jsx with new testimonials and enhance service section styling" />
+    <MESSAGE value="add AICommit.xml for project settings configuration" />
+    <MESSAGE value="{&#10;    &quot;error&quot;: {&#10;        &quot;message&quot;: &quot;You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.&quot;,&#10;        &quot;type&quot;: &quot;invalid_request_error&quot;,&#10;        &quot;param&quot;: null,&#10;        &quot;code&quot;: null&#10;    }&#10;}" />
     <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="github-copilot-workspace">
