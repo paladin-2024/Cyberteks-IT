@@ -92,15 +92,15 @@ const testimonials = [
   },
   {
     quote:
-        'When our servers went down during a critical project, Cyberteks-',
+        'When our servers went down during a critical project, Cyberteks-It responded within minutes. Their remote troubleshooting team resolved the issue resolved the issue before even our clients even noticed. increasing response time.',
     name: 'Mike T',
     role: 'Facilities manager, Mombasa '
   },
   {
     quote:
-        'We needed custom IT training for staff across different locations.\n Cyberteks-It handled i entirely online and made it highly interactive and practical. our team is now more confident tech-savvy.',
-    name: 'Joan k',
-    role: 'Program Director, kampala'
+        'We used Cyberteks-IT for our VOIP system upgrade and CCTV installation across multiple locations. Everything was handled smoothly and remotely with minimal disruptions. Top-tier service and professionalism.',
+    name: 'Adewole O',
+    role: 'IT Director, Nigeria'
   }
 ];
 
@@ -335,26 +335,26 @@ const Home = () => {
         <div className="mx-auto max-w-6xl px-4 md:px-6 lg:px-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between" data-reveal>
             <div>
-              <h2 className="font-heading text-2xl font-semibold tracking-tight text-slate-900">
+              <h2 className="font-heading text-3xl font-semibold tracking-tight text-slate-900">
                 Explore our key services
               </h2>
-              <p className="mt-2 max-w-xl text-sm text-slate-600">
+              <p className="mt-3 max-w-xl text-base text-slate-700">
                 Shortcuts to the services organisations choose most often when partnering with CyberteksIT.
               </p>
             </div>
           </div>
 
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {servicesShortcuts.map((service) => (
               <Link
                 key={service.title}
                 to={service.href}
-                className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700 shadow-sm transition hover:-translate-y-1 hover:border-primary-blue/40 hover:shadow-md"
+                className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-5 text-base text-slate-700 shadow-sm transition hover:-translate-y-1 hover:border-primary-blue/40 hover:shadow-md"
                 data-reveal
               >
-                <h3 className="text-sm font-semibold text-slate-900">{service.title}</h3>
-                <p className="mt-2 flex-1 text-xs text-slate-600">{service.description}</p>
-                <span className="mt-3 text-[11px] font-medium text-primary-blue group-hover:text-primary-red">
+                <h3 className="text-base font-semibold text-slate-900">{service.title}</h3>
+                <p className="mt-2 flex-1 text-sm text-slate-600">{service.description}</p>
+                <span className="mt-3 text-xs font-semibold text-primary-blue group-hover:text-primary-red">
                   View service →
                 </span>
               </Link>
