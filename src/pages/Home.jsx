@@ -108,7 +108,20 @@ const testimonials = [
 const Home = () => {
   return (
     <div className="smooth-scroll-container">
-      <section className="relative min-h-[78vh] overflow-hidden border-b border-slate-200 bg-white pb-16 pt-24 md:pt-24">
+      <section
+        className="relative min-h-[78vh] overflow-hidden border-b border-slate-200 bg-white pb-16"
+        style={{
+          marginTop: 'calc(var(--navbar-offset, 90px) * -1)',
+          paddingTop: 'calc(var(--navbar-offset, 90px) + 145px)'
+        }}
+      >
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              'radial-gradient(70% 70% at 12% 12%, rgba(225,29,72,0.12), transparent 55%), radial-gradient(60% 60% at 88% 18%, rgba(37,99,235,0.12), transparent 60%), #ffffff'
+          }}
+        />
         <div className="pointer-events-none absolute inset-0 dot-pattern opacity-90" />
         <div
           className="absolute -right-20 top-16 h-44 w-44 rounded-full bg-primary-blue/12"
@@ -205,7 +218,7 @@ const Home = () => {
                     </div>
                     <div className="rounded-xl border border-slate-200 bg-white p-2 text-slate-700">
                       Avg. Response
-                      <p className="mt-1 text-base font-semibold text-slate-900">7 min</p>
+                      <p className="mt-1 text-base font-semibold text-slate-900">30 min</p>
                     </div>
                     <div className="rounded-xl border border-slate-200 bg-white p-2 text-slate-700">
                       Regions
