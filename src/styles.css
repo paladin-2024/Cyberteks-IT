@@ -14,6 +14,12 @@ body {
   line-height: 1.6;
 }
 
+main > section:first-of-type,
+main > * > section:first-of-type {
+  margin-top: calc(var(--navbar-offset, 90px) * -1);
+  padding-top: calc(var(--navbar-offset, 90px) + 145px);
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
