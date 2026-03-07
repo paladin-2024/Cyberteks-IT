@@ -12,53 +12,98 @@ const products = [
     title: 'Printers & Scanners',
     description: 'Enterprise-ready printing and scanning solutions for secure document workflows.',
     image: printerScannerImage,
-    alt: 'Printer and Scanner'
+    alt: 'Printer and Scanner',
+    price: '$420.00',
+    oldPrice: '$520.00',
+    stock: 'In Stock',
+    lead: '2-5 business days',
+    support: 'Next-day swap',
+    colors: ['#e5e7eb', '#cbd5e1', '#94a3b8', '#0f172a'],
+    weights: ['Desktop', 'MFP', 'Mobile']
   },
   {
     title: 'Telecom Masts',
     description: 'Robust telecom mast systems for reliable, high-availability connectivity.',
     image: telecomMastImage,
-    alt: 'Telecom Mast'
+    alt: 'Telecom Mast',
+    price: 'Custom',
+    oldPrice: null,
+    stock: 'Built to order',
+    lead: 'Quote on request',
+    support: 'Project-based',
+    colors: ['#e5e7eb', '#0f172a'],
+    weights: ['20m', '40m', '60m']
   },
   {
     title: 'Desktops & Laptops',
     description: 'Business-grade endpoints configured, secured, and ready for your teams.',
     image: laptopImage,
-    alt: 'Desktops and Laptops'
+    alt: 'Desktops and Laptops',
+    price: '$750.00',
+    oldPrice: '$820.00',
+    stock: 'In Stock',
+    lead: '5-7 business days',
+    support: '3-year support',
+    colors: ['#e5e7eb', '#0f172a', '#111827'],
+    weights: ['i5 / 8GB', 'i7 / 16GB', 'Ryzen 7 / 32GB']
   },
   {
     title: 'Biometrics',
     description: 'Biometric access control and identity verification devices built for security.',
     image: biometricsImage,
-    alt: 'Biometrics'
+    alt: 'Biometrics',
+    price: '$320.00',
+    oldPrice: '$360.00',
+    stock: 'In Stock',
+    lead: '3-6 business days',
+    support: 'Install + support',
+    colors: ['#0f172a', '#1e293b', '#cbd5e1'],
+    weights: ['Single-door', 'Multi-door', 'Enterprise']
   },
   {
     title: 'CCTV Systems',
     description: 'High-availability surveillance kits with storage, remote viewing, and alerting.',
     image: cctvSurveillanceImage,
-    alt: 'CCTV Systems'
+    alt: 'CCTV Systems',
+    price: '$1,500.00',
+    oldPrice: '$1,780.00',
+    stock: 'In Stock',
+    lead: '1-2 weeks',
+    support: 'On-site/remote',
+    colors: ['#e2e8f0', '#0f172a'],
+    weights: ['4 Cam', '8 Cam', '16 Cam']
   },
   {
     title: 'Digital Cameras',
     description: 'High-resolution IP and digital cameras ready for smart monitoring workflows.',
     image: digitalCameraImage,
-    alt: 'Digital Cameras'
+    alt: 'Digital Cameras',
+    price: '$280.00',
+    oldPrice: '$320.00',
+    stock: 'In Stock',
+    lead: '3-5 business days',
+    support: 'Remote setup',
+    colors: ['#e5e7eb', '#0f172a', '#111827'],
+    weights: ['Body', 'Kit', 'Pro Kit']
   }
 ];
 
-const detailMap = {
-  'Printers & Scanners': { price: 'From $420', sla: 'Next-day swap', lead: '2-5 business days' },
-  'Telecom Masts': { price: 'Custom', sla: 'Project-based', lead: 'Quote on request' },
-  'Desktops & Laptops': { price: 'From $750', sla: '3-year support', lead: '5-7 business days' },
-  Biometrics: { price: 'From $320', sla: 'Install + support', lead: '3-6 business days' },
-  'CCTV Systems': { price: 'From $1,500', sla: 'On-site/remote', lead: '1-2 weeks' },
-  'Digital Cameras': { price: 'From $280', sla: 'Remote setup', lead: '3-5 business days' }
-};
-
 const Products = () => {
   const [activeProduct, setActiveProduct] = React.useState(null);
+  const [quantity, setQuantity] = React.useState(1);
+  const [selectedColor, setSelectedColor] = React.useState(null);
+  const [selectedVariant, setSelectedVariant] = React.useState(null);
+  const [userRating, setUserRating] = React.useState(4);
+  const [userReview, setUserReview] = React.useState('');
 
-  const activeDetails = activeProduct ? detailMap[activeProduct] : null;
+  const openProduct = (product) => {
+    setActiveProduct(product);
+    setQuantity(1);
+    setSelectedColor(product.colors?.[0] || null);
+    setSelectedVariant(product.weights?.[0] || null);
+    setUserRating(4);
+    setUserReview('');
+  };
 
   return (
     <section className="bg-white py-14 sm:py-16">
@@ -74,7 +119,7 @@ const Products = () => {
             <button
               key={product.title}
               type="button"
-              onClick={() => setActiveProduct(product.title)}
+              onClick={() => openProduct(product)}
               className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-slate-50 p-5 text-base text-slate-700 shadow-sm transition hover:-translate-y-2 hover:border-primary-blue/50 hover:shadow-md"
               data-reveal
             >
@@ -101,39 +146,218 @@ const Products = () => {
       </div>
 
       {activeProduct ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 px-4" role="dialog" aria-modal="true">
-          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-heading text-lg font-semibold text-slate-900">{activeProduct}</h3>
-                <p className="mt-1 text-sm text-slate-600">Detailed specs & commercial info.</p>
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/70 px-4 py-6 md:items-center md:py-12" role="dialog" aria-modal="true">
+          <div className="relative w-full max-w-6xl rounded-3xl bg-white p-4 shadow-2xl ring-1 ring-slate-200 md:p-6 lg:p-8 max-h-[92vh] overflow-y-auto">
+            <button
+              className="absolute right-4 top-4 rounded-full border border-slate-200 p-2 text-slate-500 hover:text-primary-red"
+              onClick={() => setActiveProduct(null)}
+              aria-label="Close product details"
+            >
+              ✕
+            </button>
+
+            <div className="grid gap-6 lg:grid-cols-[1.05fr_1fr]">
+              <div className="space-y-3">
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                  <img src={activeProduct.image} alt={activeProduct.alt} className="h-[340px] w-full object-cover sm:h-[420px]" />
+                </div>
+                <div className="flex gap-3">
+                  {[0, 1, 2].map((idx) => (
+                    <div
+                      key={idx}
+                      className="flex-1 overflow-hidden rounded-xl border border-slate-200 bg-slate-50"
+                    >
+                      <img src={activeProduct.image} alt={`${activeProduct.alt} thumb ${idx + 1}`} className="h-20 w-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+                <div className="hidden max-w-md rounded-xl border border-slate-200 p-3 text-sm text-slate-700 lg:block">
+                  <div className="flex items-center gap-3">
+                    <div className="text-3xl font-semibold text-slate-900">4.5</div>
+                    <div className="space-y-1 text-xs text-slate-600">
+                      <p>Excellent (245 reviews)</p>
+                      <div className="flex gap-1 text-amber-400" aria-label="rating stars">
+                        {'★★★★★'}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 grid gap-1 text-xs text-slate-600">
+                    {[5, 4, 3, 2, 1].map((star) => (
+                      <div key={star} className="flex items-center gap-2">
+                        <span className="w-6 text-right font-semibold">{star}★</span>
+                        <div className="h-1.5 flex-1 rounded-full bg-slate-100">
+                          <div
+                            className="h-full rounded-full bg-amber-400"
+                            style={{ width: `${Math.max(12 - star * 2, 3) * 8}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <button
-                className="rounded-full border border-slate-200 p-2 text-slate-500 hover:text-primary-red"
-                onClick={() => setActiveProduct(null)}
-                aria-label="Close product details"
-              >
-                ✕
-              </button>
-            </div>
 
-            <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-700">
-              <p><span className="font-semibold text-slate-900">Price:</span> {activeDetails?.price || 'Custom quote'}</p>
-              <p className="mt-2"><span className="font-semibold text-slate-900">Support:</span> {activeDetails?.sla || 'Varies by bundle'}</p>
-              <p className="mt-2"><span className="font-semibold text-slate-900">Lead time:</span> {activeDetails?.lead || 'On request'}</p>
-              <p className="mt-3 text-xs text-slate-500">Contact us for full datasheets, installation scope, and SLAs.</p>
-            </div>
+              <div className="space-y-5">
+                <div>
+                  <h3 className="font-heading text-2xl font-semibold text-slate-900">{activeProduct.title}</h3>
+                  <p className="mt-1 text-sm font-semibold text-emerald-600">{activeProduct.stock}</p>
+                  <div className="mt-3 flex items-baseline gap-3">
+                    <span className="text-2xl font-semibold text-slate-900">{activeProduct.price}</span>
+                    {activeProduct.oldPrice ? (
+                      <span className="text-sm text-slate-400 line-through">{activeProduct.oldPrice}</span>
+                    ) : null}
+                  </div>
+                  <p className="mt-3 text-sm text-slate-700">{activeProduct.description}</p>
+                </div>
 
-            <div className="mt-4 flex justify-end gap-3">
-              <button
-                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 hover:border-primary-blue hover:text-primary-blue"
-                onClick={() => setActiveProduct(null)}
-              >
-                Close
-              </button>
-              <button className="rounded-full bg-primary-blue px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-primary-red">
-                Request quote
-              </button>
+                <div className="rounded-xl border border-slate-200 p-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Color</p>
+                  <div className="mt-2 flex gap-2">
+                    {activeProduct.colors?.map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => setSelectedColor(c)}
+                        className={`h-8 w-8 rounded-full border-2 ${selectedColor === c ? 'border-primary-blue ring-2 ring-primary-blue/40' : 'border-slate-200'}`}
+                        style={{ background: c }}
+                        aria-label={`Color ${c}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-slate-200 p-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Variant</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {activeProduct.weights?.map((w) => (
+                      <button
+                        key={w}
+                        type="button"
+                        onClick={() => setSelectedVariant(w)}
+                        className={`rounded-full border px-3 py-1 text-xs font-semibold ${
+                          selectedVariant === w ? 'border-primary-blue bg-primary-blue/10 text-primary-blue' : 'border-slate-200 text-slate-700'
+                        }`}
+                      >
+                        {w}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-[auto_1fr] sm:items-center">
+                  <div className="flex items-center rounded-full border border-slate-200 px-3 py-2">
+                    <button
+                      type="button"
+                      className="px-2 text-lg text-slate-600"
+                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    >
+                      –
+                    </button>
+                    <span className="min-w-[36px] text-center text-sm font-semibold text-slate-900">{quantity}</span>
+                    <button
+                      type="button"
+                      className="px-2 text-lg text-slate-600"
+                      onClick={() => setQuantity((q) => q + 1)}
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div className="grid gap-2 sm:grid-cols-2 sm:gap-3">
+                    <button className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 hover:border-primary-blue hover:text-primary-blue">
+                      Request Installation
+                    </button>
+                    <button className="rounded-full bg-primary-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-red">
+                      Schedule a Call
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid gap-3 rounded-xl border border-slate-200 p-3 text-sm text-slate-700 sm:grid-cols-3">
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Support</p>
+                    <p className="font-semibold text-slate-900">{activeProduct.support}</p>
+                    <p className="text-xs text-slate-500">Remote & on-site options.</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Lead Time</p>
+                    <p className="font-semibold text-slate-900">{activeProduct.lead}</p>
+                    <p className="text-xs text-slate-500">Fast-track available.</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Warranty</p>
+                    <p className="font-semibold text-slate-900">12–36 months</p>
+                    <p className="text-xs text-slate-500">Coverage varies by bundle.</p>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-slate-200 p-3 lg:hidden">
+                  <div className="flex items-center gap-3">
+                    <div className="text-3xl font-semibold text-slate-900">4.5</div>
+                    <div className="space-y-1 text-xs text-slate-600">
+                      <p>Excellent (245 reviews)</p>
+                      <div className="flex gap-1 text-amber-400" aria-label="rating stars">
+                        {'★★★★★'}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 grid gap-1 text-xs text-slate-600">
+                    {[5, 4, 3, 2, 1].map((star) => (
+                      <div key={star} className="flex items-center gap-2">
+                        <span className="w-6 text-right font-semibold">{star}★</span>
+                        <div className="h-1.5 flex-1 rounded-full bg-slate-100">
+                          <div
+                            className="h-full rounded-full bg-amber-400"
+                            style={{ width: `${Math.max(12 - star * 2, 3) * 8}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-slate-200 p-3 text-sm text-slate-700">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Your Rating</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            type="button"
+                            onClick={() => setUserRating(star)}
+                            className={`text-lg ${userRating >= star ? 'text-amber-400' : 'text-slate-300'}`}
+                            aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
+                          >
+                            ★
+                          </button>
+                        ))}
+                        <span className="text-xs font-semibold text-slate-600">{userRating}.0 / 5</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        value={userReview}
+                        onChange={(e) => setUserReview(e.target.value)}
+                        maxLength={120}
+                        placeholder="Optional note (120 chars)"
+                        className="w-full max-w-xs rounded-full border border-slate-200 px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:border-primary-blue focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center rounded-full bg-primary-blue px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-primary-red"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <button className="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 hover:border-primary-blue hover:text-primary-blue" onClick={() => setActiveProduct(null)}>
+                    Close
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
