@@ -12,7 +12,7 @@ import daoMarbleLogo from '/assets/dao-marble-logo-a1f1e271-7ba4-4ceb-a8c0-ddbb6
 import sanaaConsultingLogo from '/assets/sanaa-consulting-3a639a2d-4c5b-4c90-8432-c968ba9afec8.png';
 import dembeTradingLogo from '/assets/dembe-trading-logo-3bb90707-7558-4b87-b614-8da2eecfc5ee.png';
 import krishnaConstructionLogo from '/assets/krishna-construction-logo-e634ca34-80d6-440a-a1a6-5ad2f3953962.png';
-
+import iueaLogo from '/assets/iuea.png';
 const benefits = [
   {
     title: 'Global Remote Support',
@@ -45,7 +45,8 @@ const companyLogos = [
   { src: daoMarbleLogo, alt: 'DAO Marble' },
   { src: sanaaConsultingLogo, alt: 'Sanaa Consulting' },
   { src: dembeTradingLogo, alt: 'Dembe Trading' },
-  { src: krishnaConstructionLogo, alt: 'Krishna Construction' }
+  { src: krishnaConstructionLogo, alt: 'Krishna Construction' },
+  { src: iueaLogo, alt: 'IUEA' }
 ];
 
 const servicesShortcuts = [
@@ -287,7 +288,7 @@ const Home = () => {
                   key={`${logo.alt}-${idx}`}
                   src={logo.src}
                   alt={logo.alt}
-                  className="h-16 w-auto object-contain opacity-50 hover:opacity-100 hover:animate-none filter grayscale hover:grayscale-0"
+                  className="h-20 w-auto object-contain opacity-50 hover:opacity-100 hover:animate-none filter grayscale hover:grayscale-0"
                 />
               ))}
             </div>
