@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e72114-1901-4c17-922f-3f284d87e9b3" name="Changes" comment="Update workspace settings in workspace.xml">
+    <list default="true" id="66e72114-1901-4c17-922f-3f284d87e9b3" name="Changes" comment="&#10;refactor: Remove services dropdown and update footer contact info">
+      <change afterPath="$PROJECT_DIR$/src/pages/services/AccessControl.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/services/CCTV.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/services/ICTSkilling.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/services/RemoteITSupport.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/services/SoftwareAI.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/services/VOIP.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Contact.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Contact.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Products.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Products.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Services.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Services.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,7 +156,7 @@
       <workItem from="1772836880540" duration="1257000" />
       <workItem from="1772838192377" duration="2482000" />
       <workItem from="1772897613999" duration="1311000" />
-      <workItem from="1772918224082" duration="10312000" />
+      <workItem from="1772918224082" duration="11774000" />
     </task>
     <task id="LOCAL-00001" summary="add initial project files and configurations">
       <option name="closed" value="true" />
@@ -289,7 +294,31 @@
       <option name="project" value="LOCAL" />
       <updated>1772962761898</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="update contact details and social links, remove product reviews, and adjust product layout">
+      <option name="closed" value="true" />
+      <created>1773004156926</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1773004156926</updated>
+    </task>
+    <task id="LOCAL-00019" summary="&#10;feat: update Contact.jsx with redesigned contact details and social media links">
+      <option name="closed" value="true" />
+      <created>1773005128178</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1773005128178</updated>
+    </task>
+    <task id="LOCAL-00020" summary="&#10;refactor: Remove services dropdown and update footer contact info">
+      <option name="closed" value="true" />
+      <created>1773005228601</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1773005228601</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -324,7 +353,10 @@
     <MESSAGE value="changing the navbar settings for responsiveness" />
     <MESSAGE value="refactoring the style for better outcome" />
     <MESSAGE value="Update workspace settings in workspace.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update workspace settings in workspace.xml" />
+    <MESSAGE value="update contact details and social links, remove product reviews, and adjust product layout" />
+    <MESSAGE value="&#10;feat: update Contact.jsx with redesigned contact details and social media links" />
+    <MESSAGE value="&#10;refactor: Remove services dropdown and update footer contact info" />
+    <option name="LAST_COMMIT_MESSAGE" value="&#10;refactor: Remove services dropdown and update footer contact info" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
