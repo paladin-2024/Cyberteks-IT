@@ -9,6 +9,12 @@ import Products from './pages/Products';
 import Careers from './pages/Careers';
 import Contact from './pages/Contact';
 import GetStarted from './pages/GetStarted';
+import RemoteITSupport from './pages/services/RemoteITSupport';
+import AccessControl from './pages/services/AccessControl';
+import CCTV from './pages/services/CCTV';
+import VOIP from './pages/services/VOIP';
+import ICTSkilling from './pages/services/ICTSkilling';
+import SoftwareAI from './pages/services/SoftwareAI';
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -37,6 +43,12 @@ const AppRoutes = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/remote-it-support" element={<RemoteITSupport />} />
+          <Route path="/services/access-control" element={<AccessControl />} />
+          <Route path="/services/cctv" element={<CCTV />} />
+          <Route path="/services/voip" element={<VOIP />} />
+          <Route path="/services/ict-skilling" element={<ICTSkilling />} />
+          <Route path="/services/software-ai" element={<SoftwareAI />} />
           <Route path="/products" element={<Products />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/contact" element={<Contact />} />

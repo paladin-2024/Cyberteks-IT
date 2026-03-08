@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SectionHeader from '../components/SectionHeader';
 import remoteImg from '/assets/remote-it-support.jpg';
@@ -115,9 +116,20 @@ const Services = () => {
                   </p>
                 </div>
               ) : null}
-              <p className="mt-3 text-[12px] font-semibold text-primary-blue group-hover:text-primary-red">
-                Talk to us about this service →
-              </p>
+              <div className="mt-3 flex items-center gap-3">
+                <Link
+                  to={`/services/${service.id}`}
+                  className="text-[12px] font-semibold text-primary-blue hover:text-primary-red"
+                >
+                  Learn more →
+                </Link>
+                <Link
+                  to="/contact"
+                  className="text-[12px] font-semibold text-primary-blue hover:text-primary-red"
+                >
+                  Talk to us →
+                </Link>
+              </div>
             </motion.article>
           ))}
         </div>
