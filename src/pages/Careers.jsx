@@ -35,9 +35,9 @@ const Careers = () => {
         />
 
         <div className="mt-8 grid gap-6 md:grid-cols-2">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-base text-slate-700 shadow-sm" data-reveal>
-            <h2 className="font-heading text-sm font-semibold text-slate-900">Why Work With Us</h2>
-            <ul className="mt-3 space-y-2 text-xs text-slate-600">
+          <div className="rounded-2xl border border-slate-200 bg-white p-7 text-lg text-slate-700 shadow-sm md:min-h-[260px]" data-reveal>
+            <h2 className="font-heading text-base font-semibold text-slate-900">Why Work With Us</h2>
+            <ul className="mt-3 space-y-2 text-sm text-slate-700">
               {benefits.map((item) => (
                 <li key={item} className="flex items-start gap-2">
                   <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary-blue" />
@@ -47,20 +47,20 @@ const Careers = () => {
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-base text-slate-700 shadow-sm" data-reveal>
-            <h2 className="font-heading text-sm font-semibold text-slate-900">Who We Look For</h2>
+          <div className="rounded-2xl border border-slate-200 bg-white p-7 text-lg text-slate-700 shadow-sm md:min-h-[260px]" data-reveal>
+            <h2 className="font-heading text-base font-semibold text-slate-900">Who We Look For</h2>
             <div className="mt-3 grid gap-2 sm:grid-cols-2">
               {traits.map((trait) => (
                 <div
                   key={trait}
-                  className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] font-medium text-slate-600 transition hover:-translate-y-1 hover:border-primary-blue hover:bg-white hover:text-primary-blue"
+                  className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:-translate-y-1 hover:border-primary-blue hover:bg-white hover:text-primary-blue"
                 >
                   <span className="h-1.5 w-1.5 rounded-full bg-primary-blue" />
                   {trait}
                 </div>
               ))}
             </div>
-            <p className="mt-4 text-xs text-slate-600">
+            <p className="mt-4 text-sm text-slate-700">
               Thrive in a fast-paced, ever-changing tech environment. Communicate well in remote and in-person
               settings. Embrace technology as a tool for progress.
             </p>
@@ -68,23 +68,23 @@ const Careers = () => {
         </div>
 
         <div className="mt-10" data-reveal>
-          <h2 className="font-heading text-lg font-semibold text-slate-900">Current Openings</h2>
+          <h2 className="font-heading text-xl font-semibold text-slate-900">Current Openings</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {openings.map((role) => (
               <div
                 key={role}
-                className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 text-base text-slate-700 shadow-sm"
+                className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 text-lg text-slate-700 shadow-sm"
               >
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-900">{role}</h3>
-                  <p className="mt-2 text-xs text-slate-600">
+                  <h3 className="text-base font-semibold text-slate-900">{role}</h3>
+                  <p className="mt-2 text-sm text-slate-700">
                     Remote-first role with opportunities to collaborate on impactful ICT initiatives across
                     multiple industries.
                   </p>
                 </div>
                 <button
                   type="button"
-                  className="mt-4 inline-flex w-fit items-center justify-center rounded-full border border-primary-blue px-4 py-2 text-xs font-semibold text-primary-blue transition hover:border-primary-red hover:text-primary-red"
+                  className="mt-4 inline-flex w-fit items-center justify-center rounded-full border border-primary-blue px-5 py-2.5 text-sm font-semibold text-primary-blue transition hover:border-primary-red hover:text-primary-red"
                 >
                   Apply
                 </button>
