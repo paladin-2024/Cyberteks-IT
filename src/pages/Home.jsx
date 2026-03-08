@@ -53,22 +53,22 @@ const servicesShortcuts = [
   {
     title: 'Remote IT Support',
     description: 'Proactive, always-on remote IT support for distributed teams.',
-    href: '/services#remote-it-support'
+    href: '/services/remote-it-support'
   },
   {
     title: 'CCTV & Surveillance',
     description: 'Intelligent monitoring with secure, scalable infrastructure.',
-    href: '/services#cctv'
+    href: '/services/cctv'
   },
   {
     title: 'VOIP & Collaboration',
     description: 'Crystal-clear communication solutions tailored to modern teams.',
-    href: '/services#voip'
+    href: '/services/voip'
   },
   {
     title: 'Software, Web & AI',
     description: 'Custom software, web platforms, and AI integrations.',
-    href: '/services#software-ai'
+    href: '/services/software-ai'
   }
 ];
 
@@ -332,7 +332,7 @@ const Home = () => {
                   data-reveal
                 >
                   <p className="flex-1 whitespace-normal break-words hyphens-auto text-sm leading-relaxed sm:text-base">
-                    &ldquo;{testimonial.quote}&rdquo;
+                    {testimonial.quote}
                   </p>
                   <div className="mt-4">
                   <p className="text-sm font-semibold text-primary-blue sm:text-base">{testimonial.name}</p>

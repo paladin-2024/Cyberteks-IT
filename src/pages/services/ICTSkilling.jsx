@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import ictImg from '/assets/ict-skilling-capacity-building.jpg';
 
 const tracks = [
@@ -16,8 +17,40 @@ const formats = [
 
 const gallery = [ictImg, ictImg, ictImg];
 
+const programs = [
+  'Prompt Engineering',
+  'Augmented Reality',
+  'Virtual Reality',
+  'AI & Robotics',
+  'Website Design',
+  'Graphic Design & Programming',
+  'Videography & Photography',
+  'IT Fundamentals & Digital Literacy',
+  'Database Programming',
+  'Office Packages',
+  'Power BI & Data Analytics',
+  'Cyber Security',
+  'Computer Networking'
+];
+
+const audiences = [
+  'University and college students',
+  'Working professionals seeking career growth',
+  'Corporate teams and departments',
+  'Schools and academic institutions',
+  'NGOs and government agencies'
+];
+
+const vacationTracks = ['Corporate training', 'P7, S4, S6 vacation programs', 'ICT skilling for general'];
+
 const ICTSkilling = () => (
-  <section className="bg-white py-14 sm:py-16">
+  <motion.section
+    className="bg-white py-14 sm:py-16"
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.2 }}
+    transition={{ duration: 0.6, ease: 'easeOut' }}
+  >
     <div className="mx-auto max-w-6xl px-4 md:px-6 lg:px-8">
       <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
         <div className="space-y-4">
@@ -62,8 +95,38 @@ const ICTSkilling = () => (
           </div>
         </div>
       </div>
+
+      <div className="mt-10 grid gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 sm:grid-cols-[1.1fr_1fr]">
+        <div className="space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Programs</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {programs.map((p) => (
+              <div key={p} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700">
+                {p}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Who we train</p>
+          <ul className="space-y-1 text-xs text-slate-600">
+            {audiences.map((a) => (
+              <li key={a}>• {a}</li>
+            ))}
+          </ul>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Tracks</p>
+          <ul className="space-y-1 text-xs text-slate-600">
+            {vacationTracks.map((t) => (
+              <li key={t}>• {t}</li>
+            ))}
+          </ul>
+          <p className="text-xs text-slate-600">
+            Flexible online and hybrid delivery with labs, assessments, and certification support.
+          </p>
+        </div>
+      </div>
     </div>
-  </section>
+  </motion.section>
 );
 
 export default ICTSkilling;
