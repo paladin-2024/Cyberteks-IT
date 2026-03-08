@@ -8,6 +8,7 @@ import cctvImg from '/assets/cctv-surveillance-systems.jpg';
 import voipImg from '/assets/voip-solutions.jpg';
 import ictImg from '/assets/ict-skilling-capacity-building.jpg';
 import laptopImage from '/assets/laptops-d7d8c876-add9-4f6f-b38f-4b65a259cd24.png';
+import webDesignImg from '/assets/web design.jpeg';
 
 const services = [
   {
@@ -50,7 +51,7 @@ const services = [
     title: 'Software, Web Design & AI Solutions',
     description:
       'Modern web platforms, internal tools and AI-driven solutions that integrate securely with your existing systems.',
-    image: laptopImage
+    image: webDesignImg
   }
 ];
 
@@ -82,52 +83,12 @@ const Services = () => {
                 {service.title}
               </h2>
               <p className="mt-2 flex-1 text-sm text-slate-600">{service.description}</p>
-              {service.id === 'ict-skilling' ? (
-                <div className="mt-3 space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-                  <p className="text-sm text-slate-700">
-                    Immersive online programs with labs, mentoring, and certification support tailored for teams and individuals.
-                  </p>
-                  <p className="text-sm font-semibold text-slate-900">Programs</p>
-                  <select className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none ring-primary-blue/20 focus:ring-2">
-                    {[ 'Prompt Engineering', 'Augmented Reality', 'Virtual Reality', 'AI & Robotics', 'Website Design', 'Graphic Design & Programming', 'Videography & Photography', 'IT Fundamentals & Digital Literacy', 'Database Programming', 'Office Packages', 'Power BI & Data Analytics', 'Cyber Security', 'Computer Networking' ].map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
-                  <div className="space-y-1 text-xs text-slate-600">
-                    <p className="font-semibold text-slate-900">Who we train</p>
-                    <ul className="space-y-1">
-                      <li>University and college students</li>
-                      <li>Working professionals seeking career growth</li>
-                      <li>Corporate teams and departments</li>
-                      <li>Schools and academic institutions</li>
-                      <li>NGOs and government agencies</li>
-                    </ul>
-                  </div>
-                  <div className="space-y-1 text-xs text-slate-600">
-                    <p className="font-semibold text-slate-900">Tracks</p>
-                    <ul className="space-y-1">
-                      <li>Corporate training</li>
-                      <li>P7, S4, S6 vacation programs</li>
-                      <li>ICT skilling for general</li>
-                    </ul>
-                  </div>
-                  <p className="text-xs text-slate-600">
-                    Flexible online and hybrid delivery with labs, assessments, and certification support.
-                  </p>
-                </div>
-              ) : null}
               <div className="mt-3 flex items-center gap-3">
                 <Link
                   to={`/services/${service.id}`}
                   className="text-[12px] font-semibold text-primary-blue hover:text-primary-red"
                 >
                   Learn more →
-                </Link>
-                <Link
-                  to="/contact"
-                  className="text-[12px] font-semibold text-primary-blue hover:text-primary-red"
-                >
-                  Talk to us →
                 </Link>
               </div>
             </motion.article>

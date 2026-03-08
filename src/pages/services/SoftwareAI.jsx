@@ -1,5 +1,5 @@
 import React from 'react';
-import laptopImage from '/assets/laptops-d7d8c876-add9-4f6f-b38f-4b65a259cd24.png';
+import laptopImage from '/assets/web design.jpeg';
 
 const pillars = [
   'Product discovery, UX, and prototyping',
