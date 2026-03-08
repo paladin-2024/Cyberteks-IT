@@ -2,13 +2,20 @@ import React from 'react';
 import SectionHeader from '../components/SectionHeader';
 
 const benefits = [
-  'Remote-first flexibility',
-  'Cutting-edge projects',
-  'Professional growth',
-  'Impactful work'
+  'Remote-first flexibility – work from anywhere without sacrificing collaboration or impact.',
+  'Cutting-edge projects – from AI solutions to enterprise networking, we tackle challenges that shape industries.',
+  'Professional growth – access to continuous training, certifications, and skill development.',
+  'Impactful work – see your expertise directly improve businesses and communities.'
 ];
 
-const traits = ['Innovators', 'Problem-solvers', 'Lifelong learners', 'Strong communicators'];
+const traits = [
+  'Innovators',
+  'Problem-solvers',
+  'Lifelong learners',
+  'Strong communicators',
+  'Remote-collaboration pros',
+  'Tech-as-progress mindset'
+];
 
 const openings = [
   'ICT Trainer – Cybersecurity, Data Analytics and AI',
@@ -42,19 +49,20 @@ const Careers = () => {
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 text-base text-slate-700 shadow-sm" data-reveal>
             <h2 className="font-heading text-sm font-semibold text-slate-900">Who We Look For</h2>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
               {traits.map((trait) => (
-                <span
+                <div
                   key={trait}
-                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-medium text-slate-600"
+                  className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] font-medium text-slate-600 transition hover:-translate-y-1 hover:border-primary-blue hover:bg-white hover:text-primary-blue"
                 >
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary-blue" />
                   {trait}
-                </span>
+                </div>
               ))}
             </div>
             <p className="mt-4 text-xs text-slate-600">
-              We value curiosity, ownership, and the ability to communicate clearly with both technical and
-              non-technical teams.
+              Thrive in a fast-paced, ever-changing tech environment. Communicate well in remote and in-person
+              settings. Embrace technology as a tool for progress.
             </p>
           </div>
         </div>
