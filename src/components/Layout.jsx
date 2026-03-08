@@ -179,6 +179,16 @@ const Layout = ({ children }) => {
                     Get Started
                   </Link>
                 </li>
+                <li>
+                  <Link to="/privacy-policy" className="text-sm text-slate-600 hover:text-primary-blue">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/terms-of-use" className="text-sm text-slate-600 hover:text-primary-blue">
+                    Terms of Use
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -231,8 +241,18 @@ const Layout = ({ children }) => {
             </div>
           </div>
 
-          <div className="mt-8 border-t border-slate-200 pt-8 text-center text-sm text-slate-500">
-            <p>© {new Date().getFullYear()} CyberteksIT. All rights reserved.</p>
+          <div className="mt-8 border-t border-slate-200 pt-8 text-sm text-slate-500">
+            <div className="flex flex-col items-center justify-between gap-2 text-center sm:flex-row sm:text-left">
+              <p>© {new Date().getFullYear()} CyberteksIT. All rights reserved.</p>
+              <div className="flex items-center gap-4">
+                <Link to="/privacy-policy" className="text-sm text-slate-600 hover:text-primary-blue">
+                  Privacy Policy
+                </Link>
+                <Link to="/terms-of-use" className="text-sm text-slate-600 hover:text-primary-blue">
+                  Terms of Use
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

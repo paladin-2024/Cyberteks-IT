@@ -15,6 +15,8 @@ import CCTV from './pages/services/CCTV';
 import VOIP from './pages/services/VOIP';
 import ICTSkilling from './pages/services/ICTSkilling';
 import SoftwareAI from './pages/services/SoftwareAI';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfUse from './pages/TermsOfUse';
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -53,6 +55,8 @@ const AppRoutes = () => {
           <Route path="/careers" element={<Careers />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/get-started" element={<GetStarted />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-use" element={<TermsOfUse />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
