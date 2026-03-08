@@ -184,10 +184,49 @@ const Layout = ({ children }) => {
 
             <div>
               <h3 className="text-sm font-semibold tracking-wider text-slate-900 uppercase">Contact</h3>
-              <ul className="mt-4 space-y-2 text-sm text-slate-600">
-                <li>Email: hello@cyberteksit.com</li>
-                <li>Phone: +1 (202) 555-0198</li>
-                <li>Address: 88 Polaris Avenue, Tech City, TX 78701</li>
+              <ul className="mt-4 space-y-3 text-sm text-slate-600">
+                <li className="flex gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-blue/10 text-primary-blue">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M4 4h16v16H4z" />
+                      <path d="m4 7 8 5 8-5" />
+                    </svg>
+                  </span>
+                  <span className="leading-tight">
+                    <span className="block text-[11px] uppercase tracking-[0.12em] text-slate-500">Email</span>
+                    <a
+                      href="mailto:info@cyberteks-it.com"
+                      className="font-semibold text-primary-blue hover:text-primary-red"
+                    >
+                      info@cyberteks-it.com
+                    </a>
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-blue/10 text-primary-blue">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.06 4.1 2 2 0 0 1 4.05 2h3a2 2 0 0 1 2 1.72c.12.86.38 1.69.76 2.47a2 2 0 0 1-.45 2.18L8.09 9.91a16 16 0 0 0 6 6l1.54-1.27a2 2 0 0 1 2.18-.45 11.8 11.8 0 0 0 2.47.76A2 2 0 0 1 22 16.92Z" />
+                    </svg>
+                  </span>
+                  <span className="leading-tight">
+                    <span className="block text-[11px] uppercase tracking-[0.12em] text-slate-500">Phone</span>
+                    <span className="block font-semibold text-slate-900">+256 779 367 005</span>
+                    <span className="block font-semibold text-slate-900">+256 706 911 732</span>
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-blue/10 text-primary-blue">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 21s-6-5.33-6-10a6 6 0 1 1 12 0c0 4.67-6 10-6 10Z" />
+                      <circle cx="12" cy="11" r="2" />
+                    </svg>
+                  </span>
+                  <span className="leading-tight">
+                    <span className="block text-[11px] uppercase tracking-[0.12em] text-slate-500">Office</span>
+                    <span className="block font-semibold text-slate-900">Buganda Rd, Kampala, Uganda</span>
+                    <span className="block text-xs text-slate-600">P.O Box 193095</span>
+                  </span>
+                </li>
               </ul>
             </div>
           </div>

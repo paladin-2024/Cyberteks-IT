@@ -6,15 +6,6 @@ import logo from '/assets/cyberteks-it-logo-33783fbc-fb2c-484a-b670-9f269d8493cf
 const navLinkClass =
   'relative text-base font-medium text-slate-600 hover:text-slate-900 transition-colors px-3.5 py-2.5 flex items-center gap-1';
 
-const servicesLinks = [
-  { to: '/services#remote-it-support', label: 'Remote IT Support' },
-  { to: '/services#access-control', label: 'Access Control Systems' },
-  { to: '/services#cctv', label: 'CCTV & Surveillance Systems' },
-  { to: '/services#voip', label: 'VOIP Solutions' },
-  { to: '/services#ict-skilling', label: 'Online Skilling & Capacity Building' },
-  { to: '/services#software-ai', label: 'Software, Web Design & AI Solutions' }
-];
-
 const Navbar = () => {
   const navRef = useRef(null);
   const [servicesOpen, setServicesOpen] = React.useState(false);
@@ -45,40 +36,9 @@ const Navbar = () => {
           <NavLink to="/about" className={navLinkClass}>
             About
           </NavLink>
-
-          <div
-            className="relative"
-            onMouseEnter={() => setServicesOpen(true)}
-            onMouseLeave={() => setServicesOpen(false)}
-          >
-            <button className={navLinkClass} type="button">
-              Services
-              <span className="text-xs">▾</span>
-            </button>
-            <AnimatePresence>
-              {servicesOpen ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  className="absolute right-0 mt-2 w-72 rounded-xl border border-slate-200 bg-white shadow-lg"
-                >
-                  <div className="p-2 text-sm">
-                    {servicesLinks.map((link) => (
-                      <NavLink
-                        key={link.to}
-                        to={link.to}
-                        className="block rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                      >
-                        {link.label}
-                      </NavLink>
-                    ))}
-                  </div>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
-          </div>
-
+          <NavLink to="/services" className={navLinkClass}>
+            Services
+          </NavLink>
           <NavLink to="/products" className={navLinkClass}>
             Products
           </NavLink>
@@ -146,37 +106,22 @@ const Navbar = () => {
 
                 <div className="grid gap-4 px-4 py-5">
                   <div className="grid gap-2">
-                    <NavLink to="/" className={navLinkClass} onClick={() => setMenuOpen(false)}>
-                      Home
-                    </NavLink>
-                    <NavLink to="/about" className={navLinkClass} onClick={() => setMenuOpen(false)}>
-                      About
-                    </NavLink>
-                    <NavLink to="/products" className={navLinkClass} onClick={() => setMenuOpen(false)}>
-                      Products
-                    </NavLink>
-                    <NavLink to="/careers" className={navLinkClass} onClick={() => setMenuOpen(false)}>
-                      Careers
-                    </NavLink>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                      Services
-                    </p>
-                    <div className="mt-2 grid gap-1">
-                      {servicesLinks.map((link) => (
-                        <NavLink
-                          key={link.to}
-                          to={link.to}
-                          className="text-sm text-slate-600 hover:text-slate-900"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          {link.label}
-                        </NavLink>
-                      ))}
-                    </div>
-                  </div>
+                <NavLink to="/" className={navLinkClass} onClick={() => setMenuOpen(false)}>
+                  Home
+                </NavLink>
+                <NavLink to="/about" className={navLinkClass} onClick={() => setMenuOpen(false)}>
+                  About
+                </NavLink>
+                <NavLink to="/services" className={navLinkClass} onClick={() => setMenuOpen(false)}>
+                  Services
+                </NavLink>
+                <NavLink to="/products" className={navLinkClass} onClick={() => setMenuOpen(false)}>
+                  Products
+                </NavLink>
+                <NavLink to="/careers" className={navLinkClass} onClick={() => setMenuOpen(false)}>
+                  Careers
+                </NavLink>
+              </div>
 
                   <div className="grid gap-2 sm:grid-cols-2 sm:items-center sm:gap-3">
                     <Link
