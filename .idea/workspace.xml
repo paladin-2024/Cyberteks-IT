@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e72114-1901-4c17-922f-3f284d87e9b3" name="Changes" comment="refactoring the style for better outcome">
+    <list default="true" id="66e72114-1901-4c17-922f-3f284d87e9b3" name="Changes" comment="Update workspace settings in workspace.xml">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Contact.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Contact.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Products.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Products.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +151,7 @@
       <workItem from="1772836880540" duration="1257000" />
       <workItem from="1772838192377" duration="2482000" />
       <workItem from="1772897613999" duration="1311000" />
-      <workItem from="1772918224082" duration="5624000" />
+      <workItem from="1772918224082" duration="10312000" />
     </task>
     <task id="LOCAL-00001" summary="add initial project files and configurations">
       <option name="closed" value="true" />
@@ -278,7 +281,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772923069223</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Update workspace settings in workspace.xml">
+      <option name="closed" value="true" />
+      <created>1772962761898</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1772962761898</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,7 +323,8 @@
     <MESSAGE value="adding a window for products better views" />
     <MESSAGE value="changing the navbar settings for responsiveness" />
     <MESSAGE value="refactoring the style for better outcome" />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Update workspace settings in workspace.xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update workspace settings in workspace.xml" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

@@ -93,16 +93,12 @@ const Products = () => {
   const [quantity, setQuantity] = React.useState(1);
   const [selectedColor, setSelectedColor] = React.useState(null);
   const [selectedVariant, setSelectedVariant] = React.useState(null);
-  const [userRating, setUserRating] = React.useState(4);
-  const [userReview, setUserReview] = React.useState('');
 
   const openProduct = (product) => {
     setActiveProduct(product);
     setQuantity(1);
     setSelectedColor(product.colors?.[0] || null);
     setSelectedVariant(product.weights?.[0] || null);
-    setUserRating(4);
-    setUserReview('');
   };
 
   return (
@@ -171,30 +167,7 @@ const Products = () => {
                     </div>
                   ))}
                 </div>
-                <div className="hidden max-w-md rounded-xl border border-slate-200 p-3 text-sm text-slate-700 lg:block">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl font-semibold text-slate-900">4.5</div>
-                    <div className="space-y-1 text-xs text-slate-600">
-                      <p>Excellent (245 reviews)</p>
-                      <div className="flex gap-1 text-amber-400" aria-label="rating stars">
-                        {'★★★★★'}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-3 grid gap-1 text-xs text-slate-600">
-                    {[5, 4, 3, 2, 1].map((star) => (
-                      <div key={star} className="flex items-center gap-2">
-                        <span className="w-6 text-right font-semibold">{star}★</span>
-                        <div className="h-1.5 flex-1 rounded-full bg-slate-100">
-                          <div
-                            className="h-full rounded-full bg-amber-400"
-                            style={{ width: `${Math.max(12 - star * 2, 3) * 8}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                {/* removed inline review card under gallery on desktop */}
               </div>
 
               <div className="space-y-5">
@@ -210,37 +183,40 @@ const Products = () => {
                   <p className="mt-3 text-sm text-slate-700">{activeProduct.description}</p>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 p-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Color</p>
-                  <div className="mt-2 flex gap-2">
-                    {activeProduct.colors?.map((c) => (
-                      <button
-                        key={c}
-                        type="button"
-                        onClick={() => setSelectedColor(c)}
-                        className={`h-8 w-8 rounded-full border-2 ${selectedColor === c ? 'border-primary-blue ring-2 ring-primary-blue/40' : 'border-slate-200'}`}
-                        style={{ background: c }}
-                        aria-label={`Color ${c}`}
-                      />
-                    ))}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-xl border border-slate-200 p-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Color</p>
+                    <div className="mt-2 flex gap-2">
+                      {activeProduct.colors?.map((c) => (
+                        <button
+                          key={c}
+                          type="button"
+                          onClick={() => setSelectedColor(c)}
+                          className={`h-8 w-8 rounded-full border-2 ${
+                            selectedColor === c ? 'border-primary-blue ring-2 ring-primary-blue/40' : 'border-slate-200'
+                          }`}
+                          style={{ background: c }}
+                          aria-label={`Color ${c}`}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
-
-                <div className="rounded-xl border border-slate-200 p-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Variant</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {activeProduct.weights?.map((w) => (
-                      <button
-                        key={w}
-                        type="button"
-                        onClick={() => setSelectedVariant(w)}
-                        className={`rounded-full border px-3 py-1 text-xs font-semibold ${
-                          selectedVariant === w ? 'border-primary-blue bg-primary-blue/10 text-primary-blue' : 'border-slate-200 text-slate-700'
-                        }`}
-                      >
-                        {w}
-                      </button>
-                    ))}
+                  <div className="rounded-xl border border-slate-200 p-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Variant</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {activeProduct.weights?.map((w) => (
+                        <button
+                          key={w}
+                          type="button"
+                          onClick={() => setSelectedVariant(w)}
+                          className={`rounded-full border px-3 py-1 text-xs font-semibold ${
+                            selectedVariant === w ? 'border-primary-blue bg-primary-blue/10 text-primary-blue' : 'border-slate-200 text-slate-700'
+                          }`}
+                        >
+                          {w}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -290,67 +266,7 @@ const Products = () => {
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 p-3 lg:hidden">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl font-semibold text-slate-900">4.5</div>
-                    <div className="space-y-1 text-xs text-slate-600">
-                      <p>Excellent (245 reviews)</p>
-                      <div className="flex gap-1 text-amber-400" aria-label="rating stars">
-                        {'★★★★★'}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-3 grid gap-1 text-xs text-slate-600">
-                    {[5, 4, 3, 2, 1].map((star) => (
-                      <div key={star} className="flex items-center gap-2">
-                        <span className="w-6 text-right font-semibold">{star}★</span>
-                        <div className="h-1.5 flex-1 rounded-full bg-slate-100">
-                          <div
-                            className="h-full rounded-full bg-amber-400"
-                            style={{ width: `${Math.max(12 - star * 2, 3) * 8}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-slate-200 p-3 text-sm text-slate-700">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Your Rating</p>
-                      <div className="mt-1 flex items-center gap-2">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <button
-                            key={star}
-                            type="button"
-                            onClick={() => setUserRating(star)}
-                            className={`text-lg ${userRating >= star ? 'text-amber-400' : 'text-slate-300'}`}
-                            aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
-                          >
-                            ★
-                          </button>
-                        ))}
-                        <span className="text-xs font-semibold text-slate-600">{userRating}.0 / 5</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input
-                        value={userReview}
-                        onChange={(e) => setUserReview(e.target.value)}
-                        maxLength={120}
-                        placeholder="Optional note (120 chars)"
-                        className="w-full max-w-xs rounded-full border border-slate-200 px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:border-primary-blue focus:outline-none"
-                      />
-                      <button
-                        type="button"
-                        className="inline-flex items-center justify-center rounded-full bg-primary-blue px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-primary-red"
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                {/* Rating UI removed per request */}
 
                 <div className="flex justify-end">
                   <button className="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 hover:border-primary-blue hover:text-primary-blue" onClick={() => setActiveProduct(null)}>
