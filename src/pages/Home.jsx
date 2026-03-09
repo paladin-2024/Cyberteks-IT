@@ -150,6 +150,16 @@ const Home = () => {
               <span className="text-primary-blue">Anytime, Anywhere</span>
             </motion.h1>
 
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.08 }}
+              className="inline-flex flex-col gap-1 rounded-2xl border border-slate-200 bg-white/70 px-4 py-3 font-heading shadow-sm backdrop-blur"
+            >
+              <span className="text-[11px] uppercase tracking-[0.28em] text-slate-500">Slogan</span>
+              <span className="text-xl font-semibold text-slate-900 sm:text-2xl">Speed, Efficiency, and Effectiveness</span>
+            </motion.div>
+
             <motion.p
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}

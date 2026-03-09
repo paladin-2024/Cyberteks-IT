@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e72114-1901-4c17-922f-3f284d87e9b3" name="Changes" comment="update Contact.jsx with detailed form fields and reformat Navbar.jsx">
+    <list default="true" id="66e72114-1901-4c17-922f-3f284d87e9b3" name="Changes" comment="reset service pages to basic placeholders&#10;&#10;Replace detailed implementations with boilerplate components for AccessControl, CCTV, ICTSkilling, RemoteITSupport, SoftwareAI, and VOIP. Update workspace configuration.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/services/AccessControl.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/services/AccessControl.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/services/CCTV.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/services/CCTV.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/services/ICTSkilling.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/services/ICTSkilling.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/services/RemoteITSupport.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/services/RemoteITSupport.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/services/SoftwareAI.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/services/SoftwareAI.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/services/VOIP.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/services/VOIP.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/GetStarted.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/GetStarted.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tailwind.config.cjs" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.cjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +151,7 @@
       <workItem from="1772836880540" duration="1257000" />
       <workItem from="1772838192377" duration="2482000" />
       <workItem from="1772897613999" duration="1311000" />
-      <workItem from="1772918224082" duration="19782000" />
+      <workItem from="1772918224082" duration="21451000" />
     </task>
     <task id="LOCAL-00001" summary="add initial project files and configurations">
       <option name="closed" value="true" />
@@ -404,7 +401,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773045330040</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="reset service pages to basic placeholders&#10;&#10;Replace detailed implementations with boilerplate components for AccessControl, CCTV, ICTSkilling, RemoteITSupport, SoftwareAI, and VOIP. Update workspace configuration.">
+      <option name="closed" value="true" />
+      <created>1773048528577</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1773048528577</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -422,7 +427,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="{&#10;    &quot;error&quot;: {&#10;        &quot;message&quot;: &quot;You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.&quot;,&#10;        &quot;type&quot;: &quot;invalid_request_error&quot;,&#10;        &quot;param&quot;: null,&#10;        &quot;code&quot;: null&#10;    }&#10;}" />
     <MESSAGE value="changing the pictures in assets" />
     <MESSAGE value="changing the workspace setting from workspace.xml to AICommit.xml" />
     <MESSAGE value="changing thee workspace" />
@@ -447,7 +451,8 @@
     <MESSAGE value="increase font sizes, padding, and text contrast in Careers.jsx" />
     <MESSAGE value="&#10;Overhaul README.md with a project progress snapshot" />
     <MESSAGE value="update Contact.jsx with detailed form fields and reformat Navbar.jsx" />
-    <option name="LAST_COMMIT_MESSAGE" value="update Contact.jsx with detailed form fields and reformat Navbar.jsx" />
+    <MESSAGE value="reset service pages to basic placeholders&#10;&#10;Replace detailed implementations with boilerplate components for AccessControl, CCTV, ICTSkilling, RemoteITSupport, SoftwareAI, and VOIP. Update workspace configuration." />
+    <option name="LAST_COMMIT_MESSAGE" value="reset service pages to basic placeholders&#10;&#10;Replace detailed implementations with boilerplate components for AccessControl, CCTV, ICTSkilling, RemoteITSupport, SoftwareAI, and VOIP. Update workspace configuration." />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
