@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Build output
+dist/
+server/dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.DS_Store
+.vscode/
+.idea/
+
+# Prisma generated
+server/src/generated/
+
+# Next.js cache
+.next/
+
+# Worktrees / Claude
+.claude/
+.claire/

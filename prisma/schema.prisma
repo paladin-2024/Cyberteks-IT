@@ -1,0 +1,468 @@
+// ─── Prisma Schema — CyberteksIT LMS ───────────────────────────────────────
+// Database: PostgreSQL (Neon.tech)
+// ORM: Prisma 5
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")  // Uncomment when using Neon connection pooling
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// ENUMS
+// ────────────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum ApplicationStatus {
+  PENDING
+  UNDER_REVIEW
+  ACCEPTED
+  REJECTED
+  WAITLISTED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  SUSPENDED
+  DROPPED
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum LessonType {
+  VIDEO
+  DOCUMENT
+  QUIZ
+  ASSIGNMENT
+  LIVE_SESSION
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// USER
+// ────────────────────────────────────────────────────────────────────────────
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  role          Role     @default(STUDENT)
+  phone         String?
+  bio           String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Auth
+  accounts      Account[]
+  sessions      Session[]
+
+  // LMS relationships
+  teacherCourses   Course[]       @relation("CourseTeacher")
+  enrollments      Enrollment[]
+  application      Application?
+  invoices         Invoice[]
+  certificates     Certificate[]
+  notifications    Notification[]
+  sentMessages     Message[]      @relation("MessageSender")
+  receivedMessages Message[]      @relation("MessageReceiver")
+  lessonProgress   LessonProgress[]
+  quizAttempts     QuizAttempt[]
+
+  @@map("users")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// AUTH (NextAuth v5 — Prisma Adapter)
+// ────────────────────────────────────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// APPLICATION (Training Program Application)
+// ────────────────────────────────────────────────────────────────────────────
+
+model Application {
+  id              String            @id @default(cuid())
+  userId          String?           @unique
+  status          ApplicationStatus @default(PENDING)
+
+  // Personal info
+  fullName        String
+  email           String
+  phone           String
+  dateOfBirth     String
+  gender          String
+  cityCountry     String
+
+  // Education
+  educationLevel  String
+  educationOther  String?
+  currentOccupation String?
+
+  // Program selection
+  programs        String[]          // e.g. ["Web Development", "Cybersecurity"]
+  programOther    String?
+
+  // Motivation
+  motivation      String            @db.Text
+  careerGoals     String            @db.Text
+
+  // Availability
+  hoursPerWeek    String
+  hasComputer     String
+  deviceTypes     String[]
+  hasInternet     String
+
+  // Optional
+  referralSource  String?
+  socialHandle    String?
+
+  // Admin notes
+  reviewNotes     String?           @db.Text
+  reviewedById    String?
+  reviewedAt      DateTime?
+
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([email])
+  @@index([status])
+  @@map("applications")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// COURSE
+// ────────────────────────────────────────────────────────────────────────────
+
+model Course {
+  id          String       @id @default(cuid())
+  title       String
+  slug        String       @unique
+  description String       @db.Text
+  coverImage  String?
+  price       Float        @default(0)
+  currency    String       @default("UGX")
+  status      CourseStatus @default(DRAFT)
+  duration    String?      // e.g. "3 months"
+  level       String?      // e.g. "Beginner", "Intermediate"
+  category    String?
+  tags        String[]
+
+  teacherId   String
+  teacher     User         @relation("CourseTeacher", fields: [teacherId], references: [id])
+
+  sections    Section[]
+  enrollments Enrollment[]
+  invoices    Invoice[]
+  certificates Certificate[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("courses")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// SECTION & LESSON
+// ────────────────────────────────────────────────────────────────────────────
+
+model Section {
+  id       String   @id @default(cuid())
+  title    String
+  order    Int      @default(0)
+  courseId String
+
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons  Lesson[]
+
+  @@map("sections")
+}
+
+model Lesson {
+  id          String     @id @default(cuid())
+  title       String
+  description String?    @db.Text
+  type        LessonType @default(VIDEO)
+  content     String?    @db.Text   // video URL, document URL, or rich text
+  duration    Int?       // in minutes
+  order       Int        @default(0)
+  isFree      Boolean    @default(false)
+  sectionId   String
+
+  section     Section    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  progress    LessonProgress[]
+  quiz        Quiz?
+
+  @@map("lessons")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// QUIZ
+// ────────────────────────────────────────────────────────────────────────────
+
+model Quiz {
+  id           String        @id @default(cuid())
+  title        String
+  passMark     Int           @default(70) // percentage
+  lessonId     String        @unique
+
+  lesson       Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions    QuizQuestion[]
+  attempts     QuizAttempt[]
+
+  @@map("quizzes")
+}
+
+model QuizQuestion {
+  id       String   @id @default(cuid())
+  text     String   @db.Text
+  options  Json     // [{label: "A", text: "...", isCorrect: bool}]
+  order    Int      @default(0)
+  quizId   String
+
+  quiz     Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@map("quiz_questions")
+}
+
+model QuizAttempt {
+  id        String   @id @default(cuid())
+  score     Float
+  passed    Boolean
+  answers   Json     // {questionId: selectedOptionIndex}
+  userId    String
+  quizId    String
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@map("quiz_attempts")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// ENROLLMENT & PROGRESS
+// ────────────────────────────────────────────────────────────────────────────
+
+model Enrollment {
+  id               String           @id @default(cuid())
+  status           EnrollmentStatus @default(ACTIVE)
+  progressPercent  Float            @default(0)
+  startedAt        DateTime         @default(now())
+  completedAt      DateTime?
+
+  userId           String
+  courseId         String
+
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course           Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+model LessonProgress {
+  id          String   @id @default(cuid())
+  completed   Boolean  @default(false)
+  completedAt DateTime?
+  watchedSecs Int      @default(0)
+
+  userId      String
+  lessonId    String
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@map("lesson_progress")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// CERTIFICATE
+// ────────────────────────────────────────────────────────────────────────────
+
+model Certificate {
+  id          String   @id @default(cuid())
+  certificateNo String @unique @default(cuid())
+  issuedAt    DateTime @default(now())
+
+  userId      String
+  courseId    String
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@map("certificates")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// INVOICE
+// ────────────────────────────────────────────────────────────────────────────
+
+model Invoice {
+  id          String        @id @default(cuid())
+  invoiceNo   String        @unique
+  amount      Float
+  currency    String        @default("UGX")
+  status      InvoiceStatus @default(DRAFT)
+  dueDate     DateTime?
+  paidAt      DateTime?
+  notes       String?       @db.Text
+
+  userId      String
+  courseId    String?
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course      Course?       @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@map("invoices")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// MESSAGING
+// ────────────────────────────────────────────────────────────────────────────
+
+model Conversation {
+  id           String    @id @default(cuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  messages     Message[]
+  participants ConversationParticipant[]
+
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  userId         String
+  conversationId String
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, conversationId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id             String        @id @default(cuid())
+  content        String        @db.Text
+  status         MessageStatus @default(SENT)
+  senderId       String
+  receiverId     String
+  conversationId String?
+
+  sender         User          @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver       User          @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+
+  createdAt      DateTime      @default(now())
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([receiverId])
+  @@map("messages")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// NOTIFICATIONS
+// ────────────────────────────────────────────────────────────────────────────
+
+model Notification {
+  id        String           @id @default(cuid())
+  title     String
+  body      String
+  type      NotificationType @default(INFO)
+  isRead    Boolean          @default(false)
+  link      String?
+  userId    String
+
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime         @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("notifications")
+}
