@@ -1,43 +1,50 @@
-import { Bell, Search, ChevronRight, Home, Menu } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Bell, Search, Menu, CalendarDays } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
-import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 
 interface TopBarProps {
   onMenuToggle?: () => void;
 }
 
-function useBreadcrumb(pathname: string) {
-  const segments = pathname.split('/').filter(Boolean);
-  const crumbs: { label: string; href: string }[] = [];
-  let path = '';
-  for (const seg of segments) {
-    path += '/' + seg;
-    const label = seg.charAt(0).toUpperCase() + seg.slice(1).replace(/-/g, ' ');
-    crumbs.push({ label, href: path });
-  }
-  return crumbs;
+function formatMonthYear(date: Date): string {
+  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+
+function getInitials(name: string | null | undefined): string {
+  if (!name) return '?';
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
 }
 
 export default function TopBar({ onMenuToggle }: TopBarProps) {
   const { t } = useLanguage();
   const { pathname } = useLocation();
   const { user } = useAuth();
-  const crumbs = useBreadcrumb(pathname);
   const [unreadCount, setUnreadCount] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const initials = user?.name
-    ?.split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase() ?? '?';
-
+  const initials = getInitials(user?.name);
   const roleKey = user?.role?.toLowerCase() ?? 'student';
+  const currentMonthYear = formatMonthYear(new Date());
 
-  const roleColors: Record<string, string> = {
-    admin:   'bg-rose-100 text-rose-700',
-    teacher: 'bg-blue-100 text-blue-700',
-    student: 'bg-emerald-100 text-emerald-700',
+  const roleLabels: Record<string, string> = {
+    admin:   'Administrator',
+    teacher: 'Instructor',
+    student: 'Student',
   };
+  const roleColors: Record<string, string> = {
+    admin:   'bg-rose-50 text-rose-600',
+    teacher: 'bg-blue-50 text-[#023064]',
+    student: 'bg-emerald-50 text-emerald-600',
+  };
+  const roleLabel = roleLabels[roleKey] ?? 'Student';
   const roleColor = roleColors[roleKey] ?? roleColors.student;
 
   const notifHref =
@@ -55,56 +62,53 @@ export default function TopBar({ onMenuToggle }: TopBarProps) {
       .catch(() => null);
   }, [pathname]);
 
+  const hasUnread = unreadCount === null || unreadCount > 0;
+
   return (
-    <header className="h-[60px] border-b border-slate-100 bg-white flex items-center justify-between px-4 md:px-6 shrink-0 gap-3">
-      {/* Left: hamburger (mobile) + breadcrumb */}
-      <div className="flex items-center gap-2 min-w-0">
+    <header className="h-16 border-b border-gray-100 bg-white flex items-center justify-between px-4 md:px-6 shrink-0 gap-3">
+      {/* LEFT: hamburger (mobile) + search */}
+      <div className="flex items-center gap-3 flex-1 min-w-0">
+        {/* Mobile hamburger */}
         <button
           onClick={onMenuToggle}
-          className="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 transition-all shrink-0"
           aria-label="Toggle sidebar"
+          className="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-500 hover:text-gray-700 transition-all shrink-0"
         >
           <Menu className="w-4 h-4" />
         </button>
 
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-sm min-w-0">
-          <Link to="/" className="text-slate-400 hover:text-slate-600 transition-colors shrink-0">
-            <Home className="w-3.5 h-3.5" />
-          </Link>
-          {crumbs.map((c, i) => (
-            <span key={c.href} className="flex items-center gap-1.5 min-w-0">
-              <ChevronRight className="w-3 h-3 text-slate-300 shrink-0" />
-              {i === crumbs.length - 1 ? (
-                <span className="font-semibold text-slate-800 truncate">{c.label}</span>
-              ) : (
-                <Link to={c.href} className="text-slate-400 hover:text-slate-600 transition-colors truncate hidden sm:inline">
-                  {c.label}
-                </Link>
-              )}
-            </span>
-          ))}
-        </nav>
-      </div>
-
-      {/* Right */}
-      <div className="flex items-center gap-2 shrink-0">
-        {/* Search */}
-        <div className="relative hidden md:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+        {/* Search input */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           <input
-            placeholder={t.lms.common.search}
-            className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue w-44 transition-all"
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={`${t.lms.common.search.replace('...', '')}  /`}
+            className="pl-9 pr-4 py-2 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#023064]/20 focus:border-[#023064]/40 w-64 md:w-80 transition-all"
           />
         </div>
+      </div>
 
-        {/* Notifications */}
+      {/* RIGHT: date pill + notifications + user */}
+      <div className="flex items-center gap-2 shrink-0">
+        {/* Date pill */}
+        <button
+          type="button"
+          className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all"
+        >
+          <CalendarDays className="w-4 h-4 text-[#023064]" />
+          <span>{currentMonthYear}</span>
+        </button>
+
+        {/* Notification bell */}
         <Link
           to={notifHref}
-          className="relative w-9 h-9 rounded-xl flex items-center justify-center bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-all text-slate-500 hover:text-slate-700"
+          aria-label="Notifications"
+          className="relative w-9 h-9 rounded-xl flex items-center justify-center bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-500 hover:text-gray-700 transition-all"
         >
           <Bell className="w-4 h-4" />
-          {(unreadCount === null || unreadCount > 0) && (
+          {hasUnread && (
             <span className="absolute top-1.5 right-1.5 flex items-center justify-center min-w-[14px] h-[14px] rounded-full bg-primary-red ring-2 ring-white">
               {unreadCount !== null && unreadCount > 0 && (
                 <span className="text-white text-[9px] font-bold px-0.5 leading-none">
@@ -116,21 +120,29 @@ export default function TopBar({ onMenuToggle }: TopBarProps) {
         </Link>
 
         {/* Divider */}
-        <div className="w-px h-6 bg-slate-200" />
+        <div className="w-px h-6 bg-gray-200" />
 
-        {/* User */}
+        {/* User profile */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl overflow-hidden bg-primary-blue flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-[#023064] flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
             {user?.image ? (
-              <img src={user.image} alt={user.name ?? ''} className="w-full h-full object-cover" />
+              <img
+                src={user.image}
+                alt={user.name ?? ''}
+                className="w-full h-full object-cover"
+              />
             ) : (
               <span className="text-white text-xs font-bold">{initials}</span>
             )}
           </div>
           <div className="hidden sm:block">
-            <p className="text-sm font-semibold text-slate-800 leading-none">{user?.name}</p>
-            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full mt-0.5 inline-block ${roleColor}`}>
-              {user?.role?.charAt(0).toUpperCase()}{user?.role?.slice(1).toLowerCase()}
+            <p className="text-sm font-semibold text-gray-800 leading-tight">
+              {user?.name ?? 'User'}
+            </p>
+            <span
+              className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full mt-0.5 inline-block ${roleColor}`}
+            >
+              {roleLabel}
             </span>
           </div>
         </div>

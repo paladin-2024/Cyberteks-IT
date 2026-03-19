@@ -1,203 +1,436 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  BookOpen, Award, Clock, TrendingUp, ArrowUpRight,
-  Target, Flame, CheckCircle2, PlayCircle, Calendar,
-  ChevronRight, Star,
+  BookOpen, Award, Clock, Calendar,
+  Eye, MoreVertical, CheckSquare,
 } from 'lucide-react';
-import { ChartLine, ChartPie } from '@/components/ui/chart';
-import { useLanguage } from '@/context/LanguageContext';
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
+} from 'recharts';
 import { useAuth } from '@/context/AuthContext';
 
-const progressData = [
-  { week: 'W1', hours: 3 }, { week: 'W2', hours: 5 }, { week: 'W3', hours: 4 },
-  { week: 'W4', hours: 7 }, { week: 'W5', hours: 6 }, { week: 'W6', hours: 8 },
+// ─── Data ────────────────────────────────────────────────────────────────────
+
+const studyData = [
+  { day: 'Mon', hours: 3 },
+  { day: 'Tue', hours: 5 },
+  { day: 'Wed', hours: 4 },
+  { day: 'Thu', hours: 7 },
+  { day: 'Fri', hours: 6 },
+  { day: 'Sat', hours: 2 },
+  { day: 'Sun', hours: 4 },
 ];
 
-const timeData = [
-  { name: 'Web Dev', value: 40 },
-  { name: 'Cybersecurity', value: 25 },
-  { name: 'Networking', value: 20 },
-  { name: 'Other', value: 15 },
+const todayIndex = new Date().getDay(); // 0=Sun … 6=Sat
+const dayOrder = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const todayLabel = dayOrder[todayIndex];
+
+const liveSessions = [
+  {
+    subject: 'Web Development',
+    initials: 'WD',
+    subtitle: 'CSS Grid & Flexbox — Live',
+    timeLeft: '2h 15m',
+    pct: 62,
+    color: '#023064',
+  },
+  {
+    subject: 'Cybersecurity',
+    initials: 'CS',
+    subtitle: 'Network Threats — Coming up',
+    timeLeft: '4h 00m',
+    pct: 35,
+    color: '#E11D48',
+  },
 ];
 
-const courses = [
-  { title: 'Web Development Fundamentals', progress: 72, lessons: '18/25', nextLesson: 'CSS Grid & Flexbox',        instructor: 'Caleb Nzabanita', color: 'bg-blue-500' },
-  { title: 'Cybersecurity Essentials',     progress: 34, lessons: '9/26',  nextLesson: 'Network Threats & Firewalls', instructor: 'Caleb Nzabanita', color: 'bg-rose-500' },
-  { title: 'IT Support & Networking',      progress: 91, lessons: '22/24', nextLesson: 'Final Assessment',            instructor: 'Caleb Nzabanita', color: 'bg-emerald-500' },
+const tableRows = [
+  { id: 'CRS-001', subject: 'Web Development Fundamentals', date: 'Jan 12, 2026', progress: 72, instructor: 'CN' },
+  { id: 'CRS-002', subject: 'Cybersecurity Essentials',     date: 'Jan 20, 2026', progress: 34, instructor: 'JK' },
+  { id: 'CRS-003', subject: 'IT Support & Networking',      date: 'Feb 03, 2026', progress: 91, instructor: 'CN' },
+  { id: 'CRS-004', subject: 'Introduction to AI',           date: 'Feb 18, 2026', progress: 18, instructor: 'MA' },
+  { id: 'CRS-005', subject: 'Cloud Computing Basics',       date: 'Mar 01, 2026', progress: 55, instructor: 'BO' },
 ];
 
-const upcoming = [
-  { time: 'Today 3:00 PM',     title: 'Live Session: CSS Grid',       course: 'Web Dev' },
-  { time: 'Tomorrow 10:00 AM', title: 'Quiz: Network Fundamentals',   course: 'Networking' },
-  { time: 'Fri, Mar 21',       title: 'Project Submission Deadline',  course: 'Cybersecurity' },
-];
+// assignment breakdown percentages
+const assignBreakdown = { submitted: 48, inReview: 27, remaining: 25 };
 
-const achievements = [
-  { icon: Flame,  label: '7-Day Streak',      unlocked: true  },
-  { icon: Star,   label: 'First Certificate', unlocked: true  },
-  { icon: Target, label: '50 Lessons Done',   unlocked: false },
-  { icon: Award,  label: 'Top Performer',     unlocked: false },
-];
+// ─── Sub-components ──────────────────────────────────────────────────────────
 
-export default function StudentDashboard() {
-  const { t } = useLanguage();
-  const { user } = useAuth();
-  const name = user?.name?.split(' ')[0] ?? 'Student';
-  const d = t.lms.student.dashboard;
+function StatCard({
+  label,
+  value,
+  icon: Icon,
+  iconBg,
+  iconColor,
+  badge,
+  progress,
+  link,
+  linkLabel,
+}: {
+  label: string;
+  value: string;
+  icon: React.ElementType;
+  iconBg: string;
+  iconColor: string;
+  badge?: { text: string; color: string };
+  progress?: number;
+  link: string;
+  linkLabel: string;
+}) {
+  return (
+    <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconBg}`}>
+          <Icon className={`w-4 h-4 ${iconColor}`} />
+        </div>
+        {badge && (
+          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${badge.color}`}>
+            {badge.text}
+          </span>
+        )}
+      </div>
+      <div>
+        <p className="font-display text-3xl font-extrabold text-slate-900 leading-none">{value}</p>
+        <p className="text-xs font-medium text-slate-500 mt-1">{label}</p>
+      </div>
+      {progress !== undefined && (
+        <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
+          <div
+            className="h-full rounded-full bg-primary-blue transition-all"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
+      <Link
+        to={link}
+        className="text-xs font-semibold text-primary-blue hover:underline"
+      >
+        {linkLabel} →
+      </Link>
+    </div>
+  );
+}
 
-  const stats = [
-    { label: d.stats.enrolled,     value: '3',   icon: BookOpen,   iconBg: 'bg-blue-50',    iconColor: 'text-blue-600',    desc: 'Active courses' },
-    { label: d.stats.completed,    value: '49',  icon: TrendingUp, iconBg: 'bg-emerald-50', iconColor: 'text-emerald-600', desc: 'Lessons done' },
-    { label: d.stats.hoursStudied, value: '33h', icon: Clock,      iconBg: 'bg-amber-50',   iconColor: 'text-amber-600',   desc: 'Total study time' },
-    { label: d.stats.certificates, value: '1',   icon: Award,      iconBg: 'bg-violet-50',  iconColor: 'text-violet-600',  desc: 'Earned' },
-  ];
+type TabKey = 'Daily' | 'Weekly' | 'Monthly';
+
+const tabData: Record<TabKey, typeof studyData> = {
+  Daily: studyData,
+  Weekly: [
+    { day: 'W1', hours: 18 },
+    { day: 'W2', hours: 24 },
+    { day: 'W3', hours: 21 },
+    { day: 'W4', hours: 30 },
+  ],
+  Monthly: [
+    { day: 'Jan', hours: 72 },
+    { day: 'Feb', hours: 88 },
+    { day: 'Mar', hours: 65 },
+  ],
+};
+
+function StudyAnalyticsCard() {
+  const [tab, setTab] = useState<TabKey>('Daily');
+  const data = tabData[tab];
 
   return (
-    <div className="space-y-6 max-w-6xl pb-8">
-
-      {/* Welcome banner */}
-      <div className="bg-gradient-to-r from-primary-blue to-blue-700 rounded-2xl p-6 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid opacity-100" />
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
-        <div className="relative">
-          <p className="text-white/60 text-sm font-medium mb-1">Welcome back,</p>
-          <h1 className="font-display text-2xl font-extrabold mb-0.5">{name}</h1>
-          <p className="text-white/70 text-sm">{d.subtitle}</p>
-          <div className="flex items-center gap-4 mt-4">
-            <div className="flex items-center gap-1.5 bg-white/15 rounded-xl px-3 py-1.5 text-sm font-semibold">
-              <Flame className="w-4 h-4 text-amber-300" />
-              7-day streak
-            </div>
-            <div className="flex items-center gap-1.5 bg-white/15 rounded-xl px-3 py-1.5 text-sm font-semibold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-              49 lessons complete
-            </div>
-          </div>
+    <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="font-display font-bold text-slate-900 text-base">Study Analytics</h2>
+          <p className="text-xs text-slate-400 mt-0.5">Hours studied per session</p>
+        </div>
+        <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
+          {(['Daily', 'Weekly', 'Monthly'] as TabKey[]).map((t) => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={`text-[11px] font-semibold px-3 py-1 rounded-lg transition-all ${
+                tab === t
+                  ? 'bg-white text-primary-blue shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              {t}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((s) => (
-          <div key={s.label} className="bg-white border border-slate-200 rounded-2xl p-5">
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${s.iconBg}`}>
-              <s.icon className={`w-4 h-4 ${s.iconColor}`} />
+      <ResponsiveContainer width="100%" height={200}>
+        <BarChart data={data} barSize={28} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
+          <XAxis
+            dataKey="day"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 11, fill: '#94a3b8' }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 11, fill: '#94a3b8' }}
+            domain={[0, 'dataMax + 2']}
+          />
+          <Tooltip
+            cursor={{ fill: 'transparent' }}
+            contentStyle={{
+              background: '#1e293b',
+              border: 'none',
+              borderRadius: 8,
+              color: '#f8fafc',
+              fontSize: 12,
+            }}
+            formatter={(v: number) => [`${v}h`, 'Hours']}
+          />
+          <Bar dataKey="hours" radius={[6, 6, 0, 0]}>
+            {data.map((entry) => (
+              <Cell
+                key={entry.day}
+                fill={entry.day === todayLabel ? '#023064' : '#e2e8f0'}
+              />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+function LiveSessionsCard() {
+  return (
+    <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <h2 className="font-display font-bold text-slate-900 text-sm">Live Sessions</h2>
+        <Link to="/student/schedule" className="text-[11px] font-semibold text-primary-blue hover:underline">
+          View Schedule →
+        </Link>
+      </div>
+      <div className="space-y-3">
+        {liveSessions.map((s) => (
+          <div key={s.subject} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:border-slate-200 transition-colors">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-white text-xs font-bold"
+              style={{ backgroundColor: s.color }}
+            >
+              {s.initials}
             </div>
-            <p className="font-display text-2xl font-extrabold text-slate-900 leading-none">{s.value}</p>
-            <p className="text-xs font-medium text-slate-500 mt-1">{s.label}</p>
-            <p className="text-xs text-slate-400">{s.desc}</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-slate-800 truncate">{s.subject}</p>
+              <p className="text-[10px] text-slate-400 truncate">{s.subtitle}</p>
+              {/* battery-style bar */}
+              <div className="flex items-center gap-2 mt-1.5">
+                <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{ width: `${s.pct}%`, backgroundColor: s.color }}
+                  />
+                </div>
+                <span className="text-[10px] text-slate-400 shrink-0">{s.pct}%</span>
+              </div>
+            </div>
+            <div className="shrink-0 text-right">
+              <div className="flex items-center gap-1 text-[10px] text-slate-400">
+                <Clock className="w-3 h-3" />
+                {s.timeLeft}
+              </div>
+            </div>
           </div>
         ))}
       </div>
+    </div>
+  );
+}
 
-      {/* Charts */}
-      <div className="grid lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <h2 className="font-display font-bold text-slate-900 text-base">{d.weeklyStudy}</h2>
-              <p className="text-xs text-slate-400 mt-0.5">Hours studied per week</p>
+function AssignmentBreakdownCard() {
+  const { submitted, inReview, remaining } = assignBreakdown;
+  return (
+    <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+      <h2 className="font-display font-bold text-slate-900 text-sm">Assignment Breakdown</h2>
+      {/* stacked bar */}
+      <div className="flex h-3 rounded-full overflow-hidden gap-0.5">
+        <div className="rounded-l-full bg-emerald-500 transition-all" style={{ width: `${submitted}%` }} />
+        <div className="bg-primary-blue transition-all" style={{ width: `${inReview}%` }} />
+        <div className="rounded-r-full bg-slate-200 transition-all" style={{ width: `${remaining}%` }} />
+      </div>
+      <div className="space-y-1.5">
+        {[
+          { label: 'Submitted', pct: submitted, dot: 'bg-emerald-500' },
+          { label: 'In Review', pct: inReview,  dot: 'bg-primary-blue' },
+          { label: 'Remaining', pct: remaining, dot: 'bg-slate-300' },
+        ].map(({ label, pct, dot }) => (
+          <div key={label} className="flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <span className={`w-2 h-2 rounded-full ${dot}`} />
+              <span className="text-slate-600">{label}</span>
             </div>
-            <Link to="/student/progress" className="flex items-center gap-1 text-xs font-semibold text-primary-blue hover:text-blue-800 transition-colors">
-              Full report <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
+            <span className="font-semibold text-slate-800">{pct}%</span>
           </div>
-          <ChartLine data={progressData} dataKeys={['hours']} xKey="week" height={220} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
+export default function StudentDashboard() {
+  const { user } = useAuth();
+  const name = user?.name?.split(' ')[0] ?? 'Student';
+
+  const stats = [
+    {
+      label: 'Enrolled Courses',
+      value: '5',
+      icon: BookOpen,
+      iconBg: 'bg-blue-50',
+      iconColor: 'text-primary-blue',
+      badge: { text: '● Active', color: 'bg-emerald-50 text-emerald-600' },
+      progress: 55,
+      link: '/student/courses',
+      linkLabel: 'View All',
+    },
+    {
+      label: 'Total Assignments',
+      value: '12',
+      icon: CheckSquare,
+      iconBg: 'bg-violet-50',
+      iconColor: 'text-violet-600',
+      link: '/student/courses',
+      linkLabel: 'View All',
+    },
+    {
+      label: 'Completed Courses',
+      value: '3',
+      icon: Award,
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-600',
+      link: '/student/certificates',
+      linkLabel: 'View Courses',
+    },
+    {
+      label: 'Upcoming Quiz',
+      value: '3 Days',
+      icon: Calendar,
+      iconBg: 'bg-amber-50',
+      iconColor: 'text-amber-600',
+      link: '/student/schedule',
+      linkLabel: 'View Schedule',
+    },
+  ];
+
+  return (
+    <div className="min-h-full bg-[#f4f4f9] p-4 md:p-6 space-y-6">
+
+      {/* Page title */}
+      <div>
+        <h1 className="font-display text-xl font-extrabold text-slate-900">
+          Welcome back, {name} 👋
+        </h1>
+        <p className="text-sm text-slate-500 mt-0.5">Here's what's happening with your learning today.</p>
+      </div>
+
+      {/* Row 1 — Stat cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((s) => (
+          <StatCard key={s.label} {...s} />
+        ))}
+      </div>
+
+      {/* Row 2 — Charts + right panel */}
+      <div className="grid lg:grid-cols-5 gap-5">
+        {/* Study Analytics — 60% */}
+        <div className="lg:col-span-3">
+          <StudyAnalyticsCard />
         </div>
-        <div className="bg-white border border-slate-200 rounded-2xl p-6">
-          <h2 className="font-display font-bold text-slate-900 text-base mb-1">{d.timeByCourse}</h2>
-          <p className="text-xs text-slate-400 mb-4">Time split by subject</p>
-          <ChartPie data={timeData} donut height={220} />
+
+        {/* Right panel — 40% */}
+        <div className="lg:col-span-2 flex flex-col gap-4">
+          <LiveSessionsCard />
+          <AssignmentBreakdownCard />
         </div>
       </div>
 
-      {/* Bottom row */}
-      <div className="grid lg:grid-cols-5 gap-5">
-
-        {/* Course progress */}
-        <div className="lg:col-span-3 bg-white border border-slate-200 rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="font-display font-bold text-slate-900 text-base">{d.courseProgress}</h2>
-            <Link to="/student/courses" className="flex items-center gap-1 text-xs font-semibold text-primary-blue hover:text-blue-800 transition-colors">
-              All courses <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-          <div className="space-y-5">
-            {courses.map((c) => (
-              <div key={c.title}>
-                <div className="flex items-start justify-between mb-2 gap-3">
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-slate-800 truncate">{c.title}</p>
-                    <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
-                      <PlayCircle className="w-3 h-3 text-slate-400" />
-                      Next: {c.nextLesson}
-                    </p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-sm font-bold text-slate-900">{c.progress}%</p>
-                    <p className="text-xs text-slate-400">{c.lessons} lessons</p>
-                  </div>
-                </div>
-                <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                  <div className={`h-full rounded-full ${c.color} transition-all`} style={{ width: `${c.progress}%` }} />
-                </div>
-              </div>
-            ))}
-          </div>
-          <Link
-            to="/student/courses"
-            className="mt-5 flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all"
-          >
-            Continue Learning <ChevronRight className="w-4 h-4" />
+      {/* Row 3 — Continue Watching table */}
+      <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
+          <h2 className="font-display font-bold text-slate-900 text-base">Continue Watching</h2>
+          <Link to="/student/courses" className="text-xs font-semibold text-primary-blue hover:underline">
+            View All →
           </Link>
         </div>
 
-        {/* Right column */}
-        <div className="lg:col-span-2 space-y-5">
-
-          {/* Upcoming */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-display font-bold text-slate-900 text-base">Upcoming</h2>
-              <Link to="/student/schedule" className="text-xs font-semibold text-primary-blue hover:text-blue-800 transition-colors">
-                Schedule
-              </Link>
-            </div>
-            <div className="space-y-3">
-              {upcoming.map((u, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-primary-blue/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <Calendar className="w-3.5 h-3.5 text-primary-blue" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-slate-800 leading-snug">{u.title}</p>
-                    <p className="text-xs text-slate-400">{u.time}</p>
-                    <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-md font-medium mt-0.5 inline-block">{u.course}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Achievements */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5">
-            <h2 className="font-display font-bold text-slate-900 text-base mb-4">Achievements</h2>
-            <div className="grid grid-cols-2 gap-2">
-              {achievements.map(({ icon: Icon, label, unlocked }) => (
-                <div
-                  key={label}
-                  className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border text-center ${
-                    unlocked
-                      ? 'bg-amber-50 border-amber-100 text-amber-700'
-                      : 'bg-slate-50 border-slate-100 text-slate-400'
-                  }`}
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-slate-100 bg-slate-50/60">
+                <th className="w-10 px-4 py-3">
+                  <input type="checkbox" className="rounded border-slate-300 accent-primary-blue" />
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">ID</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Subject</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Date</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide min-w-[160px]">Progress</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Instructor</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableRows.map((row) => (
+                <tr
+                  key={row.id}
+                  className="border-b border-slate-50 hover:bg-slate-50/60 transition-colors"
                 >
-                  <Icon className={`w-5 h-5 ${unlocked ? 'text-amber-500' : 'text-slate-300'}`} />
-                  <span className="text-[10px] font-semibold leading-tight">{label}</span>
-                </div>
+                  <td className="px-4 py-3.5 text-center">
+                    <input type="checkbox" className="rounded border-slate-300 accent-primary-blue" />
+                  </td>
+                  <td className="px-4 py-3.5">
+                    <span className="text-xs font-mono text-slate-400">{row.id}</span>
+                  </td>
+                  <td className="px-4 py-3.5">
+                    <span className="font-medium text-slate-800 text-sm">{row.subject}</span>
+                  </td>
+                  <td className="px-4 py-3.5">
+                    <span className="text-xs text-slate-400">{row.date}</span>
+                  </td>
+                  <td className="px-4 py-3.5">
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-primary-blue transition-all"
+                          style={{ width: `${row.progress}%` }}
+                        />
+                      </div>
+                      <span className="text-xs font-semibold text-slate-600 shrink-0 w-8 text-right">
+                        {row.progress}%
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3.5">
+                    <div className="w-7 h-7 rounded-full bg-primary-blue flex items-center justify-center">
+                      <span className="text-white text-[10px] font-bold">{row.instructor}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3.5">
+                    <div className="flex items-center gap-2">
+                      <Link
+                        to="/student/courses"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-primary-blue hover:text-white flex items-center justify-center text-slate-500 transition-colors"
+                        title="View course"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </Link>
+                      <button
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors"
+                        title="More options"
+                      >
+                        <MoreVertical className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
               ))}
-            </div>
-          </div>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

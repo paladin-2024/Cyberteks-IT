@@ -1,51 +1,53 @@
 import { Link } from 'react-router-dom';
 import {
-  Users, BookOpen, FileText, Briefcase,
-  TrendingUp, TrendingDown, ArrowUpRight,
-  Clock, CheckCircle2, AlertCircle, UserPlus,
-  BarChart3, Activity,
+  Users, BookOpen, FileText, TrendingUp,
+  Activity, BarChart3, Star, Zap, CheckCircle,
 } from 'lucide-react';
-import { ChartArea, ChartBar, ChartPie } from '@/components/ui/chart';
-import { useLanguage } from '@/context/LanguageContext';
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer,
+} from 'recharts';
+
+// ─── Data ──────────────────────────────────────────────────────────────────
 
 const enrollmentData = [
-  { month: 'Jan', students: 18 }, { month: 'Feb', students: 25 }, { month: 'Mar', students: 32 },
-  { month: 'Apr', students: 28 }, { month: 'May', students: 41 }, { month: 'Jun', students: 38 },
-  { month: 'Jul', students: 52 }, { month: 'Aug', students: 47 }, { month: 'Sep', students: 60 },
-  { month: 'Oct', students: 55 }, { month: 'Nov', students: 68 }, { month: 'Dec', students: 72 },
-];
-
-const revenueData = [
-  { month: 'Jan', revenue: 1200000 }, { month: 'Feb', revenue: 1800000 }, { month: 'Mar', revenue: 2400000 },
-  { month: 'Apr', revenue: 2100000 }, { month: 'May', revenue: 3200000 }, { month: 'Jun', revenue: 2900000 },
-];
-
-const courseData = [
-  { name: 'Web Dev', value: 68 }, { name: 'Cybersecurity', value: 45 },
-  { name: 'Networking', value: 52 }, { name: 'Data Analysis', value: 38 }, { name: 'AI & ML', value: 29 },
+  { month: 'Jan', enrollments: 18 },
+  { month: 'Feb', enrollments: 25 },
+  { month: 'Mar', enrollments: 32 },
+  { month: 'Apr', enrollments: 28 },
+  { month: 'May', enrollments: 41 },
+  { month: 'Jun', enrollments: 38 },
 ];
 
 const recentApplications = [
-  { name: 'Aisha Nakato',     program: 'Web Development',  status: 'PENDING',      date: 'Today, 9:14 AM' },
-  { name: 'David Ochieng',    program: 'Cybersecurity',    status: 'UNDER_REVIEW', date: 'Yesterday' },
-  { name: 'Grace Atuhaire',   program: 'Data Analysis',    status: 'ACCEPTED',     date: '2 days ago' },
-  { name: 'Moses Ssemakula',  program: 'AI & ML',          status: 'PENDING',      date: '3 days ago' },
-  { name: 'Priscilla Akello', program: 'Networking',       status: 'REJECTED',     date: '4 days ago' },
+  { name: 'Aisha Nakato',     initials: 'AN', program: 'Web Development',  status: 'PENDING',      date: 'Today, 9:14 AM' },
+  { name: 'David Ochieng',    initials: 'DO', program: 'Cybersecurity',    status: 'UNDER_REVIEW', date: 'Yesterday' },
+  { name: 'Grace Atuhaire',   initials: 'GA', program: 'Data Analysis',    status: 'ACCEPTED',     date: '2 days ago' },
+  { name: 'Moses Ssemakula',  initials: 'MS', program: 'AI & ML',          status: 'PENDING',      date: '3 days ago' },
+  { name: 'Priscilla Akello', initials: 'PA', program: 'Networking',       status: 'REJECTED',     date: '4 days ago' },
 ];
 
-const activity = [
-  { icon: UserPlus,     text: 'New student enrolled in Web Dev',        time: '2 min ago',  color: 'text-blue-500',    bg: 'bg-blue-50' },
-  { icon: CheckCircle2, text: 'Application approved — Grace Atuhaire',  time: '18 min ago', color: 'text-emerald-500', bg: 'bg-emerald-50' },
-  { icon: AlertCircle,  text: 'Payment overdue — Invoice #1042',        time: '1 hr ago',   color: 'text-amber-500',   bg: 'bg-amber-50' },
-  { icon: BookOpen,     text: 'New course published: AI & Robotics',    time: '3 hrs ago',  color: 'text-violet-500',  bg: 'bg-violet-50' },
-  { icon: Users,        text: '12 new registrations this week',         time: 'Today',      color: 'text-blue-500',    bg: 'bg-blue-50' },
+const activityFeed = [
+  { dot: 'bg-blue-500',    text: 'New student enrolled in Web Dev',       time: '2 hours ago' },
+  { dot: 'bg-emerald-500', text: 'Application approved — Grace Atuhaire', time: '3 hours ago' },
+  { dot: 'bg-amber-500',   text: 'Payment overdue — Invoice #1042',       time: '5 hours ago' },
+  { dot: 'bg-violet-500',  text: 'New course published: AI & Robotics',   time: '8 hours ago' },
+  { dot: 'bg-blue-400',    text: '12 new registrations this week',        time: 'Today' },
 ];
+
+const progressIndicators = [
+  { label: 'Students',               value: 204, total: 248 },
+  { label: 'Courses Active',         value: 14,  total: 20  },
+  { label: 'Applications Pending',   value: 37,  total: 50  },
+  { label: 'Revenue (% of target)',  value: 82,  total: 100 },
+];
+
+// ─── Status badge styles ────────────────────────────────────────────────────
 
 const statusStyles: Record<string, string> = {
-  PENDING:      'bg-amber-50 text-amber-700 border border-amber-100',
-  UNDER_REVIEW: 'bg-blue-50 text-blue-700 border border-blue-100',
+  PENDING:      'bg-amber-50  text-amber-700  border border-amber-100',
+  UNDER_REVIEW: 'bg-blue-50   text-blue-700   border border-blue-100',
   ACCEPTED:     'bg-emerald-50 text-emerald-700 border border-emerald-100',
-  REJECTED:     'bg-red-50 text-red-700 border border-red-100',
+  REJECTED:     'bg-red-50    text-red-700    border border-red-100',
 };
 const statusLabel: Record<string, string> = {
   PENDING:      'Pending',
@@ -54,217 +56,232 @@ const statusLabel: Record<string, string> = {
   REJECTED:     'Rejected',
 };
 
-const quickActions = [
-  { label: 'New Application', to: '/admin/applications', icon: Briefcase,  color: 'bg-blue-600 hover:bg-blue-700' },
-  { label: 'Add User',        to: '/admin/users',        icon: UserPlus,   color: 'bg-emerald-600 hover:bg-emerald-700' },
-  { label: 'Add Course',      to: '/admin/courses',      icon: BookOpen,   color: 'bg-violet-600 hover:bg-violet-700' },
-  { label: 'Analytics',       to: '/admin/analytics',    icon: BarChart3,  color: 'bg-slate-700 hover:bg-slate-800' },
-];
+// ─── Component ───────────────────────────────────────────────────────────────
 
 export default function AdminDashboard() {
-  const { t } = useLanguage();
-  const d = t.lms.admin.dashboard;
-
-  const stats = [
-    {
-      label: d.stats.students, value: '248', change: '+12%', up: true,
-      icon: Users, iconColor: 'text-blue-600', iconBg: 'bg-blue-50',
-      desc: '30 new this month',
-    },
-    {
-      label: d.stats.courses, value: '14', change: '+2 this month', up: true,
-      icon: BookOpen, iconColor: 'text-violet-600', iconBg: 'bg-violet-50',
-      desc: '11 published, 3 drafts',
-    },
-    {
-      label: d.stats.applications, value: '37', change: '+8 pending', up: true,
-      icon: Briefcase, iconColor: 'text-amber-600', iconBg: 'bg-amber-50',
-      desc: '8 need review',
-    },
-    {
-      label: d.stats.revenue, value: 'UGX 12.4M', change: '-3% vs last month', up: false,
-      icon: FileText, iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50',
-      desc: 'Monthly revenue',
-    },
-  ];
+  const now = new Date().toLocaleString('en-UG', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
 
   return (
-    <div className="space-y-6 max-w-7xl pb-8">
+    <div className="bg-[#f4f4f9] min-h-screen p-6 space-y-6">
 
-      {/* Header */}
+      {/* ── Page title ──────────────────────────────────────────────── */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-xl font-bold text-slate-900">{d.title}</h1>
-          <p className="text-slate-500 text-sm mt-0.5 flex items-center gap-1.5">
-            <Activity className="w-3.5 h-3.5 text-emerald-500" />
-            {d.subtitle}
-          </p>
-        </div>
-        <div className="flex items-center gap-2 text-xs text-slate-500 bg-white border border-slate-200 rounded-xl px-3 py-1.5">
-          <Clock className="w-3.5 h-3.5" />
-          <span>Last updated: just now</span>
-        </div>
+        <h1 className="text-2xl font-bold text-[#023064]">Dashboard</h1>
+        <span className="text-xs text-slate-500 bg-white border border-slate-200 rounded-xl px-3 py-1.5">
+          Last updated: {now}
+        </span>
       </div>
 
-      {/* Quick actions */}
-      <div className="flex flex-wrap gap-2">
-        {quickActions.map(({ label, to, icon: Icon, color }) => (
-          <Link
-            key={label}
-            to={to}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-white text-sm font-semibold transition-all ${color} shadow-sm`}
-          >
-            <Icon className="w-3.5 h-3.5" />
-            {label}
+      {/* ── Row 1 — Stat cards ─────────────────────────────────────── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+
+        {/* Total Students */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+            <Users className="w-5 h-5 text-[#023064]" />
+          </div>
+          <p className="text-3xl font-extrabold text-[#023064]">248</p>
+          <p className="text-sm font-medium text-slate-500">Total Students</p>
+          <span className="inline-block text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-2 py-0.5 w-fit">
+            ↑ +12 this month
+          </span>
+          <Link to="/admin/users" className="text-xs font-semibold text-[#023064] hover:underline mt-auto">
+            View All →
           </Link>
-        ))}
-      </div>
-
-      {/* Stats grid */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-        {stats.map((s) => (
-          <div key={s.label} className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${s.iconBg}`}>
-                <s.icon className={`w-4 h-4 ${s.iconColor}`} />
-              </div>
-              <span className={`inline-flex items-center gap-1 text-xs font-semibold ${s.up ? 'text-emerald-600' : 'text-red-500'}`}>
-                {s.up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                {s.change}
-              </span>
-            </div>
-            <div>
-              <p className="font-display text-2xl font-extrabold text-slate-900 leading-none">{s.value}</p>
-              <p className="text-xs font-medium text-slate-500 mt-1">{s.label}</p>
-              <p className="text-xs text-slate-400 mt-0.5">{s.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Charts row 1 */}
-      <div className="grid lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <h2 className="font-display font-bold text-slate-900 text-base">{d.enrollments}</h2>
-              <p className="text-xs text-slate-400 mt-0.5">Monthly new student enrollments</p>
-            </div>
-            <Link to="/admin/analytics" className="flex items-center gap-1 text-xs font-semibold text-primary-blue hover:text-blue-800 transition-colors">
-              Full report <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-          <ChartArea data={enrollmentData} dataKeys={['students']} xKey="month" height={230} />
-        </div>
-        <div className="bg-white border border-slate-200 rounded-2xl p-6">
-          <h2 className="font-display font-bold text-slate-900 text-base mb-1">{d.enrollmentsByProgram}</h2>
-          <p className="text-xs text-slate-400 mb-4">Distribution across programs</p>
-          <ChartPie data={courseData} donut height={230} />
-        </div>
-      </div>
-
-      {/* Charts row 2 */}
-      <div className="grid lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <h2 className="font-display font-bold text-slate-900 text-base">{d.revenueChart}</h2>
-              <p className="text-xs text-slate-400 mt-0.5">Revenue in UGX (last 6 months)</p>
-            </div>
-            <Link to="/admin/invoices" className="flex items-center gap-1 text-xs font-semibold text-primary-blue hover:text-blue-800 transition-colors">
-              View invoices <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-          <ChartBar data={revenueData} dataKeys={['revenue']} xKey="month" ugxFormat height={220} />
         </div>
 
-        {/* Recent Applications */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display font-bold text-slate-900 text-base">{d.recentApplications}</h2>
-            <Link to="/admin/applications" className="text-xs font-semibold text-primary-blue hover:text-blue-800 transition-colors">
-              View all
-            </Link>
+        {/* Active Courses */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+            <BookOpen className="w-5 h-5 text-[#023064]" />
           </div>
-          <div className="space-y-3">
-            {recentApplications.map((a) => (
-              <div key={a.name} className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-slate-800 truncate">{a.name}</p>
-                  <p className="text-xs text-slate-400 truncate">{a.program}</p>
-                </div>
-                <div className="text-right shrink-0 space-y-1">
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold block ${statusStyles[a.status]}`}>
-                    {statusLabel[a.status]}
-                  </span>
-                  <p className="text-[10px] text-slate-400">{a.date}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <p className="text-3xl font-extrabold text-[#023064]">14</p>
+          <p className="text-sm font-medium text-slate-500">Active Courses</p>
+          <span className="inline-block text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100 rounded-full px-2 py-0.5 w-fit">
+            ↑ +2 this month
+          </span>
+          <Link to="/admin/courses" className="text-xs font-semibold text-[#023064] hover:underline mt-auto">
+            View All →
+          </Link>
         </div>
+
+        {/* Pending Applications */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-3">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
+            <FileText className="w-5 h-5 text-amber-600" />
+          </div>
+          <p className="text-3xl font-extrabold text-[#023064]">37</p>
+          <p className="text-sm font-medium text-slate-500">Pending Applications</p>
+          <span className="inline-block text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-100 rounded-full px-2 py-0.5 w-fit">
+            Needs Review
+          </span>
+          <Link to="/admin/applications" className="text-xs font-semibold text-[#023064] hover:underline mt-auto">
+            View Applications →
+          </Link>
+        </div>
+
+        {/* Monthly Revenue */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-emerald-600" />
+          </div>
+          <p className="text-3xl font-extrabold text-[#023064]">UGX 12.4M</p>
+          <p className="text-sm font-medium text-slate-500">Monthly Revenue</p>
+          <span className="inline-block text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-2 py-0.5 w-fit">
+            ↑ This month
+          </span>
+          <Link to="/admin/invoices" className="text-xs font-semibold text-[#023064] hover:underline mt-auto">
+            View Invoices →
+          </Link>
+        </div>
+
       </div>
 
-      {/* Bottom row: Activity + Summary */}
-      <div className="grid lg:grid-cols-2 gap-5">
-        {/* Activity feed */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6">
-          <h2 className="font-display font-bold text-slate-900 text-base mb-5">Recent Activity</h2>
-          <div className="space-y-4">
-            {activity.map(({ icon: Icon, text, time, color, bg }, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${bg}`}>
-                  <Icon className={`w-4 h-4 ${color}`} />
+      {/* ── Row 2 — Enrollment chart + Recent Applications ─────────── */}
+      <div className="grid lg:grid-cols-5 gap-5">
+
+        {/* Enrollment Analytics (60%) */}
+        <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-6">
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="font-bold text-[#023064] text-base">Enrollment Analytics</h2>
+            <span className="text-xs text-slate-400 bg-slate-100 rounded-lg px-2 py-1 font-medium">This Year</span>
+          </div>
+          <p className="text-xs text-slate-400 mb-5">Monthly new student enrollments (Jan – Jun)</p>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={enrollmentData} barCategoryGap="35%">
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+              <XAxis
+                dataKey="month"
+                tick={{ fontSize: 12, fill: '#94a3b8' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 12, fill: '#94a3b8' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
+                cursor={{ fill: '#f4f4f9' }}
+              />
+              <Bar dataKey="enrollments" fill="#023064" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Recent Applications (40%) */}
+        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6 flex flex-col">
+          <h2 className="font-bold text-[#023064] text-base mb-4">Recent Applications</h2>
+          <div className="space-y-3 flex-1">
+            {recentApplications.map((app) => (
+              <div key={app.name} className="flex items-center gap-3">
+                {/* Initials avatar */}
+                <div className="w-9 h-9 rounded-full bg-[#023064] text-white flex items-center justify-center text-xs font-bold shrink-0">
+                  {app.initials}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-slate-700 leading-snug">{text}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">{time}</p>
+                  <p className="text-sm font-semibold text-slate-800 truncate">{app.name}</p>
+                  <p className="text-xs text-slate-400 truncate">{app.program}</p>
+                </div>
+                <div className="text-right shrink-0 space-y-1">
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold block ${statusStyles[app.status]}`}>
+                    {statusLabel[app.status]}
+                  </span>
+                  <p className="text-[10px] text-slate-400">{app.date}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Link
+            to="/admin/applications"
+            className="mt-4 text-xs font-semibold text-[#023064] hover:underline"
+          >
+            View All Applications →
+          </Link>
+        </div>
+
+      </div>
+
+      {/* ── Row 3 — Recent Activity + Platform Overview ─────────────── */}
+      <div className="grid lg:grid-cols-5 gap-5">
+
+        {/* Recent Activity (60%) */}
+        <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-6">
+          <div className="flex items-center gap-2 mb-5">
+            <Activity className="w-4 h-4 text-[#023064]" />
+            <h2 className="font-bold text-[#023064] text-base">Recent Activity</h2>
+          </div>
+          <div className="space-y-4">
+            {activityFeed.map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <span className={`mt-1.5 w-2.5 h-2.5 rounded-full shrink-0 ${item.dot}`} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-slate-700 leading-snug">{item.text}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{item.time}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Platform summary */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6">
-          <h2 className="font-display font-bold text-slate-900 text-base mb-5">Platform Overview</h2>
-          <div className="space-y-4">
-            {[
-              { label: 'Active Students',       value: 204, total: 248, color: 'bg-blue-500' },
-              { label: 'Course Completion',     value: 76,  total: 100, color: 'bg-emerald-500' },
-              { label: 'Applications Reviewed', value: 29,  total: 37,  color: 'bg-amber-500' },
-              { label: 'Revenue Target',        value: 82,  total: 100, color: 'bg-violet-500' },
-            ].map((item) => {
+        {/* Platform Overview (40%) */}
+        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6">
+          <div className="flex items-center gap-2 mb-5">
+            <BarChart3 className="w-4 h-4 text-[#023064]" />
+            <h2 className="font-bold text-[#023064] text-base">Platform Overview</h2>
+          </div>
+
+          {/* 3 big stat highlights */}
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            <div className="text-center bg-[#f4f4f9] rounded-xl p-3">
+              <div className="flex items-center justify-center gap-1 mb-1">
+                <Zap className="w-3.5 h-3.5 text-emerald-500" />
+              </div>
+              <p className="text-lg font-extrabold text-[#023064]">99.9%</p>
+              <p className="text-[10px] text-slate-500 mt-0.5">Uptime</p>
+            </div>
+            <div className="text-center bg-[#f4f4f9] rounded-xl p-3">
+              <div className="flex items-center justify-center gap-1 mb-1">
+                <Star className="w-3.5 h-3.5 text-amber-400" />
+              </div>
+              <p className="text-lg font-extrabold text-[#023064]">4.8 ★</p>
+              <p className="text-[10px] text-slate-500 mt-0.5">Rating</p>
+            </div>
+            <div className="text-center bg-[#f4f4f9] rounded-xl p-3">
+              <div className="flex items-center justify-center gap-1 mb-1">
+                <CheckCircle className="w-3.5 h-3.5 text-blue-500" />
+              </div>
+              <p className="text-lg font-extrabold text-[#023064]">248</p>
+              <p className="text-[10px] text-slate-500 mt-0.5">Active Users</p>
+            </div>
+          </div>
+
+          {/* Progress bars */}
+          <div className="space-y-3">
+            {progressIndicators.map((item) => {
               const pct = Math.round((item.value / item.total) * 100);
               return (
                 <div key={item.label}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-sm font-medium text-slate-600">{item.label}</span>
-                    <span className="text-sm font-bold text-slate-800">
-                      {item.label.includes('Rate') || item.label.includes('Target') ? `${pct}%` : `${item.value}/${item.total}`}
-                    </span>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-medium text-slate-600">{item.label}</span>
+                    <span className="text-xs font-bold text-[#023064]">{pct}%</span>
                   </div>
                   <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                    <div className={`h-full rounded-full ${item.color} transition-all`} style={{ width: `${pct}%` }} />
+                    <div
+                      className="h-full rounded-full bg-[#023064] transition-all"
+                      style={{ width: `${pct}%` }}
+                    />
                   </div>
                 </div>
               );
             })}
           </div>
-
-          <div className="mt-6 pt-5 border-t border-slate-100 grid grid-cols-3 gap-4 text-center">
-            {[
-              { label: 'Uptime',     value: '99.9%' },
-              { label: 'Avg. Rating', value: '4.8' },
-              { label: 'Support SLA', value: '98%' },
-            ].map((m) => (
-              <div key={m.label}>
-                <p className="font-display font-extrabold text-xl text-slate-900">{m.value}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{m.label}</p>
-              </div>
-            ))}
-          </div>
         </div>
+
       </div>
     </div>
   );
