@@ -40,7 +40,12 @@ router.get('/download/:type/:filename', (req: AuthRequest, res: Response): void 
   if (!fs.existsSync(filePath)) { res.status(404).json({ error: 'File not found' }); return; }
 
   const displayName = (req.query.name as string) || safeName;
-  res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(displayName)}"`);
+  // Use both filename (ASCII fallback) and filename* (UTF-8, RFC 5987) so
+  // browsers use the exact original name including spaces and non-ASCII chars.
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="${displayName.replace(/"/g, '\\"')}"; filename*=UTF-8''${encodeURIComponent(displayName)}`,
+  );
   res.sendFile(filePath);
 });
 
