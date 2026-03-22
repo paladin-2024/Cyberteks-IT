@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ChevronDown, Shield, Monitor, Wifi, GraduationCap, Code2, Camera, Phone, Mail, MapPin } from 'lucide-react';
+import { Menu, X, ChevronDown, Shield, Monitor, Wifi, GraduationCap, Code2, Camera, Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Youtube } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -67,12 +67,26 @@ export default function Navbar() {
                 info@cyberteks-it.com
               </a>
             </div>
-            <div className="flex items-center gap-2 ml-auto">
+            <div className="flex items-center gap-3 ml-auto">
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-red/20 border border-primary-red/30">
                 <Phone className="w-4 h-4 text-primary-red shrink-0" />
                 <a href="tel:+256779367005" className="text-lg font-extrabold text-white tracking-tight hover:text-primary-red transition-colors">
                   +256 779 367 005
                 </a>
+              </div>
+              <div className="flex items-center gap-1.5">
+                {[
+                  { icon: Facebook, href: 'https://facebook.com/cyberteksit',             label: 'Facebook' },
+                  { icon: Twitter,  href: 'https://twitter.com/cyberteksit',              label: 'Twitter' },
+                  { icon: Linkedin, href: 'https://linkedin.com/company/cyberteks-it',    label: 'LinkedIn' },
+                  { icon: Youtube,  href: 'https://youtube.com/@cyberteksit',             label: 'YouTube' },
+                ].map(({ icon: Icon, href, label }) => (
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer"
+                    aria-label={label}
+                    className="w-7 h-7 rounded-full bg-white/10 hover:bg-primary-red flex items-center justify-center transition-colors">
+                    <Icon className="w-3.5 h-3.5 text-white" />
+                  </a>
+                ))}
               </div>
             </div>
           </div>
