@@ -35,15 +35,14 @@ const adminNavGroups: NavGroup[] = [
   {
     label: 'COMMUNICATION',
     items: [
-      { key: 'messages', href: '/admin/messages', icon: MessageSquare },
+      { key: 'messages',      href: '/admin/messages',      icon: MessageSquare },
       { key: 'notifications', href: '/admin/notifications', icon: Bell },
     ],
   },
   {
     label: 'SYSTEM',
     items: [
-
-      { key: 'settings',      href: '/admin/settings',      icon: Settings },
+      { key: 'settings', href: '/admin/settings', icon: Settings },
     ],
   },
 ];
@@ -107,10 +106,10 @@ const navByRole: Record<string, NavGroup[]> = {
   student: studentNavGroups,
 };
 
-const roleConfig: Record<string, { label: string; textColor: string; bgColor: string }> = {
-  admin:   { label: 'Administrator', textColor: 'text-rose-600',    bgColor: 'bg-rose-50' },
-  teacher: { label: 'Instructor',    textColor: 'text-[#023064]',   bgColor: 'bg-blue-50' },
-  student: { label: 'Student',       textColor: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+const roleConfig: Record<string, { label: string; accent: string; dot: string }> = {
+  admin:   { label: 'Administrator', accent: 'text-rose-400',    dot: 'bg-rose-400' },
+  teacher: { label: 'Instructor',    accent: 'text-sky-400',     dot: 'bg-sky-400' },
+  student: { label: 'Student',       accent: 'text-emerald-400', dot: 'bg-emerald-400' },
 };
 
 const extraLabels: Record<string, string> = {
@@ -125,12 +124,7 @@ const extraLabels: Record<string, string> = {
 
 function getInitials(name: string | null | undefined): string {
   if (!name) return '?';
-  return name
-    .split(' ')
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
+  return name.split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase();
 }
 
 interface SidebarProps {
@@ -153,72 +147,51 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
   const getLabel = (key: string) =>
     (sb as Record<string, string>)[key] ?? extraLabels[key] ?? key;
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
-
+  const handleLogout = () => { logout(); navigate('/'); };
   const profileHref = `/${role}/profile`;
 
   return (
     <>
-      {/* Mobile overlay backdrop */}
       {mobileOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
-          onClick={onClose}
-          aria-hidden="true"
-        />
+        <div className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden" onClick={onClose} aria-hidden="true" />
       )}
 
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          'hidden lg:flex flex-col h-full bg-white border-r border-gray-100 transition-all duration-300 ease-in-out shrink-0 overflow-hidden',
-          collapsed ? 'w-[60px]' : 'w-[240px]'
+          'hidden lg:flex flex-col h-full transition-all duration-300 ease-in-out shrink-0 overflow-hidden',
+          'bg-[#060e1f] border-r border-white/[0.06]',
+          collapsed ? 'w-[64px]' : 'w-[240px]'
         )}
       >
         <SidebarContent
-          user={user}
-          rc={rc}
-          groups={groups}
-          collapsed={collapsed}
-          pathname={pathname}
-          getLabel={getLabel}
-          signOutLabel={t.lms.common.signOut}
-          profileHref={profileHref}
-          onCollapseToggle={() => setCollapsed((v) => !v)}
+          user={user} rc={rc} groups={groups} collapsed={collapsed}
+          pathname={pathname} getLabel={getLabel} signOutLabel={t.lms.common.signOut}
+          profileHref={profileHref} onCollapseToggle={() => setCollapsed((v) => !v)}
           onLogout={handleLogout}
         />
       </aside>
 
-      {/* Mobile sidebar (overlay drawer) */}
+      {/* Mobile sidebar */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-40 flex flex-col h-full w-[260px] bg-white border-r border-gray-100',
-          'shadow-2xl shadow-slate-900/20 transition-transform duration-300 ease-in-out lg:hidden',
+          'fixed inset-y-0 left-0 z-40 flex flex-col h-full w-[260px]',
+          'bg-[#060e1f] border-r border-white/[0.06] shadow-2xl shadow-black/50',
+          'transition-transform duration-300 ease-in-out lg:hidden',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         <button
           onClick={onClose}
-          aria-label="Close sidebar"
-          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all"
+          className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg bg-white/10 text-white/60 hover:bg-white/15 hover:text-white transition-all"
         >
-          <X className="w-4 h-4" />
+          <X className="w-3.5 h-3.5" />
         </button>
         <SidebarContent
-          user={user}
-          rc={rc}
-          groups={groups}
-          collapsed={false}
-          pathname={pathname}
-          getLabel={getLabel}
-          signOutLabel={t.lms.common.signOut}
-          profileHref={profileHref}
-          onCollapseToggle={undefined}
-          onLinkClick={onClose}
-          onLogout={handleLogout}
+          user={user} rc={rc} groups={groups} collapsed={false}
+          pathname={pathname} getLabel={getLabel} signOutLabel={t.lms.common.signOut}
+          profileHref={profileHref} onCollapseToggle={undefined}
+          onLinkClick={onClose} onLogout={handleLogout}
         />
       </aside>
     </>
@@ -227,7 +200,7 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
 
 interface ContentProps {
   user: { name: string | null; email: string; role: string; image: string | null } | null;
-  rc: { label: string; textColor: string; bgColor: string };
+  rc: { label: string; accent: string; dot: string };
   groups: NavGroup[];
   collapsed: boolean;
   pathname: string;
@@ -240,67 +213,53 @@ interface ContentProps {
 }
 
 function SidebarContent({
-  user,
-  rc,
-  groups,
-  collapsed,
-  pathname,
-  getLabel,
-  signOutLabel,
-  profileHref,
-  onCollapseToggle,
-  onLinkClick,
-  onLogout,
+  user, rc, groups, collapsed, pathname, getLabel,
+  signOutLabel, profileHref, onCollapseToggle, onLinkClick, onLogout,
 }: ContentProps) {
   const initials = getInitials(user?.name);
   const { unreadMessages, unreadNotifications } = useUnread();
 
   return (
     <div className="flex flex-col h-full">
-      {/* Logo header */}
-      <div
-        className={cn(
-          'flex items-center h-[64px] border-b border-gray-100 shrink-0 px-4',
-          collapsed ? 'justify-center px-0' : 'gap-3'
-        )}
-      >
+
+      {/* ── Logo header ── */}
+      <div className={cn(
+        'flex items-center h-[64px] shrink-0 border-b border-white/[0.06]',
+        collapsed ? 'justify-center px-0' : 'px-4 gap-3'
+      )}>
         {collapsed ? (
-          <img
-            src="/assets/logo-round.png"
-            alt="CyberteksIT"
-            className="w-10 h-10 object-contain"
-          />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#E11D48] to-[#023064] flex items-center justify-center shadow-lg">
+            <span className="text-white font-black text-sm tracking-tight">C</span>
+          </div>
         ) : (
           <img
             src="/assets/cyberteks-it-logo-33783fbc-fb2c-484a-b670-9f269d8493cf.png"
             alt="CyberteksIT"
-            className="h-10 w-auto object-contain"
+            className="h-9 w-auto object-contain brightness-0 invert"
           />
         )}
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-5">
+      {/* ── Navigation ── */}
+      <nav className="flex-1 overflow-y-auto py-4 px-2.5 space-y-4 scrollbar-hide">
         {groups.map((group) => (
           <div key={group.label}>
-            {!collapsed && (
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.12em] px-2 mb-2">
+            {!collapsed ? (
+              <p className="text-[9px] font-bold text-white/25 uppercase tracking-[0.15em] px-2.5 mb-1.5">
                 {group.label}
               </p>
+            ) : (
+              <div className="h-px bg-white/[0.07] mx-2 mb-2" />
             )}
-            {collapsed && (
-              <div className="h-px bg-gray-100 mx-1 mb-2" />
-            )}
+
             <div className="space-y-0.5">
               {group.items.map((item) => {
-                const active =
-                  pathname === item.href || pathname.startsWith(item.href + '/');
+                const active = pathname === item.href || pathname.startsWith(item.href + '/');
                 const badgeCount =
-                  item.key === 'messages'
-                    ? unreadMessages
-                    : item.key === 'notifications'
-                    ? unreadNotifications
-                    : item.badge ?? 0;
+                  item.key === 'messages'      ? unreadMessages :
+                  item.key === 'notifications' ? unreadNotifications :
+                  item.badge ?? 0;
+
                 return (
                   <Link
                     key={item.href}
@@ -308,39 +267,40 @@ function SidebarContent({
                     onClick={onLinkClick}
                     title={collapsed ? getLabel(item.key) : undefined}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 relative group',
+                      'relative flex items-center gap-3 rounded-xl text-sm font-medium transition-all duration-150 group',
+                      collapsed ? 'justify-center px-0 py-2.5 mx-1' : 'px-3 py-2.5',
                       active
-                        ? 'bg-[#023064] text-white shadow-sm'
-                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800',
-                      collapsed && 'justify-center px-0 py-2.5'
+                        ? 'bg-white/10 text-white'
+                        : 'text-white/45 hover:bg-white/[0.06] hover:text-white/80'
                     )}
                   >
-                    <item.icon
-                      className={cn(
-                        'shrink-0 transition-colors',
-                        collapsed ? 'w-5 h-5' : 'w-4 h-4',
-                        active ? 'text-white' : 'text-gray-400 group-hover:text-gray-600'
-                      )}
-                    />
+                    {/* Active left bar */}
+                    {active && !collapsed && (
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full bg-[#E11D48]" />
+                    )}
+
+                    <item.icon className={cn(
+                      'shrink-0 transition-colors',
+                      collapsed ? 'w-5 h-5' : 'w-4 h-4',
+                      active ? 'text-white' : 'text-white/35 group-hover:text-white/70'
+                    )} />
+
                     {!collapsed && (
                       <>
-                        <span className="truncate flex-1">{getLabel(item.key)}</span>
+                        <span className="truncate flex-1 leading-none">{getLabel(item.key)}</span>
                         {badgeCount > 0 && (
-                          <span
-                            className={cn(
-                              'text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center tabular-nums',
-                              active
-                                ? 'bg-white/20 text-white'
-                                : 'bg-primary-red text-white'
-                            )}
-                          >
-                            {badgeCount}
+                          <span className={cn(
+                            'text-[9px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center tabular-nums',
+                            active ? 'bg-white/15 text-white' : 'bg-[#E11D48] text-white'
+                          )}>
+                            {badgeCount > 99 ? '99+' : badgeCount}
                           </span>
                         )}
                       </>
                     )}
+
                     {collapsed && badgeCount > 0 && (
-                      <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary-red ring-2 ring-white" />
+                      <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#E11D48] ring-2 ring-[#060e1f]" />
                     )}
                   </Link>
                 );
@@ -350,78 +310,75 @@ function SidebarContent({
         ))}
       </nav>
 
-      {/* Bottom actions */}
-      <div className="border-t border-gray-100 p-3 space-y-1 shrink-0">
-        {/* My Profile */}
-        <Link
-          to={profileHref}
-          onClick={onLinkClick}
-          title={collapsed ? 'My Profile' : undefined}
-          className={cn(
-            'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-all group',
-            collapsed && 'justify-center px-0'
-          )}
-        >
-          <UserCircle
-            className={cn(
-              'shrink-0 text-gray-400 group-hover:text-gray-600 transition-colors',
-              collapsed ? 'w-5 h-5' : 'w-4 h-4'
-            )}
-          />
-          {!collapsed && <span>My Profile</span>}
-        </Link>
+      {/* ── Bottom section ── */}
+      <div className="border-t border-white/[0.06] shrink-0">
 
-        {/* Help Center */}
-        <Link
-          to="/help"
-          onClick={onLinkClick}
-          title={collapsed ? 'Help Center' : undefined}
-          className={cn(
-            'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-all group',
-            collapsed && 'justify-center px-0'
-          )}
-        >
-          <HelpCircle
-            className={cn(
-              'shrink-0 text-gray-400 group-hover:text-gray-600 transition-colors',
-              collapsed ? 'w-5 h-5' : 'w-4 h-4'
-            )}
-          />
-          {!collapsed && <span>Help Center</span>}
-        </Link>
-
-        {/* Sign Out */}
-        <button
-          onClick={onLogout}
-          title={collapsed ? signOutLabel : undefined}
-          className={cn(
-            'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all group',
-            collapsed && 'justify-center px-0'
-          )}
-        >
-          <LogOut
-            className={cn(
-              'shrink-0 text-gray-400 group-hover:text-red-500 transition-colors',
-              collapsed ? 'w-5 h-5' : 'w-4 h-4'
-            )}
-          />
-          {!collapsed && <span>{signOutLabel}</span>}
-        </button>
-
-        {/* Collapse toggle (desktop only) */}
-        {onCollapseToggle && (
-          <button
-            onClick={onCollapseToggle}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            className="flex items-center justify-center w-full py-1.5 rounded-xl text-gray-300 hover:bg-gray-50 hover:text-gray-500 transition-all"
+        {/* User profile card */}
+        {!collapsed && (
+          <Link
+            to={profileHref}
+            onClick={onLinkClick}
+            className="flex items-center gap-3 px-3 py-3 mx-2 mt-2 rounded-xl hover:bg-white/[0.06] transition-all group"
           >
-            {collapsed ? (
-              <ChevronRight className="w-3.5 h-3.5" />
-            ) : (
-              <ChevronLeft className="w-3.5 h-3.5" />
-            )}
-          </button>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#023064] to-[#E11D48] flex items-center justify-center shrink-0 shadow-md">
+              {user?.image ? (
+                <img src={user.image} alt="" className="w-full h-full object-cover rounded-lg" />
+              ) : (
+                <span className="text-white text-xs font-bold">{initials}</span>
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-white/90 truncate leading-tight">{user?.name ?? 'User'}</p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className={cn('w-1.5 h-1.5 rounded-full', rc.dot)} />
+                <span className={cn('text-[10px] font-medium leading-none', rc.accent)}>{rc.label}</span>
+              </div>
+            </div>
+          </Link>
         )}
+
+        {collapsed && (
+          <div className="flex justify-center py-2">
+            <Link to={profileHref} onClick={onLinkClick} title="My Profile"
+              className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#023064] to-[#E11D48] flex items-center justify-center shadow-md hover:opacity-90 transition-opacity">
+              {user?.image
+                ? <img src={user.image} alt="" className="w-full h-full object-cover rounded-xl" />
+                : <span className="text-white text-xs font-bold">{initials}</span>}
+            </Link>
+          </div>
+        )}
+
+        <div className="px-2 pb-2 space-y-0.5">
+          {/* Help */}
+          <Link to="/help" onClick={onLinkClick} title={collapsed ? 'Help Center' : undefined}
+            className={cn(
+              'flex items-center gap-3 w-full rounded-xl text-sm font-medium text-white/35 hover:bg-white/[0.06] hover:text-white/70 transition-all group',
+              collapsed ? 'justify-center px-0 py-2.5 mx-1' : 'px-3 py-2'
+            )}>
+            <HelpCircle className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')} />
+            {!collapsed && <span>Help Center</span>}
+          </Link>
+
+          {/* Sign out */}
+          <button onClick={onLogout} title={collapsed ? signOutLabel : undefined}
+            className={cn(
+              'flex items-center gap-3 w-full rounded-xl text-sm font-medium text-white/35 hover:bg-red-500/10 hover:text-red-400 transition-all group',
+              collapsed ? 'justify-center px-0 py-2.5 mx-1' : 'px-3 py-2'
+            )}>
+            <LogOut className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')} />
+            {!collapsed && <span>{signOutLabel}</span>}
+          </button>
+
+          {/* Collapse toggle */}
+          {onCollapseToggle && (
+            <button onClick={onCollapseToggle}
+              className="flex items-center justify-center w-full py-1.5 rounded-xl text-white/20 hover:bg-white/[0.05] hover:text-white/40 transition-all">
+              {collapsed
+                ? <ChevronRight className="w-3.5 h-3.5" />
+                : <ChevronLeft  className="w-3.5 h-3.5" />}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
