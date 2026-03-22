@@ -86,6 +86,76 @@ router.post('/', requireAuth, requireRole('ADMIN'), async (req: AuthRequest, res
   }
 });
 
+// PATCH /api/users/:id — edit user details (admin only)
+router.patch('/:id', requireAuth, requireRole('ADMIN'), async (req: AuthRequest, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const { name, email, role, phone, password } = req.body as {
+      name?: string; email?: string; role?: string; phone?: string; password?: string;
+    };
+
+    const existing = await prisma.user.findUnique({ where: { id } });
+    if (!existing) { res.status(404).json({ error: 'User not found' }); return; }
+
+    // If changing email, check it's not already taken
+    if (email && email.trim().toLowerCase() !== existing.email) {
+      const clash = await prisma.user.findUnique({ where: { email: email.trim().toLowerCase() } });
+      if (clash) { res.status(409).json({ error: 'Email already in use' }); return; }
+    }
+
+    const allowedRoles = ['ADMIN', 'TEACHER', 'STUDENT'];
+
+    const data: Record<string, unknown> = {};
+    if (name?.trim())  data.name  = name.trim();
+    if (email?.trim()) data.email = email.trim().toLowerCase();
+    if (role && allowedRoles.includes(role)) data.role = role;
+    if (phone !== undefined) data.phone = phone?.trim() || null;
+    if (password?.trim() && password.length >= 6) {
+      data.password = await bcrypt.hash(password, 12);
+    }
+
+    const updated = await prisma.user.update({
+      where: { id },
+      data,
+      select: {
+        id: true, name: true, email: true, role: true,
+        isActive: true, phone: true, image: true, createdAt: true,
+        _count: { select: { enrollments: true, teacherCourses: true } },
+      },
+    });
+
+    res.json({ user: updated });
+  } catch (err) {
+    console.error('[users PATCH /:id]', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// DELETE /api/users/:id — delete a user (admin only)
+router.delete('/:id', requireAuth, requireRole('ADMIN'), async (req: AuthRequest, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const adminId = req.user!.id;
+
+    if (id === adminId) { res.status(400).json({ error: 'You cannot delete your own account' }); return; }
+
+    const existing = await prisma.user.findUnique({ where: { id } });
+    if (!existing) { res.status(404).json({ error: 'User not found' }); return; }
+
+    // Reassign teacher's courses to the requesting admin before deletion
+    if (existing.role === 'TEACHER') {
+      await prisma.course.updateMany({ where: { teacherId: id }, data: { teacherId: adminId } });
+      await prisma.assignment.deleteMany({ where: { teacherId: id } });
+    }
+
+    await prisma.user.delete({ where: { id } });
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[users DELETE /:id]', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // PATCH /api/users/:id/status — toggle isActive (admin only)
 router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthRequest, res: Response) => {
   try {
