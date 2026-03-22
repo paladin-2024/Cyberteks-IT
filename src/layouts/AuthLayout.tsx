@@ -13,9 +13,9 @@ export default function AuthLayout() {
         {/* Logo */}
         <Link to="/" className="relative flex items-center gap-3">
           <img
-            src="/assets/logo-round.png"
+            src="/assets/cyberteks-it-logo-33783fbc-fb2c-484a-b670-9f269d8493cf.png"
             alt="CyberteksIT"
-            className="w-10 h-10 object-contain"
+            className="h-14 w-auto object-contain"
           />
         </Link>
 

@@ -17,6 +17,7 @@ import ServicesPage from './pages/marketing/ServicesPage';
 import GetStartedPage from './pages/marketing/GetStartedPage';
 import PrivacyPage from './pages/marketing/PrivacyPage';
 import TermsPage from './pages/marketing/TermsPage';
+import SecurityTipsPage from './pages/marketing/SecurityTipsPage';
 
 // Service sub-pages
 import RemoteITSupportPage from './pages/marketing/services/RemoteITSupportPage';
@@ -39,23 +40,35 @@ import AdminInvoices from './pages/lms/admin/Invoices';
 import AdminAnalytics from './pages/lms/admin/Analytics';
 import AdminNotifications from './pages/lms/admin/Notifications';
 import AdminSettings from './pages/lms/admin/Settings';
+import AdminMessages from './pages/lms/admin/Messages';
+import AdminITSupport from './pages/lms/admin/ITSupport';
+
+// Shared pages
+import Profile from './pages/lms/shared/Profile';
+import HelpCenter from './pages/lms/shared/HelpCenter';
 
 // Teacher pages
 import TeacherDashboard from './pages/lms/teacher/Dashboard';
 import TeacherCourses from './pages/lms/teacher/Courses';
+import TeacherCourseDetail from './pages/lms/teacher/CourseDetail';
 import TeacherStudents from './pages/lms/teacher/Students';
 import TeacherAssignments from './pages/lms/teacher/Assignments';
 import TeacherMessages from './pages/lms/teacher/Messages';
+import TeacherCurriculum from './pages/lms/teacher/Curriculum';
+import TeacherAnalytics from './pages/lms/teacher/Analytics';
+import TeacherNotifications from './pages/lms/teacher/Notifications';
 
 // Student pages
 import StudentDashboard from './pages/lms/student/Dashboard';
 import StudentCourses from './pages/lms/student/Courses';
+import StudentCourseDetail from './pages/lms/student/CourseDetail';
 import StudentPlan from './pages/lms/student/Plan';
 import StudentSchedule from './pages/lms/student/Schedule';
 import StudentProgress from './pages/lms/student/Progress';
 import StudentCertificates from './pages/lms/student/Certificates';
 import StudentMessages from './pages/lms/student/Messages';
 import StudentNotifications from './pages/lms/student/Notifications';
+import StudentAssignments from './pages/lms/student/Assignments';
 
 // Route guards
 function ProtectedRoute({ children, roles }: { children: React.ReactNode; roles?: string[] }) {
@@ -90,6 +103,7 @@ export default function App() {
           <Route path="/get-started" element={<GetStartedPage />} />
           <Route path="/privacy-policy" element={<PrivacyPage />} />
           <Route path="/terms-of-use" element={<TermsPage />} />
+          <Route path="/security-tips" element={<SecurityTipsPage />} />
           <Route path="/services/remote-it-support" element={<RemoteITSupportPage />} />
           <Route path="/services/cctv" element={<CCTVPage />} />
           <Route path="/services/access-control" element={<AccessControlPage />} />
@@ -118,16 +132,24 @@ export default function App() {
           <Route path="analytics" element={<AdminAnalytics />} />
           <Route path="notifications" element={<AdminNotifications />} />
           <Route path="settings" element={<AdminSettings />} />
+          <Route path="messages" element={<AdminMessages />} />
+          <Route path="it-support" element={<AdminITSupport />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
 
         {/* Teacher */}
         <Route path="/teacher" element={<ProtectedRoute roles={['TEACHER']}><LMSLayout /></ProtectedRoute>}>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<TeacherDashboard />} />
+          <Route path="analytics" element={<TeacherAnalytics />} />
           <Route path="courses" element={<TeacherCourses />} />
+          <Route path="courses/:id" element={<TeacherCourseDetail />} />
+          <Route path="curriculum" element={<TeacherCurriculum />} />
           <Route path="students" element={<TeacherStudents />} />
           <Route path="assignments" element={<TeacherAssignments />} />
           <Route path="messages" element={<TeacherMessages />} />
+          <Route path="notifications" element={<TeacherNotifications />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
 
         {/* Student */}
@@ -135,12 +157,20 @@ export default function App() {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<StudentDashboard />} />
           <Route path="courses" element={<StudentCourses />} />
+          <Route path="courses/:id" element={<StudentCourseDetail />} />
           <Route path="plan" element={<StudentPlan />} />
           <Route path="schedule" element={<StudentSchedule />} />
           <Route path="progress" element={<StudentProgress />} />
           <Route path="certificates" element={<StudentCertificates />} />
           <Route path="messages" element={<StudentMessages />} />
           <Route path="notifications" element={<StudentNotifications />} />
+          <Route path="assignments" element={<StudentAssignments />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
+
+        {/* Help Center — shared across all roles */}
+        <Route path="/help" element={<ProtectedRoute><LMSLayout /></ProtectedRoute>}>
+          <Route index element={<HelpCenter />} />
         </Route>
 
         {/* Fallback */}

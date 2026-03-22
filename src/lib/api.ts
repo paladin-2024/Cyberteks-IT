@@ -19,6 +19,20 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return res.json();
 }
 
+/**
+ * Convert a stored upload URL like /uploads/submissions/uuid.pdf
+ * into a force-download URL /api/upload/download/submissions/uuid.pdf?name=original.pdf
+ */
+export function toDownloadUrl(url: string | null | undefined, originalName?: string | null): string {
+  if (!url) return '#';
+  // Match /uploads/<type>/<filename>
+  const m = url.match(/^\/uploads\/(avatars|covers|submissions)\/(.+)$/);
+  if (!m) return url; // not a managed upload, return as-is
+  const [, type, filename] = m;
+  const base = `/api/upload/download/${type}/${encodeURIComponent(filename)}`;
+  return originalName ? `${base}?name=${encodeURIComponent(originalName)}` : base;
+}
+
 export const api = {
   get: <T>(path: string) => request<T>(path),
   post: <T>(path: string, body: unknown) =>

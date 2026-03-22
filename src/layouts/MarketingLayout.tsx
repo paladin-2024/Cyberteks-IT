@@ -6,7 +6,7 @@ export default function MarketingLayout() {
   return (
     <>
       <Navbar />
-      <main><Outlet /></main>
+      <main className="mt-32"><Outlet /></main>
       <Footer />
     </>
   );

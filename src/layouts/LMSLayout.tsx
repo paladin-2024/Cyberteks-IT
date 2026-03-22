@@ -8,7 +8,7 @@ export default function LMSLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f4f4f9]">
+    <div className="flex h-screen overflow-hidden bg-white">
       <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       {mobileOpen && (
         <div

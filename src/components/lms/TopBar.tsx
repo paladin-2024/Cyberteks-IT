@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Bell, Search, Menu, CalendarDays } from 'lucide-react';
+import { Bell, Search, Menu, CalendarDays, UserCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/lib/api';
@@ -34,23 +34,12 @@ export default function TopBar({ onMenuToggle }: TopBarProps) {
   const roleKey = user?.role?.toLowerCase() ?? 'student';
   const currentMonthYear = formatMonthYear(new Date());
 
-  const roleLabels: Record<string, string> = {
-    admin:   'Administrator',
-    teacher: 'Instructor',
-    student: 'Student',
-  };
-  const roleColors: Record<string, string> = {
-    admin:   'bg-rose-50 text-rose-600',
-    teacher: 'bg-blue-50 text-[#023064]',
-    student: 'bg-emerald-50 text-emerald-600',
-  };
-  const roleLabel = roleLabels[roleKey] ?? 'Student';
-  const roleColor = roleColors[roleKey] ?? roleColors.student;
-
   const notifHref =
-    roleKey === 'admin'   ? '/admin/notifications' :
-    roleKey === 'teacher' ? '/teacher/messages'    :
+    roleKey === 'admin'   ? '/admin/notifications'   :
+    roleKey === 'teacher' ? '/teacher/notifications' :
     '/student/notifications';
+
+  const profileHref = `/${roleKey}/profile`;
 
   useEffect(() => {
     api.get<{ unreadCount: number }>('/notifications?limit=50')
@@ -122,30 +111,25 @@ export default function TopBar({ onMenuToggle }: TopBarProps) {
         {/* Divider */}
         <div className="w-px h-6 bg-gray-200" />
 
-        {/* User profile */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[#023064] flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
-            {user?.image ? (
-              <img
-                src={user.image}
-                alt={user.name ?? ''}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-white text-xs font-bold">{initials}</span>
-            )}
-          </div>
-          <div className="hidden sm:block">
-            <p className="text-sm font-semibold text-gray-800 leading-tight">
-              {user?.name ?? 'User'}
-            </p>
-            <span
-              className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full mt-0.5 inline-block ${roleColor}`}
-            >
-              {roleLabel}
-            </span>
-          </div>
-        </div>
+        {/* Avatar — click to go to profile */}
+        <Link
+          to={profileHref}
+          aria-label="My Profile"
+          title="My Profile"
+          className="w-9 h-9 rounded-xl bg-[#023064] flex items-center justify-center shrink-0 shadow-sm overflow-hidden hover:ring-2 hover:ring-[#023064]/40 hover:ring-offset-1 transition-all"
+        >
+          {user?.image ? (
+            <img
+              src={user.image}
+              alt={user.name ?? ''}
+              className="w-full h-full object-cover"
+            />
+          ) : initials !== '?' ? (
+            <span className="text-white text-xs font-bold">{initials}</span>
+          ) : (
+            <UserCircle className="w-5 h-5 text-white/80" />
+          )}
+        </Link>
       </div>
     </header>
   );

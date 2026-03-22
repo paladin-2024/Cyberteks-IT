@@ -4,11 +4,12 @@ import {
   LayoutDashboard, BookOpen, Users, FileText, MessageSquare,
   Bell, Award, Settings, ChevronLeft, ChevronRight, LogOut,
   GraduationCap, Briefcase, Map, BarChart3, Calendar,
-  ClipboardList, UserCheck, PieChart, X, HelpCircle,
+  ClipboardList, UserCheck, PieChart, X, HelpCircle, UserCircle, ListOrdered, Headphones,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
+import { useUnread } from '@/context/UnreadContext';
 
 type NavItem  = { key: string; href: string; icon: React.ElementType; badge?: number };
 type NavGroup = { label: string; items: NavItem[] };
@@ -19,6 +20,7 @@ const adminNavGroups: NavGroup[] = [
     items: [
       { key: 'dashboard',    href: '/admin/dashboard',    icon: LayoutDashboard },
       { key: 'applications', href: '/admin/applications', icon: Briefcase },
+      { key: 'itSupport',    href: '/admin/it-support',   icon: Headphones },
       { key: 'analytics',    href: '/admin/analytics',    icon: BarChart3 },
     ],
   },
@@ -31,9 +33,16 @@ const adminNavGroups: NavGroup[] = [
     ],
   },
   {
+    label: 'COMMUNICATION',
+    items: [
+      { key: 'messages', href: '/admin/messages', icon: MessageSquare },
+      { key: 'notifications', href: '/admin/notifications', icon: Bell },
+    ],
+  },
+  {
     label: 'SYSTEM',
     items: [
-      { key: 'notifications', href: '/admin/notifications', icon: Bell },
+
       { key: 'settings',      href: '/admin/settings',      icon: Settings },
     ],
   },
@@ -50,15 +59,17 @@ const teacherNavGroups: NavGroup[] = [
   {
     label: 'TEACHING',
     items: [
-      { key: 'myCourses',   href: '/teacher/courses',     icon: BookOpen },
-      { key: 'students',    href: '/teacher/students',    icon: UserCheck },
+      { key: 'myCourses',   href: '/teacher/courses',    icon: BookOpen },
+      { key: 'curriculum',  href: '/teacher/curriculum', icon: ListOrdered },
+      { key: 'students',    href: '/teacher/students',   icon: UserCheck },
       { key: 'assignments', href: '/teacher/assignments', icon: ClipboardList },
     ],
   },
   {
     label: 'COMMUNICATION',
     items: [
-      { key: 'messages', href: '/teacher/messages', icon: MessageSquare, badge: 3 },
+      { key: 'messages',      href: '/teacher/messages',      icon: MessageSquare },
+      { key: 'notifications', href: '/teacher/notifications', icon: Bell },
     ],
   },
 ];
@@ -74,6 +85,7 @@ const studentNavGroups: NavGroup[] = [
     label: 'LEARNING',
     items: [
       { key: 'myCourses',    href: '/student/courses',      icon: GraduationCap },
+      { key: 'assignments',  href: '/student/assignments',  icon: ClipboardList },
       { key: 'plan',         href: '/student/plan',         icon: Map },
       { key: 'schedule',     href: '/student/schedule',     icon: Calendar },
       { key: 'progress',     href: '/student/progress',     icon: PieChart },
@@ -84,7 +96,7 @@ const studentNavGroups: NavGroup[] = [
     label: 'COMMUNICATION',
     items: [
       { key: 'messages',      href: '/student/messages',      icon: MessageSquare },
-      { key: 'notifications', href: '/student/notifications', icon: Bell, badge: 4 },
+      { key: 'notifications', href: '/student/notifications', icon: Bell },
     ],
   },
 ];
@@ -108,6 +120,7 @@ const extraLabels: Record<string, string> = {
   students:      'Students',
   assignments:   'Assignments',
   notifications: 'Notifications',
+  itSupport:     'IT Support',
 };
 
 function getInitials(name: string | null | undefined): string {
@@ -145,6 +158,8 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
     navigate('/');
   };
 
+  const profileHref = `/${role}/profile`;
+
   return (
     <>
       {/* Mobile overlay backdrop */}
@@ -171,6 +186,7 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
           pathname={pathname}
           getLabel={getLabel}
           signOutLabel={t.lms.common.signOut}
+          profileHref={profileHref}
           onCollapseToggle={() => setCollapsed((v) => !v)}
           onLogout={handleLogout}
         />
@@ -199,6 +215,7 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
           pathname={pathname}
           getLabel={getLabel}
           signOutLabel={t.lms.common.signOut}
+          profileHref={profileHref}
           onCollapseToggle={undefined}
           onLinkClick={onClose}
           onLogout={handleLogout}
@@ -216,6 +233,7 @@ interface ContentProps {
   pathname: string;
   getLabel: (key: string) => string;
   signOutLabel: string;
+  profileHref: string;
   onCollapseToggle?: () => void;
   onLinkClick?: () => void;
   onLogout: () => void;
@@ -229,11 +247,13 @@ function SidebarContent({
   pathname,
   getLabel,
   signOutLabel,
+  profileHref,
   onCollapseToggle,
   onLinkClick,
   onLogout,
 }: ContentProps) {
   const initials = getInitials(user?.name);
+  const { unreadMessages, unreadNotifications } = useUnread();
 
   return (
     <div className="flex flex-col h-full">
@@ -244,69 +264,20 @@ function SidebarContent({
           collapsed ? 'justify-center px-0' : 'gap-3'
         )}
       >
-        <div className="w-9 h-9 shrink-0">
+        {collapsed ? (
           <img
             src="/assets/logo-round.png"
             alt="CyberteksIT"
-            className="w-9 h-9 object-contain"
+            className="w-10 h-10 object-contain"
           />
-        </div>
-        {!collapsed && (
-          <span className="font-display font-bold text-[#023064] text-[15px] tracking-tight">
-            Cyberteks<span className="text-primary-red">IT</span>
-          </span>
+        ) : (
+          <img
+            src="/assets/cyberteks-it-logo-33783fbc-fb2c-484a-b670-9f269d8493cf.png"
+            alt="CyberteksIT"
+            className="h-10 w-auto object-contain"
+          />
         )}
       </div>
-
-      {/* User profile */}
-      {!collapsed && (
-        <div className="px-4 py-4 border-b border-gray-100 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#023064] flex items-center justify-center shrink-0 shadow-sm">
-              {user?.image ? (
-                <img
-                  src={user.image}
-                  alt={user.name ?? ''}
-                  className="w-full h-full object-cover rounded-xl"
-                />
-              ) : (
-                <span className="text-white text-sm font-bold">{initials}</span>
-              )}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-gray-900 truncate leading-tight">
-                {user?.name ?? 'User'}
-              </p>
-              <span
-                className={cn(
-                  'inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full mt-0.5',
-                  rc.bgColor,
-                  rc.textColor
-                )}
-              >
-                {rc.label}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Collapsed: avatar only */}
-      {collapsed && (
-        <div className="flex justify-center py-3 border-b border-gray-100 shrink-0">
-          <div className="w-9 h-9 rounded-xl bg-[#023064] flex items-center justify-center shadow-sm">
-            {user?.image ? (
-              <img
-                src={user.image}
-                alt={user.name ?? ''}
-                className="w-full h-full object-cover rounded-xl"
-              />
-            ) : (
-              <span className="text-white text-xs font-bold">{initials}</span>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-5">
@@ -324,6 +295,12 @@ function SidebarContent({
               {group.items.map((item) => {
                 const active =
                   pathname === item.href || pathname.startsWith(item.href + '/');
+                const badgeCount =
+                  item.key === 'messages'
+                    ? unreadMessages
+                    : item.key === 'notifications'
+                    ? unreadNotifications
+                    : item.badge ?? 0;
                 return (
                   <Link
                     key={item.href}
@@ -348,7 +325,7 @@ function SidebarContent({
                     {!collapsed && (
                       <>
                         <span className="truncate flex-1">{getLabel(item.key)}</span>
-                        {item.badge !== undefined && item.badge > 0 && (
+                        {badgeCount > 0 && (
                           <span
                             className={cn(
                               'text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center tabular-nums',
@@ -357,12 +334,12 @@ function SidebarContent({
                                 : 'bg-primary-red text-white'
                             )}
                           >
-                            {item.badge}
+                            {badgeCount}
                           </span>
                         )}
                       </>
                     )}
-                    {collapsed && item.badge !== undefined && item.badge > 0 && (
+                    {collapsed && badgeCount > 0 && (
                       <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary-red ring-2 ring-white" />
                     )}
                   </Link>
@@ -375,6 +352,25 @@ function SidebarContent({
 
       {/* Bottom actions */}
       <div className="border-t border-gray-100 p-3 space-y-1 shrink-0">
+        {/* My Profile */}
+        <Link
+          to={profileHref}
+          onClick={onLinkClick}
+          title={collapsed ? 'My Profile' : undefined}
+          className={cn(
+            'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-all group',
+            collapsed && 'justify-center px-0'
+          )}
+        >
+          <UserCircle
+            className={cn(
+              'shrink-0 text-gray-400 group-hover:text-gray-600 transition-colors',
+              collapsed ? 'w-5 h-5' : 'w-4 h-4'
+            )}
+          />
+          {!collapsed && <span>My Profile</span>}
+        </Link>
+
         {/* Help Center */}
         <Link
           to="/help"
