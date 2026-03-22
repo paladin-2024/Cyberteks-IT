@@ -41,7 +41,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Link to="/" className="inline-block mb-6">
               <img
-                src="/assets/cyberteks-it-logo-33783fbc-fb2c-484a-b670-9f269d8493cf.png"
+                src="/assets/cyberteks-it-footer-logo.png"
                 alt="CyberteksIT"
                 className="h-14 w-auto object-contain"
               />
