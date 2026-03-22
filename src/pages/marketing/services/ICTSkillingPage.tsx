@@ -70,12 +70,59 @@ const WHY_CHOOSE = [
 ];
 
 const VIDEOS = [
-  { title: 'AI & Robotics Training Session', tag: 'AI & Robotics' },
-  { title: 'Networking & Security Workshop', tag: 'Networking' },
-  { title: 'Corporate Cyber Security Training', tag: 'Corporate' },
+  { src: '/videos/session-1.webm', title: 'AI & Robotics Training Session',     tag: 'AI & Robotics' },
+  { src: '/videos/session-2.webm', title: 'Networking & Security Workshop',     tag: 'Networking' },
+  { src: '/videos/session-3.webm', title: 'Corporate Cyber Security Training',  tag: 'Corporate' },
+  { src: '/videos/session-4.webm', title: 'Data Analytics Bootcamp',            tag: 'Data Analytics' },
+  { src: '/videos/session-5.webm', title: 'Web Design & Development Class',     tag: 'Web Design' },
+  { src: '/videos/session-6.webm', title: 'Cloud Computing Session',            tag: 'Cloud' },
+  { src: '/videos/session-7.webm', title: 'Graphic Design Workshop',            tag: 'Design' },
+  { src: '/videos/session-8.webm', title: 'Programming Fundamentals Class',     tag: 'Programming' },
+  { src: '/videos/session-9.webm', title: 'Cyber Security Live Demo',           tag: 'Cyber Security' },
 ];
 
 const fmt = (n: number) => 'UGX ' + n.toLocaleString();
+
+function VideoCard({ src, title, tag }: { src: string; title: string; tag: string }) {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <div className="rounded-3xl overflow-hidden border border-gray-200 bg-white shadow-sm hover:shadow-xl transition-all group">
+      <div className="relative h-52 bg-[#023064] overflow-hidden">
+        {playing ? (
+          <video
+            src={src}
+            className="w-full h-full object-cover"
+            autoPlay
+            controls
+            onEnded={() => setPlaying(false)}
+          />
+        ) : (
+          <>
+            <video
+              src={src}
+              className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity"
+              muted
+              preload="metadata"
+            />
+            <div
+              className="absolute inset-0 flex items-center justify-center cursor-pointer"
+              onClick={() => setPlaying(true)}
+            >
+              <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/70 flex items-center justify-center group-hover:scale-110 group-hover:bg-white/30 transition-all">
+                <Play className="w-7 h-7 text-white fill-white ml-1" />
+              </div>
+            </div>
+            <span className="absolute top-3 left-3 bg-[#E11D48] text-white text-xs font-bold px-2.5 py-1 rounded-full">{tag}</span>
+          </>
+        )}
+      </div>
+      <div className="p-4">
+        <p className="font-heading font-bold text-gray-900 text-sm">{title}</p>
+        <p className="text-xs text-gray-400 mt-1">CyberteksIT Training Session</p>
+      </div>
+    </div>
+  );
+}
 
 type Tab = 'online' | 'corporate' | 'vacation';
 
@@ -466,22 +513,7 @@ export default function ICTSkillingPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {VIDEOS.map((v, i) => (
-              <div key={i} className="rounded-3xl overflow-hidden border border-gray-200 bg-white shadow-sm hover:shadow-xl transition-all group cursor-pointer">
-                <div className="relative h-48 overflow-hidden">
-                  <img src="/assets/ict-skilling-capacity-building.jpg" alt={v.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-[#023064]/50 group-hover:bg-[#023064]/40 transition-colors flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/60 flex items-center justify-center group-hover:scale-110 group-hover:bg-white/30 transition-all">
-                      <Play className="w-7 h-7 text-white fill-white ml-1" />
-                    </div>
-                  </div>
-                  <span className="absolute top-3 left-3 bg-[#E11D48] text-white text-xs font-bold px-2.5 py-1 rounded-full">{v.tag}</span>
-                </div>
-                <div className="p-4">
-                  <p className="font-heading font-bold text-gray-900 text-sm">{v.title}</p>
-                  <p className="text-xs text-gray-400 mt-1">CyberteksIT Training Session</p>
-                </div>
-              </div>
+              <VideoCard key={i} src={v.src} title={v.title} tag={v.tag} />
             ))}
           </div>
           <div className="text-center mt-8">

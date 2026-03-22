@@ -1,11 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaNeon } from '@prisma/adapter-neon';
-import { neon } from '@neondatabase/serverless';
 
 function createPrismaClient() {
-  const sql = neon(process.env.DATABASE_URL!);
-  const adapter = new PrismaNeon(sql);
-  return new PrismaClient({ adapter });
+  return new PrismaClient();
 }
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
@@ -33,7 +29,7 @@ export async function withRetry<T>(fn: () => Promise<T>): Promise<T> {
 
     if (!isTransient) throw err;
 
-    // Retry once — Neon HTTP driver reconnects automatically
+    // Retry once — driver reconnects automatically
     return fn();
   }
 }
