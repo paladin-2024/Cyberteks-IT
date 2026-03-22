@@ -5,6 +5,7 @@ import WhyChooseSection from '@/components/marketing/home/WhyChooseSection';
 import TestimonialsSection from '@/components/marketing/home/TestimonialsSection';
 import ClientsSection from '@/components/marketing/home/ClientsSection';
 import CTASection from '@/components/marketing/home/CTASection';
+import NewsletterSection from '@/components/marketing/home/NewsletterSection';
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
       <TestimonialsSection />
       <ClientsSection />
       <CTASection />
+      <NewsletterSection />
     </>
   );
 }

@@ -22,6 +22,7 @@ import submissionsRouter   from './routes/submissions';
 import uploadRouter        from './routes/upload';
 import getStartedRouter    from './routes/get-started';
 import sectionsRouter      from './routes/sections';
+import newsletterRouter    from './routes/newsletter';
 
 const app  = express();
 const PORT = process.env.PORT ?? 3001;
@@ -56,6 +57,7 @@ app.use('/api/submissions',  submissionsRouter);
 app.use('/api/upload',       uploadRouter);
 app.use('/api/get-started',  getStartedRouter);
 app.use('/api/sections',     sectionsRouter);
+app.use('/api/newsletter',   newsletterRouter);
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {

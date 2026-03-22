@@ -624,3 +624,11 @@ model Notification {
   @@index([createdAt])
   @@map("notifications")
 }
+
+model NewsletterSubscriber {
+  id          String   @id @map("_id") @default(cuid())
+  email       String   @unique
+  subscribedAt DateTime @default(now())
+
+  @@map("newsletter_subscribers")
+}
