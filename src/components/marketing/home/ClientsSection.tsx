@@ -17,17 +17,26 @@ export default function ClientsSection() {
   const { t } = useLanguage();
 
   return (
-    <section className="py-16 bg-white border-t border-gray-100 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-[0.15em]">
-          {t.clients.tagline}
-        </p>
+    <section className="py-20 bg-[#023064] overflow-hidden relative">
+      <div className="absolute inset-0 bg-grid opacity-10 pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
+        <div className="inline-flex items-center gap-3 mb-2">
+          <span className="w-6 h-0.5 bg-primary-red opacity-60" />
+          <p className="text-sm font-bold text-white/40 uppercase tracking-[0.18em]">
+            {t.clients.tagline}
+          </p>
+          <span className="w-6 h-0.5 bg-primary-red opacity-60" />
+        </div>
+        <p className="text-base text-white/30 mt-2">Trusted by businesses across Uganda and East Africa</p>
       </div>
 
       <div className="relative">
         {/* Fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-white z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, white, transparent)' }} />
-        <div className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, white, transparent)' }} />
+        <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to right, #023064, transparent)' }} />
+        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to left, #023064, transparent)' }} />
 
         <div className="flex gap-16 animate-scroll w-max">
           {[...clients, ...clients].map((client, i) => (
@@ -35,7 +44,7 @@ export default function ClientsSection() {
               <img
                 src={client.logo}
                 alt={client.name}
-                className="max-h-14 w-auto object-contain grayscale opacity-50 hover:opacity-80 hover:grayscale-0 transition-all duration-300"
+                className="max-h-14 w-auto object-contain grayscale brightness-200 opacity-30 hover:opacity-70 hover:grayscale-0 hover:brightness-100 transition-all duration-400"
               />
             </div>
           ))}
