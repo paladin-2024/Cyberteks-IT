@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ChevronDown, Shield, Monitor, Wifi, GraduationCap, Code2, Camera, Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Youtube } from 'lucide-react';
+import { Menu, X, ChevronDown, Shield, Monitor, Wifi, GraduationCap, Code2, Camera, Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -79,7 +79,7 @@ export default function Navbar() {
                   { icon: Facebook, href: 'https://facebook.com/cyberteksit',             label: 'Facebook' },
                   { icon: Twitter,  href: 'https://twitter.com/cyberteksit',              label: 'Twitter' },
                   { icon: Linkedin, href: 'https://linkedin.com/company/cyberteks-it',    label: 'LinkedIn' },
-                  { icon: Youtube,  href: 'https://youtube.com/@cyberteksit',             label: 'YouTube' },
+                  { icon: Instagram, href: 'https://instagram.com/cyberteksit',            label: 'Instagram' },
                 ].map(({ icon: Icon, href, label }) => (
                   <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                     aria-label={label}
