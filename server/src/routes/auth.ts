@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { prisma } from '../lib/prisma';
+import { prisma, withRetry } from '../lib/prisma';
 import { requireAuth, AuthRequest } from '../middleware/auth';
 import { sendEmail } from '../lib/email';
 
@@ -16,7 +16,7 @@ router.post('/login', async (req: Request, res: Response) => {
       return;
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await withRetry(() => prisma.user.findUnique({ where: { email } }));
     if (!user || !user.password) {
       res.status(401).json({ error: 'Invalid credentials' });
       return;
@@ -47,10 +47,10 @@ router.post('/login', async (req: Request, res: Response) => {
 // GET /api/auth/me
 router.get('/me', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await withRetry(() => prisma.user.findUnique({
       where: { id: req.user!.id },
       select: { id: true, name: true, email: true, role: true, image: true },
-    });
+    }));
     if (!user) {
       res.status(404).json({ error: 'User not found' });
       return;
@@ -68,20 +68,20 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
     const { email } = req.body;
     if (!email) { res.status(400).json({ error: 'Email is required' }); return; }
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await withRetry(() => prisma.user.findUnique({ where: { email } }));
 
     // Always respond 200 to avoid user enumeration
     if (user) {
       // Invalidate any previous OTPs for this email
-      await prisma.otpCode.updateMany({
+      await withRetry(() => prisma.otpCode.updateMany({
         where: { email, used: false },
         data: { used: true },
-      });
+      }));
 
       const code = String(Math.floor(100000 + Math.random() * 900000));
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-      await prisma.otpCode.create({ data: { email, code, expiresAt } });
+      await withRetry(() => prisma.otpCode.create({ data: { email, code, expiresAt } }));
 
       sendEmail({
         to: user.email,
@@ -117,10 +117,10 @@ router.post('/verify-otp', async (req: Request, res: Response) => {
     const { email, code } = req.body;
     if (!email || !code) { res.status(400).json({ error: 'Email and code are required' }); return; }
 
-    const otp = await prisma.otpCode.findFirst({
+    const otp = await withRetry(() => prisma.otpCode.findFirst({
       where: { email, code, used: false, expiresAt: { gt: new Date() } },
       orderBy: { createdAt: 'desc' },
-    });
+    }));
 
     if (!otp) {
       res.status(400).json({ error: 'Invalid or expired code. Please try again.' });
@@ -128,7 +128,7 @@ router.post('/verify-otp', async (req: Request, res: Response) => {
     }
 
     // Mark used
-    await prisma.otpCode.update({ where: { id: otp.id }, data: { used: true } });
+    await withRetry(() => prisma.otpCode.update({ where: { id: otp.id }, data: { used: true } }));
 
     // Issue a short-lived reset token
     const resetToken = jwt.sign({ email, purpose: 'reset' }, process.env.JWT_SECRET!, { expiresIn: '15m' });
@@ -156,11 +156,11 @@ router.post('/reset-password', async (req: Request, res: Response) => {
 
     if (payload.purpose !== 'reset') { res.status(400).json({ error: 'Invalid token' }); return; }
 
-    const user = await prisma.user.findUnique({ where: { email: payload.email } });
+    const user = await withRetry(() => prisma.user.findUnique({ where: { email: payload.email } }));
     if (!user) { res.status(404).json({ error: 'User not found' }); return; }
 
     const hashed = await bcrypt.hash(password, 12);
-    await prisma.user.update({ where: { id: user.id }, data: { password: hashed } });
+    await withRetry(() => prisma.user.update({ where: { id: user.id }, data: { password: hashed } }));
 
     res.json({ message: 'Password updated successfully.' });
   } catch (err) {

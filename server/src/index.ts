@@ -78,4 +78,3 @@ app.listen(PORT, () => {
     .catch((err) => console.warn('[server] DB connect warning (will retry on requests):', err.message));
 });
 
-export default app;
