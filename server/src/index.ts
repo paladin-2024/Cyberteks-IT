@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import path from 'path';
 import express from 'express';
+import { prisma } from './lib/prisma';
 import cors from 'cors';
 
 import authRouter         from './routes/auth';
@@ -67,8 +68,15 @@ app.use((_req, res) => {
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`[server] Running on http://localhost:${PORT}`);
-});
+prisma.$connect()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`[server] Running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('[server] Failed to connect to database:', err);
+    process.exit(1);
+  });
 
 export default app;

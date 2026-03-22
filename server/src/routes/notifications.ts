@@ -1,5 +1,5 @@
 import { Router, Response } from 'express';
-import { prisma } from '../lib/prisma';
+import { prisma, withRetry } from '../lib/prisma';
 import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
 
 const router = Router();
@@ -11,7 +11,7 @@ router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
     const limit = Math.min(parseInt((req.query.limit as string) ?? '50', 10) || 50, 50);
     const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
 
-    const notifications = await prisma.notification.findMany({
+    const notifications = await withRetry(() => prisma.notification.findMany({
       where: {
         userId: req.user!.id,
         OR: [
@@ -21,7 +21,7 @@ router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
       },
       orderBy: { createdAt: 'desc' },
       take: limit,
-    });
+    }));
 
     const unreadCount = notifications.filter((n: { isRead: boolean }) => !n.isRead).length;
 
