@@ -1,19 +1,23 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaNeon } from '@prisma/adapter-neon';
+import { neon } from '@neondatabase/serverless';
+
+function createPrismaClient() {
+  const sql = neon(process.env.DATABASE_URL!);
+  const adapter = new PrismaNeon(sql);
+  return new PrismaClient({ adapter });
+}
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({
-  log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
-});
+export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
-// ── Reconnect helper ─────────────────────────────────────────────────────────
-// MongoDB Atlas (especially free tier) drops idle connections after ~60s.
-// When Prisma tries to reuse a stale connection it throws P2010 / ECONNRESET.
-// This wrapper retries once after a forced reconnect on those transient errors.
+// ── Retry helper ─────────────────────────────────────────────────────────────
+// Wraps a Prisma call and retries once on transient connection errors.
 
-const TRANSIENT_CODES = new Set(['P2010', 'P1001', 'P1002', 'P1008', 'P1017']);
+const TRANSIENT_CODES = new Set(['P1001', 'P1002', 'P1008', 'P1017', 'P2010']);
 
 export async function withRetry<T>(fn: () => Promise<T>): Promise<T> {
   try {
@@ -21,18 +25,15 @@ export async function withRetry<T>(fn: () => Promise<T>): Promise<T> {
   } catch (err: unknown) {
     const code = (err as { code?: string }).code;
     const msg  = (err as { message?: string }).message ?? '';
-    const isConnectionError =
+    const isTransient =
       (code && TRANSIENT_CODES.has(code)) ||
       msg.includes('Connection reset') ||
       msg.includes('ECONNRESET') ||
       msg.includes('connect ECONNREFUSED');
 
-    if (!isConnectionError) throw err;
+    if (!isTransient) throw err;
 
-    // Force Prisma to drop all connections and reconnect
-    try { await prisma.$disconnect(); } catch { /* ignore */ }
-    await prisma.$connect();
-
-    return fn(); // one retry
+    // Retry once — Neon HTTP driver reconnects automatically
+    return fn();
   }
 }

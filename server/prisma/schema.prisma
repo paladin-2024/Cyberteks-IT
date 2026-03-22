@@ -1,13 +1,14 @@
 // ─── Prisma Schema — CyberteksIT LMS ───────────────────────────────────────
-// Database: MongoDB (Atlas)
+// Database: Neon (PostgreSQL)
 // ORM: Prisma 5
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -76,7 +77,7 @@ enum MessageStatus {
 // ────────────────────────────────────────────────────────────────────────────
 
 model User {
-  id            String   @id @map("_id") @default(cuid())
+  id            String   @id @default(cuid())
   name          String
   email         String   @unique
   emailVerified DateTime?
@@ -89,24 +90,22 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  // Auth
   accounts      Account[]
   sessions      Session[]
 
-  // LMS relationships
-  teacherCourses   Course[]       @relation("CourseTeacher")
-  enrollments      Enrollment[]
-  applications     Application[]
-  invoices         Invoice[]
-  certificates     Certificate[]
-  notifications    Notification[]
-  sentMessages     Message[]        @relation("MessageSender")
-  receivedMessages Message[]        @relation("MessageReceiver")
-  lessonProgress   LessonProgress[]
-  quizAttempts     QuizAttempt[]
+  teacherCourses     Course[]         @relation("CourseTeacher")
+  enrollments        Enrollment[]
+  applications       Application[]
+  invoices           Invoice[]
+  certificates       Certificate[]
+  notifications      Notification[]
+  sentMessages       Message[]        @relation("MessageSender")
+  receivedMessages   Message[]        @relation("MessageReceiver")
+  lessonProgress     LessonProgress[]
+  quizAttempts       QuizAttempt[]
   curriculumWeeks    CurriculumWeek[] @relation("TeacherCurriculum")
-  teacherAssignments Assignment[]    @relation("TeacherAssignments")
-  studentSubmissions Submission[]    @relation("StudentSubmissions")
+  teacherAssignments Assignment[]     @relation("TeacherAssignments")
+  studentSubmissions Submission[]     @relation("StudentSubmissions")
 
   @@map("users")
 }
@@ -116,7 +115,7 @@ model User {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Account {
-  id                String  @id @map("_id") @default(cuid())
+  id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
@@ -136,7 +135,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @map("_id") @default(cuid())
+  id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -147,7 +146,7 @@ model Session {
 }
 
 model VerificationToken {
-  id         String   @id @map("_id") @default(cuid())
+  id         String   @id @default(cuid())
   identifier String
   token      String   @unique
   expires    DateTime
@@ -161,7 +160,7 @@ model VerificationToken {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Application {
-  id              String            @id @map("_id") @default(cuid())
+  id              String            @id @default(cuid())
   userId          String?
   status          ApplicationStatus @default(PENDING)
 
@@ -209,7 +208,7 @@ model Application {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Course {
-  id          String       @id @map("_id") @default(cuid())
+  id          String       @id @default(cuid())
   title       String
   slug        String       @unique
   description String
@@ -243,7 +242,7 @@ model Course {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Section {
-  id       String   @id @map("_id") @default(cuid())
+  id       String   @id @default(cuid())
   title    String
   order    Int      @default(0)
   courseId String
@@ -255,7 +254,7 @@ model Section {
 }
 
 model Lesson {
-  id          String     @id @map("_id") @default(cuid())
+  id          String     @id @default(cuid())
   title       String
   description String?
   type        LessonType @default(VIDEO)
@@ -265,7 +264,7 @@ model Lesson {
   isFree      Boolean    @default(false)
   sectionId   String
 
-  section     Section    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  section     Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   progress    LessonProgress[]
   quiz        Quiz?
 
@@ -277,37 +276,37 @@ model Lesson {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Quiz {
-  id           String        @id @map("_id") @default(cuid())
-  title        String
-  passMark     Int           @default(70)
-  lessonId     String        @unique
+  id       String @id @default(cuid())
+  title    String
+  passMark Int    @default(70)
+  lessonId String @unique
 
-  lesson       Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  questions    QuizQuestion[]
-  attempts     QuizAttempt[]
+  lesson    Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions QuizQuestion[]
+  attempts  QuizAttempt[]
 
   @@map("quizzes")
 }
 
 model QuizQuestion {
-  id       String   @id @map("_id") @default(cuid())
-  text     String
-  options  Json
-  order    Int      @default(0)
-  quizId   String
+  id      String @id @default(cuid())
+  text    String
+  options Json
+  order   Int    @default(0)
+  quizId  String
 
-  quiz     Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
   @@map("quiz_questions")
 }
 
 model QuizAttempt {
-  id        String   @id @map("_id") @default(cuid())
-  score     Float
-  passed    Boolean
-  answers   Json
-  userId    String
-  quizId    String
+  id      String  @id @default(cuid())
+  score   Float
+  passed  Boolean
+  answers Json
+  userId  String
+  quizId  String
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
@@ -321,33 +320,33 @@ model QuizAttempt {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Enrollment {
-  id               String           @id @map("_id") @default(cuid())
-  status           EnrollmentStatus @default(ACTIVE)
-  progressPercent  Float            @default(0)
-  startedAt        DateTime         @default(now())
-  completedAt      DateTime?
+  id              String           @id @default(cuid())
+  status          EnrollmentStatus @default(ACTIVE)
+  progressPercent Float            @default(0)
+  startedAt       DateTime         @default(now())
+  completedAt     DateTime?
 
-  userId           String
-  courseId         String
+  userId   String
+  courseId String
 
-  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course           Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
   @@map("enrollments")
 }
 
 model LessonProgress {
-  id          String   @id @map("_id") @default(cuid())
-  completed   Boolean  @default(false)
+  id          String    @id @default(cuid())
+  completed   Boolean   @default(false)
   completedAt DateTime?
-  watchedSecs Int      @default(0)
+  watchedSecs Int       @default(0)
 
-  userId      String
-  lessonId    String
+  userId   String
+  lessonId String
 
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId])
   @@map("lesson_progress")
@@ -358,15 +357,15 @@ model LessonProgress {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Certificate {
-  id            String   @id @map("_id") @default(cuid())
+  id            String   @id @default(cuid())
   certificateNo String   @unique @default(cuid())
   issuedAt      DateTime @default(now())
 
-  userId        String
-  courseId      String
+  userId   String
+  courseId String
 
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course        Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
   @@map("certificates")
@@ -377,23 +376,23 @@ model Certificate {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Invoice {
-  id          String        @id @map("_id") @default(cuid())
-  invoiceNo   String        @unique
-  amount      Float
-  currency    String        @default("UGX")
-  status      InvoiceStatus @default(DRAFT)
-  dueDate     DateTime?
-  paidAt      DateTime?
-  notes       String?
+  id        String        @id @default(cuid())
+  invoiceNo String        @unique
+  amount    Float
+  currency  String        @default("UGX")
+  status    InvoiceStatus @default(DRAFT)
+  dueDate   DateTime?
+  paidAt    DateTime?
+  notes     String?
 
-  userId      String
-  courseId    String?
+  userId   String
+  courseId String?
 
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course      Course?       @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("invoices")
 }
@@ -403,9 +402,9 @@ model Invoice {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Conversation {
-  id           String    @id @map("_id") @default(cuid())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   messages     Message[]
   participants ConversationParticipant[]
@@ -414,29 +413,29 @@ model Conversation {
 }
 
 model ConversationParticipant {
-  id             String       @id @map("_id") @default(cuid())
+  id             String @id @default(cuid())
   userId         String
   conversationId String
 
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   @@unique([userId, conversationId])
   @@map("conversation_participants")
 }
 
 model Message {
-  id             String        @id @map("_id") @default(cuid())
+  id             String        @id @default(cuid())
   content        String
   status         MessageStatus @default(SENT)
   senderId       String
   receiverId     String
   conversationId String?
 
-  sender         User          @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
-  receiver       User          @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
-  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  sender       User          @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver     User          @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  conversation Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
 
-  createdAt      DateTime      @default(now())
+  createdAt DateTime @default(now())
 
   @@index([conversationId])
   @@index([senderId])
@@ -448,22 +447,39 @@ model Message {
 // NOTIFICATIONS
 // ────────────────────────────────────────────────────────────────────────────
 
+model Notification {
+  id        String           @id @default(cuid())
+  title     String
+  body      String
+  type      NotificationType @default(INFO)
+  isRead    Boolean          @default(false)
+  link      String?
+  userId    String
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
 // ────────────────────────────────────────────────────────────────────────────
-// CURRICULUM (teacher weekly roadmap)
+// CURRICULUM
 // ────────────────────────────────────────────────────────────────────────────
 
 model CurriculumWeek {
-  id         String            @id @map("_id") @default(cuid())
+  id         String   @id @default(cuid())
   courseId   String
   teacherId  String
   weekNumber Int
   title      String
-  topics     CurriculumTopic[]
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime          @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  teacher User   @relation("TeacherCurriculum", fields: [teacherId], references: [id], onDelete: Cascade)
+  course  Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacher User             @relation("TeacherCurriculum", fields: [teacherId], references: [id], onDelete: Cascade)
+  topics  CurriculumTopic[]
 
   @@index([courseId])
   @@index([teacherId])
@@ -471,16 +487,16 @@ model CurriculumWeek {
 }
 
 model CurriculumTopic {
-  id               String    @id @map("_id") @default(cuid())
-  weekId           String
-  title            String
-  description      String?
-  duration         String?
-  type             String    @default("lecture")
-  order            Int       @default(0)
-  meetLink         String?
-  meetScheduledAt  DateTime?
-  createdAt        DateTime  @default(now())
+  id              String    @id @default(cuid())
+  weekId          String
+  title           String
+  description     String?
+  duration        String?
+  type            String    @default("lecture")
+  order           Int       @default(0)
+  meetLink        String?
+  meetScheduledAt DateTime?
+  createdAt       DateTime  @default(now())
 
   week CurriculumWeek @relation(fields: [weekId], references: [id], onDelete: Cascade)
 
@@ -489,11 +505,11 @@ model CurriculumTopic {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// ASSIGNMENT
+// ASSIGNMENT & SUBMISSION
 // ────────────────────────────────────────────────────────────────────────────
 
 model Assignment {
-  id             String   @id @map("_id") @default(cuid())
+  id             String   @id @default(cuid())
   title          String
   description    String?
   instructions   String?
@@ -503,41 +519,37 @@ model Assignment {
   attachmentUrl  String?
   attachmentName String?
 
-  courseId     String
-  teacherId    String
+  courseId  String
+  teacherId String
 
-  course       Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  teacher      User         @relation("TeacherAssignments", fields: [teacherId], references: [id], onDelete: Cascade)
-  submissions  Submission[]
+  course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacher     User         @relation("TeacherAssignments", fields: [teacherId], references: [id], onDelete: Cascade)
+  submissions Submission[]
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([courseId])
   @@index([teacherId])
   @@map("assignments")
 }
 
-// ────────────────────────────────────────────────────────────────────────────
-// SUBMISSION (student submits assignment; teacher grades)
-// ────────────────────────────────────────────────────────────────────────────
-
 model Submission {
-  id           String    @id @map("_id") @default(cuid())
+  id           String    @id @default(cuid())
   assignmentId String
   studentId    String
   content      String?
-  fileUrl      String?   // uploaded file path e.g. /uploads/submissions/uuid.pdf
-  fileName     String?   // original filename shown in UI
-  fileSize     Int?      // bytes
+  fileUrl      String?
+  fileName     String?
+  fileSize     Int?
   score        Float?
   feedback     String?
-  status       String    @default("SUBMITTED")  // SUBMITTED | GRADED | LATE
+  status       String    @default("SUBMITTED")
   submittedAt  DateTime  @default(now())
   gradedAt     DateTime?
 
-  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
-  student      User       @relation("StudentSubmissions", fields: [studentId], references: [id])
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student    User       @relation("StudentSubmissions", fields: [studentId], references: [id])
 
   @@unique([assignmentId, studentId])
   @@index([assignmentId])
@@ -546,7 +558,7 @@ model Submission {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// SUPPORT REQUEST (remote IT support from marketing get-started page)
+// SUPPORT REQUEST
 // ────────────────────────────────────────────────────────────────────────────
 
 enum SupportRequestStatus {
@@ -557,35 +569,31 @@ enum SupportRequestStatus {
 }
 
 model SupportRequest {
-  id          String               @id @map("_id") @default(cuid())
-  status      SupportRequestStatus @default(OPEN)
+  id     String               @id @default(cuid())
+  status SupportRequestStatus @default(OPEN)
 
-  // Contact info
-  fullName    String
-  email       String
-  phone       String?
-  company     String?
-  location    String?
+  fullName  String
+  email     String
+  phone     String?
+  company   String?
+  location  String?
 
-  // Device + problem
-  deviceType          String?
-  os                  String?
-  problemCategory     String?
-  problemDescription  String
-  errorMessages       String?
-  urgency             String   @default("Medium")
+  deviceType         String?
+  os                 String?
+  problemCategory    String?
+  problemDescription String
+  errorMessages      String?
+  urgency            String  @default("Medium")
 
-  // Remote access
   remoteTool    String?
   remoteId      String?
   availableTime String?
 
-  // Admin
-  adminNotes  String?
-  repliedAt   DateTime?
+  adminNotes String?
+  repliedAt  DateTime?
 
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([email])
   @@index([status])
@@ -593,11 +601,11 @@ model SupportRequest {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// OTP CODES (password reset)
+// OTP CODES
 // ────────────────────────────────────────────────────────────────────────────
 
 model OtpCode {
-  id        String   @id @map("_id") @default(cuid())
+  id        String   @id @default(cuid())
   email     String
   code      String
   expiresAt DateTime
@@ -608,26 +616,13 @@ model OtpCode {
   @@map("otp_codes")
 }
 
-model Notification {
-  id        String           @id @map("_id") @default(cuid())
-  title     String
-  body      String
-  type      NotificationType @default(INFO)
-  isRead    Boolean          @default(false)
-  link      String?
-  userId    String
-
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime         @default(now())
-
-  @@index([userId])
-  @@index([createdAt])
-  @@map("notifications")
-}
+// ────────────────────────────────────────────────────────────────────────────
+// NEWSLETTER
+// ────────────────────────────────────────────────────────────────────────────
 
 model NewsletterSubscriber {
-  id          String   @id @map("_id") @default(cuid())
-  email       String   @unique
+  id           String   @id @default(cuid())
+  email        String   @unique
   subscribedAt DateTime @default(now())
 
   @@map("newsletter_subscribers")
