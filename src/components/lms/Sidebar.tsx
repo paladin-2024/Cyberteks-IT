@@ -4,7 +4,7 @@ import {
   LayoutDashboard, BookOpen, Users, FileText, MessageSquare,
   Bell, Award, Settings, ChevronLeft, ChevronRight, LogOut,
   GraduationCap, Briefcase, Map, BarChart3, Calendar,
-  ClipboardList, UserCheck, PieChart, X, HelpCircle, UserCircle, ListOrdered, Headphones,
+  ClipboardList, UserCheck, PieChart, X, HelpCircle, UserCircle, ListOrdered, Headphones, Mail,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
@@ -35,8 +35,9 @@ const adminNavGroups: NavGroup[] = [
   {
     label: 'COMMUNICATION',
     items: [
-      { key: 'messages', href: '/admin/messages', icon: MessageSquare },
+      { key: 'messages',      href: '/admin/messages',      icon: MessageSquare },
       { key: 'notifications', href: '/admin/notifications', icon: Bell },
+      { key: 'newsletter',    href: '/admin/newsletter',    icon: Mail },
     ],
   },
   {
@@ -121,6 +122,7 @@ const extraLabels: Record<string, string> = {
   assignments:   'Assignments',
   notifications: 'Notifications',
   itSupport:     'IT Support',
+  newsletter:    'Newsletter',
 };
 
 function getInitials(name: string | null | undefined): string {
