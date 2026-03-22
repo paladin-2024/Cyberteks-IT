@@ -4,10 +4,10 @@ export default function StatsSection() {
   const { t } = useLanguage();
 
   const stats = [
-    { value: '10+',    label: t.stats.years,    sub: 'Since 2014' },
-    { value: '500+',   label: t.stats.clients,  sub: 'Across East Africa' },
-    { value: '1,200+', label: t.stats.projects, sub: 'Delivered on time' },
-    { value: '3,000+', label: t.stats.trained,  sub: 'Industry-certified' },
+    { value: '5+',   label: t.stats.years,    sub: 'Years of Experience' },
+    { value: '100+', label: t.stats.clients,  sub: 'Happy Clients' },
+    { value: '100+', label: t.stats.projects, sub: 'Delivered Projects' },
+    { value: '200+', label: t.stats.trained,  sub: 'Professionals Trained' },
   ];
 
   return (
