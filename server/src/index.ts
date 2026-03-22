@@ -70,15 +70,12 @@ app.use((_req, res) => {
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
-prisma.$connect()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`[server] Running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('[server] Failed to connect to database:', err);
-    process.exit(1);
-  });
+app.listen(PORT, () => {
+  console.log(`[server] Running on http://localhost:${PORT}`);
+  // Attempt DB connection in background — routes handle reconnects via withRetry()
+  prisma.$connect()
+    .then(() => console.log('[server] Database connected'))
+    .catch((err) => console.warn('[server] DB connect warning (will retry on requests):', err.message));
+});
 
 export default app;
