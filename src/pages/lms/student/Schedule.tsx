@@ -1,141 +1,125 @@
-import { Calendar, Clock, Video, BookOpen, ClipboardList, MapPin } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Calendar, BookOpen, Clock, Video } from 'lucide-react';
+import { api } from '@/lib/api';
 
-type EventType = 'live' | 'assignment' | 'quiz' | 'lesson';
-
-interface ScheduleEvent {
-  time: string;
-  duration: string;
-  title: string;
-  course: string;
-  type: EventType;
-  instructor?: string;
-  location?: string;
+interface Enrollment {
+  id: string;
+  status: string;
+  progressPercent: number;
+  course: {
+    id: string;
+    title: string;
+    category: string | null;
+    duration: string | null;
+    teacher: { name: string };
+  };
 }
 
-const weekDays  = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const weekDates = ['Mar 17', 'Mar 18', 'Mar 19', 'Mar 20', 'Mar 21', 'Mar 22'];
-const todayIdx  = 0;
-
-const schedule: Record<number, ScheduleEvent[]> = {
-  0: [
-    { time: '9:00 AM',  duration: '60 min', title: 'Live Class: CSS Grid & Flexbox', course: 'Web Dev',       type: 'live',       instructor: 'Caleb Nzabanita', location: 'Zoom' },
-    { time: '3:00 PM',  duration: '45 min', title: 'Self-Study: JS Fundamentals',    course: 'Web Dev',       type: 'lesson' },
-  ],
-  1: [
-    { time: '10:00 AM', duration: '30 min', title: 'Quiz: Network Fundamentals',     course: 'Networking',    type: 'quiz' },
-    { time: '2:00 PM',  duration: '60 min', title: 'Live Session: Firewalls & IDS',  course: 'Cybersecurity', type: 'live',  instructor: 'Caleb Nzabanita', location: 'Google Meet' },
-  ],
-  2: [
-    { time: '11:00 AM', duration: '45 min', title: 'Self-Study: Responsive Design',  course: 'Web Dev',       type: 'lesson' },
-    { time: '4:00 PM',  duration: '20 min', title: 'Assignment Review',              course: 'Networking',    type: 'assignment' },
-  ],
-  3: [
-    { time: '9:00 AM',  duration: '60 min', title: 'Live Class: DOM Manipulation',   course: 'Web Dev',       type: 'live', instructor: 'Caleb Nzabanita', location: 'Zoom' },
-  ],
-  4: [
-    { time: '10:00 AM', duration: '—',      title: 'Project Submission Deadline',    course: 'Cybersecurity', type: 'assignment' },
-    { time: '3:00 PM',  duration: '45 min', title: 'Self-Study: Encryption Basics',  course: 'Cybersecurity', type: 'lesson' },
-  ],
-  5: [
-    { time: '10:00 AM', duration: '90 min', title: 'Open Lab / Study Session',       course: 'All Courses',   type: 'live', location: 'Discord' },
-  ],
-};
-
-const typeConfig: Record<EventType, { label: string; icon: React.ElementType; bg: string; border: string; text: string; iconColor: string }> = {
-  live:       { label: 'Live Session', icon: Video,        bg: 'bg-blue-50',  border: 'border-blue-200',  text: 'text-blue-700',  iconColor: 'text-blue-500' },
-  assignment: { label: 'Assignment',   icon: ClipboardList, bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', iconColor: 'text-amber-500' },
-  quiz:       { label: 'Quiz',         icon: BookOpen,     bg: 'bg-rose-50',  border: 'border-rose-200',  text: 'text-rose-700',  iconColor: 'text-rose-500' },
-  lesson:     { label: 'Self-Study',   icon: BookOpen,     bg: 'bg-slate-50', border: 'border-slate-200', text: 'text-slate-600', iconColor: 'text-slate-400' },
-};
-
 export default function SchedulePage() {
+  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api.get<{ enrollments: Enrollment[] }>('/enrollments')
+      .then(({ enrollments }) => setEnrollments(enrollments.filter(e => e.status === 'ACTIVE')))
+      .catch(() => setEnrollments([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const today = new Date();
+  const weekLabel = today.toLocaleDateString('en-UG', { month: 'long', year: 'numeric' });
+
+  const COURSE_COLORS = [
+    { bg: 'bg-blue-50',    border: 'border-blue-200',  text: 'text-blue-700',    dot: 'bg-blue-500' },
+    { bg: 'bg-teal-50',    border: 'border-teal-200',  text: 'text-teal-700',    dot: 'bg-teal-500' },
+    { bg: 'bg-violet-50',  border: 'border-violet-200', text: 'text-violet-700', dot: 'bg-violet-500' },
+    { bg: 'bg-amber-50',   border: 'border-amber-200', text: 'text-amber-700',   dot: 'bg-amber-500' },
+    { bg: 'bg-rose-50',    border: 'border-rose-200',  text: 'text-rose-700',    dot: 'bg-rose-500' },
+  ];
+
   return (
     <div className="space-y-6 max-w-5xl pb-8">
-
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-xl font-bold text-slate-900">My Schedule</h1>
-          <p className="text-slate-500 text-sm mt-0.5">Week of March 17 – 22, 2026</p>
+          <h1 className="font-heading text-xl font-bold text-foreground">My Schedule</h1>
+          <p className="text-muted-foreground text-sm mt-0.5">Your active courses and learning overview</p>
         </div>
-        <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-sm font-medium text-slate-600">
+        <div className="flex items-center gap-2 bg-card border border-border rounded-xl px-3 py-1.5 text-sm font-medium text-foreground">
           <Calendar className="w-4 h-4 text-primary-blue" />
-          March 2026
+          {weekLabel}
         </div>
       </div>
 
-      {/* Legend */}
-      <div className="flex flex-wrap gap-3">
-        {Object.entries(typeConfig).map(([key, cfg]) => (
-          <span key={key} className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border ${cfg.bg} ${cfg.border} ${cfg.text}`}>
-            <cfg.icon className={`w-3 h-3 ${cfg.iconColor}`} />
-            {cfg.label}
-          </span>
-        ))}
-      </div>
-
-      {/* Week grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        {weekDays.map((day, i) => {
-          const isToday = i === todayIdx;
-          const events  = schedule[i] ?? [];
-          return (
-            <div key={day} className={`rounded-2xl border overflow-hidden ${isToday ? 'border-primary-blue shadow-md shadow-blue-900/10' : 'border-slate-200 bg-white'}`}>
-              <div className={`px-3 py-2.5 flex items-center justify-between ${isToday ? 'bg-primary-blue text-white' : 'bg-slate-50 border-b border-slate-100'}`}>
-                <span className="text-xs font-bold">{day}</span>
-                <span className={`text-[10px] font-medium ${isToday ? 'text-white/70' : 'text-slate-400'}`}>{weekDates[i]}</span>
-              </div>
-              <div className="p-2 space-y-1.5 bg-white min-h-[80px]">
-                {events.length === 0 ? (
-                  <p className="text-[10px] text-slate-300 text-center py-3">No events</p>
-                ) : events.map((e, j) => {
-                  const cfg = typeConfig[e.type];
-                  return (
-                    <div key={j} className={`rounded-xl px-2 py-1.5 border ${cfg.bg} ${cfg.border}`}>
-                      <p className={`text-[10px] font-bold leading-snug ${cfg.text}`}>{e.title}</p>
-                      <p className="text-[9px] text-slate-400 mt-0.5">{e.time} · {e.duration}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Today's detail */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6">
-        <div className="flex items-center gap-2 mb-5">
-          <div className="w-2 h-2 rounded-full bg-primary-blue animate-pulse" />
-          <h2 className="font-display font-bold text-slate-900 text-base">Today — Monday, March 17</h2>
+      {/* Notice banner */}
+      <div className="flex items-start gap-3 bg-primary-blue/5 border border-primary-blue/20 rounded-2xl px-5 py-4">
+        <Video className="w-5 h-5 text-primary-blue shrink-0 mt-0.5" />
+        <div>
+          <p className="text-sm font-semibold text-primary-blue">Live sessions coming soon</p>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Your teacher will schedule live sessions and assignments here. Check back regularly for updates.
+          </p>
         </div>
+      </div>
+
+      {loading ? (
         <div className="space-y-3">
-          {(schedule[0] ?? []).map((e, i) => {
-            const cfg  = typeConfig[e.type];
-            const Icon = cfg.icon;
-            return (
-              <div key={i} className={`flex items-start gap-4 p-4 rounded-2xl border ${cfg.bg} ${cfg.border}`}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-white shadow-sm">
-                  <Icon className={`w-5 h-5 ${cfg.iconColor}`} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className={`font-semibold text-sm ${cfg.text}`}>{e.title}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">{e.course}</p>
-                  <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-slate-500">
-                    <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{e.time} · {e.duration}</span>
-                    {e.instructor && <span>{e.instructor}</span>}
-                    {e.location   && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{e.location}</span>}
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="bg-card border border-border rounded-2xl p-5 animate-pulse h-24" />
+          ))}
+        </div>
+      ) : enrollments.length === 0 ? (
+        <div className="bg-card border border-border rounded-2xl p-16 flex flex-col items-center text-center">
+          <div className="w-16 h-16 rounded-2xl bg-primary-blue/10 flex items-center justify-center mb-4">
+            <Calendar className="w-8 h-8 text-primary-blue" />
+          </div>
+          <p className="font-heading font-semibold text-foreground mb-1">No active courses</p>
+          <p className="text-sm text-muted-foreground max-w-xs">
+            Once you're enrolled in courses, your schedule will appear here.
+          </p>
+        </div>
+      ) : (
+        <>
+          <h2 className="font-heading font-semibold text-foreground">Active Courses</h2>
+          <div className="space-y-3">
+            {enrollments.map((e, idx) => {
+              const palette = COURSE_COLORS[idx % COURSE_COLORS.length];
+              const progress = Math.round(e.progressPercent);
+              return (
+                <div key={e.id} className={`rounded-2xl border p-5 ${palette.bg} ${palette.border}`}>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-sm">
+                      <BookOpen className={`w-5 h-5 ${palette.text}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-3 mb-1">
+                        <p className={`font-semibold text-sm ${palette.text}`}>{e.course.title}</p>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/70 ${palette.text} shrink-0`}>
+                          {progress}% complete
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        {e.course.teacher.name}
+                        {e.course.category ? ` · ${e.course.category}` : ''}
+                      </p>
+                      <div className="h-1.5 rounded-full bg-white/60 overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all ${palette.dot}`}
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                      {e.course.duration && (
+                        <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
+                          <Clock className="w-3 h-3" /> {e.course.duration} total
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-                {e.type === 'live' && (
-                  <button className="shrink-0 px-4 py-1.5 bg-primary-blue text-white text-xs font-bold rounded-xl hover:bg-blue-800 transition-all">
-                    Join
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 }

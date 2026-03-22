@@ -1,88 +1,184 @@
-import { Bell, CheckCheck, BookOpen, Award, MessageSquare, CreditCard, Info } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
+import { useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Bell, CheckCheck, ExternalLink,
+  Info, AlertTriangle, CheckCircle2, XCircle,
+  Loader2,
+} from 'lucide-react';
+import { api } from '@/lib/api';
+import { cn } from '@/lib/utils';
+import { useUnread } from '@/context/UnreadContext';
 
-const notifications = [
-  { id: '1', type: 'COURSE',      title: 'New lesson available',                        body: 'Lesson 19 "Advanced JavaScript Patterns" has been published in Web Development Fundamentals.',           time: '2 hours ago',  read: false },
-  { id: '2', type: 'MESSAGE',     title: 'New message from Dr. James Kiprotich',         body: 'Check the MDN docs for grid-template-columns — both fr and % work but fr is preferred.',              time: '5 hours ago',  read: false },
-  { id: '3', type: 'GRADE',       title: 'Assignment graded',                            body: 'Your Python basics assignment has been graded. You scored 88/100. Great work!',                        time: 'Yesterday',    read: true },
-  { id: '4', type: 'CERTIFICATE', title: 'Certificate issued',                           body: 'Congratulations! Your certificate for IT Support & Networking is ready to download.',                  time: '3 days ago',   read: true },
-  { id: '5', type: 'INVOICE',     title: 'Invoice paid',                                 body: 'Payment of UGX 450,000 for Web Development Fundamentals has been confirmed.',                          time: '1 week ago',   read: true },
-  { id: '6', type: 'INFO',        title: 'Scheduled maintenance',                        body: 'The platform will be unavailable on Sunday Mar 15 from 02:00–04:00 AM for scheduled maintenance.',    time: '1 week ago',   read: true },
-];
+interface Notification {
+  id: string;
+  title: string;
+  body: string;
+  type: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR';
+  isRead: boolean;
+  link: string | null;
+  createdAt: string;
+}
 
-const iconMap: Record<string, React.ReactNode> = {
-  COURSE:      <BookOpen    className="w-4 h-4 text-primary-blue" />,
-  MESSAGE:     <MessageSquare className="w-4 h-4 text-purple-500" />,
-  GRADE:       <Award       className="w-4 h-4 text-amber-500" />,
-  CERTIFICATE: <Award       className="w-4 h-4 text-green-500" />,
-  INVOICE:     <CreditCard  className="w-4 h-4 text-emerald-500" />,
-  INFO:        <Info        className="w-4 h-4 text-muted-foreground" />,
+const typeConfig: Record<string, { icon: React.ElementType; bg: string; border: string; iconColor: string }> = {
+  INFO:    { icon: Info,          bg: 'bg-blue-50',    border: 'border-blue-100',    iconColor: 'text-blue-500' },
+  SUCCESS: { icon: CheckCircle2,  bg: 'bg-emerald-50', border: 'border-emerald-100', iconColor: 'text-emerald-500' },
+  WARNING: { icon: AlertTriangle, bg: 'bg-amber-50',   border: 'border-amber-100',   iconColor: 'text-amber-500' },
+  ERROR:   { icon: XCircle,       bg: 'bg-red-50',     border: 'border-red-100',     iconColor: 'text-red-500' },
 };
 
-const bgMap: Record<string, string> = {
-  COURSE:      'bg-primary-blue/10',
-  MESSAGE:     'bg-purple-100',
-  GRADE:       'bg-amber-100',
-  CERTIFICATE: 'bg-green-100',
-  INVOICE:     'bg-emerald-100',
-  INFO:        'bg-muted',
-};
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1)  return 'Just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24)  return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
+}
 
 export default function StudentNotificationsPage() {
-  const { t } = useLanguage();
-  const d = t.lms.student.notifications;
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [markingAll, setMarkingAll] = useState(false);
+  const { refreshUnread } = useUnread();
+
+  const load = useCallback(() => {
+    setLoading(true);
+    api.get<{ notifications?: Notification[] }>('/notifications')
+      .then((data) => setNotifications(data.notifications ?? []))
+      .catch(() => null)
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const markRead = async (id: string) => {
+    await api.patch('/notifications', { ids: [id] });
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)));
+    refreshUnread();
+  };
+
+  const markAllRead = async () => {
+    setMarkingAll(true);
+    await api.patch('/notifications', { all: true });
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    setMarkingAll(false);
+    refreshUnread();
+  };
+
+  const unread = notifications.filter((n) => !n.isRead).length;
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-6 max-w-3xl pb-8">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-foreground">{d.title}</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            {unreadCount > 0 ? `${unreadCount} ${d.unread}` : d.allCaughtUp}
+          <h1 className="font-display text-xl font-bold text-slate-900">Notifications</h1>
+          <p className="text-slate-500 text-sm mt-0.5">
+            {unread > 0 ? `${unread} unread notification${unread !== 1 ? 's' : ''}` : 'All caught up'}
           </p>
         </div>
-        {unreadCount > 0 && (
-          <button className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary-blue hover:text-blue-900 transition-colors">
-            <CheckCheck className="w-4 h-4" /> {d.markAllRead}
+        {unread > 0 && (
+          <button
+            onClick={markAllRead}
+            disabled={markingAll}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-blue text-white text-sm font-bold rounded-xl hover:bg-blue-800 transition-all shadow-sm disabled:opacity-60"
+          >
+            {markingAll ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCheck className="w-4 h-4" />}
+            Mark all read
           </button>
         )}
       </div>
 
-      {notifications.length === 0 ? (
-        <div className="bg-card border border-border rounded-2xl p-12 text-center">
-          <Bell className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-          <p className="font-heading font-semibold text-foreground mb-1">{d.noneTitle}</p>
-          <p className="text-sm text-muted-foreground">{d.noneSubtitle}</p>
+      {/* Count chips */}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-sm">
+          <Bell className="w-4 h-4 text-primary-blue" />
+          <span className="font-semibold text-slate-700">{notifications.length}</span>
+          <span className="text-slate-400">total</span>
+        </div>
+        {unread > 0 && (
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-primary-red/10 border border-primary-red/20 rounded-xl text-sm">
+            <span className="w-2 h-2 rounded-full bg-primary-red animate-pulse" />
+            <span className="font-semibold text-primary-red">{unread}</span>
+            <span className="text-primary-red/70">unread</span>
+          </div>
+        )}
+      </div>
+
+      {/* Body */}
+      {loading ? (
+        <div className="flex items-center justify-center py-20 text-slate-400 gap-3">
+          <Loader2 className="w-5 h-5 animate-spin" />
+          <span className="text-sm">Loading notifications…</span>
+        </div>
+      ) : notifications.length === 0 ? (
+        <div className="bg-white border border-slate-200 rounded-2xl p-12 flex flex-col items-center gap-3 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center">
+            <Bell className="w-6 h-6 text-slate-300" />
+          </div>
+          <p className="font-semibold text-slate-500">No notifications yet</p>
+          <p className="text-sm text-slate-400">Course updates, grades, and announcements will appear here.</p>
         </div>
       ) : (
-        <div className="bg-card border border-border rounded-2xl overflow-hidden divide-y divide-border">
-          {notifications.map((notif) => (
-            <div
-              key={notif.id}
-              className={`flex items-start gap-4 px-5 py-4 transition-colors hover:bg-muted/30 ${
-                !notif.read ? 'bg-primary-blue/5' : ''
-              }`}
-            >
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${bgMap[notif.type]}`}>
-                {iconMap[notif.type]}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-2">
-                  <p className={`text-sm font-semibold ${!notif.read ? 'text-foreground' : 'text-muted-foreground'}`}>
-                    {notif.title}
-                  </p>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-xs text-muted-foreground">{notif.time}</span>
-                    {!notif.read && <div className="w-2 h-2 rounded-full bg-primary-red" />}
+        <div className="space-y-2">
+          {notifications.map((n) => {
+            const cfg = typeConfig[n.type] ?? typeConfig.INFO;
+            const Icon = cfg.icon;
+            return (
+              <div
+                key={n.id}
+                className={cn(
+                  'bg-white border rounded-2xl p-4 transition-all',
+                  n.isRead
+                    ? 'border-slate-200 opacity-70'
+                    : 'border-slate-200 shadow-sm ring-1 ring-primary-blue/10'
+                )}
+              >
+                <div className="flex items-start gap-4">
+                  <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border', cfg.bg, cfg.border)}>
+                    <Icon className={cn('w-5 h-5', cfg.iconColor)} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className={cn('font-semibold text-sm', n.isRead ? 'text-slate-600' : 'text-slate-900')}>
+                        {n.title}
+                        {!n.isRead && (
+                          <span className="ml-2 inline-block w-2 h-2 rounded-full bg-primary-red align-middle" />
+                        )}
+                      </p>
+                      <span className="text-[11px] text-slate-400 shrink-0">{timeAgo(n.createdAt)}</span>
+                    </div>
+                    <p className="text-sm text-slate-500 mt-0.5 leading-snug">{n.body}</p>
+                    <div className="flex items-center gap-3 mt-3">
+                      {n.link && (
+                        <Link
+                          to={n.link}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-primary-blue hover:underline"
+                        >
+                          View Details <ExternalLink className="w-3 h-3" />
+                        </Link>
+                      )}
+                      {!n.isRead && (
+                        <button
+                          onClick={() => markRead(n.id)}
+                          className="text-xs text-slate-400 hover:text-slate-600 transition-colors font-medium"
+                        >
+                          Mark as read
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{notif.body}</p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
+
+      <p className="text-xs text-slate-400 text-center">
+        Notifications are automatically hidden after being read and 2 days have passed.
+      </p>
     </div>
   );
 }
