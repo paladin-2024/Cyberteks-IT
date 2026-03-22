@@ -1,5 +1,5 @@
 // ─── Prisma Schema — CyberteksIT LMS ───────────────────────────────────────
-// Database: PostgreSQL (Neon.tech)
+// Database: MongoDB (Atlas)
 // ORM: Prisma 5
 
 generator client {
@@ -7,9 +7,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")  // Uncomment when using Neon connection pooling
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -77,7 +76,7 @@ enum MessageStatus {
 // ────────────────────────────────────────────────────────────────────────────
 
 model User {
-  id            String   @id @default(cuid())
+  id            String   @id @map("_id") @default(cuid())
   name          String
   email         String   @unique
   emailVerified DateTime?
@@ -97,34 +96,37 @@ model User {
   // LMS relationships
   teacherCourses   Course[]       @relation("CourseTeacher")
   enrollments      Enrollment[]
-  application      Application?
+  applications     Application[]
   invoices         Invoice[]
   certificates     Certificate[]
   notifications    Notification[]
-  sentMessages     Message[]      @relation("MessageSender")
-  receivedMessages Message[]      @relation("MessageReceiver")
+  sentMessages     Message[]        @relation("MessageSender")
+  receivedMessages Message[]        @relation("MessageReceiver")
   lessonProgress   LessonProgress[]
   quizAttempts     QuizAttempt[]
+  curriculumWeeks    CurriculumWeek[] @relation("TeacherCurriculum")
+  teacherAssignments Assignment[]    @relation("TeacherAssignments")
+  studentSubmissions Submission[]    @relation("StudentSubmissions")
 
   @@map("users")
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// AUTH (NextAuth v5 — Prisma Adapter)
+// AUTH
 // ────────────────────────────────────────────────────────────────────────────
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @map("_id") @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -134,7 +136,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @map("_id") @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -145,6 +147,7 @@ model Session {
 }
 
 model VerificationToken {
+  id         String   @id @map("_id") @default(cuid())
   identifier String
   token      String   @unique
   expires    DateTime
@@ -154,15 +157,14 @@ model VerificationToken {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// APPLICATION (Training Program Application)
+// APPLICATION
 // ────────────────────────────────────────────────────────────────────────────
 
 model Application {
-  id              String            @id @default(cuid())
-  userId          String?           @unique
+  id              String            @id @map("_id") @default(cuid())
+  userId          String?
   status          ApplicationStatus @default(PENDING)
 
-  // Personal info
   fullName        String
   email           String
   phone           String
@@ -170,31 +172,25 @@ model Application {
   gender          String
   cityCountry     String
 
-  // Education
-  educationLevel  String
-  educationOther  String?
+  educationLevel    String
+  educationOther    String?
   currentOccupation String?
 
-  // Program selection
-  programs        String[]          // e.g. ["Web Development", "Cybersecurity"]
+  programs        String[]
   programOther    String?
 
-  // Motivation
-  motivation      String            @db.Text
-  careerGoals     String            @db.Text
+  motivation      String
+  careerGoals     String
 
-  // Availability
   hoursPerWeek    String
   hasComputer     String
   deviceTypes     String[]
   hasInternet     String
 
-  // Optional
   referralSource  String?
   socialHandle    String?
 
-  // Admin notes
-  reviewNotes     String?           @db.Text
+  reviewNotes     String?
   reviewedById    String?
   reviewedAt      DateTime?
 
@@ -213,26 +209,28 @@ model Application {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Course {
-  id          String       @id @default(cuid())
+  id          String       @id @map("_id") @default(cuid())
   title       String
   slug        String       @unique
-  description String       @db.Text
+  description String
   coverImage  String?
   price       Float        @default(0)
   currency    String       @default("UGX")
   status      CourseStatus @default(DRAFT)
-  duration    String?      // e.g. "3 months"
-  level       String?      // e.g. "Beginner", "Intermediate"
+  duration    String?
+  level       String?
   category    String?
   tags        String[]
 
   teacherId   String
   teacher     User         @relation("CourseTeacher", fields: [teacherId], references: [id])
 
-  sections    Section[]
-  enrollments Enrollment[]
-  invoices    Invoice[]
-  certificates Certificate[]
+  sections        Section[]
+  enrollments     Enrollment[]
+  invoices        Invoice[]
+  certificates    Certificate[]
+  curriculumWeeks CurriculumWeek[]
+  assignments     Assignment[]
 
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -245,7 +243,7 @@ model Course {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Section {
-  id       String   @id @default(cuid())
+  id       String   @id @map("_id") @default(cuid())
   title    String
   order    Int      @default(0)
   courseId String
@@ -257,12 +255,12 @@ model Section {
 }
 
 model Lesson {
-  id          String     @id @default(cuid())
+  id          String     @id @map("_id") @default(cuid())
   title       String
-  description String?    @db.Text
+  description String?
   type        LessonType @default(VIDEO)
-  content     String?    @db.Text   // video URL, document URL, or rich text
-  duration    Int?       // in minutes
+  content     String?
+  duration    Int?
   order       Int        @default(0)
   isFree      Boolean    @default(false)
   sectionId   String
@@ -279,9 +277,9 @@ model Lesson {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Quiz {
-  id           String        @id @default(cuid())
+  id           String        @id @map("_id") @default(cuid())
   title        String
-  passMark     Int           @default(70) // percentage
+  passMark     Int           @default(70)
   lessonId     String        @unique
 
   lesson       Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
@@ -292,9 +290,9 @@ model Quiz {
 }
 
 model QuizQuestion {
-  id       String   @id @default(cuid())
-  text     String   @db.Text
-  options  Json     // [{label: "A", text: "...", isCorrect: bool}]
+  id       String   @id @map("_id") @default(cuid())
+  text     String
+  options  Json
   order    Int      @default(0)
   quizId   String
 
@@ -304,10 +302,10 @@ model QuizQuestion {
 }
 
 model QuizAttempt {
-  id        String   @id @default(cuid())
+  id        String   @id @map("_id") @default(cuid())
   score     Float
   passed    Boolean
-  answers   Json     // {questionId: selectedOptionIndex}
+  answers   Json
   userId    String
   quizId    String
 
@@ -323,7 +321,7 @@ model QuizAttempt {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Enrollment {
-  id               String           @id @default(cuid())
+  id               String           @id @map("_id") @default(cuid())
   status           EnrollmentStatus @default(ACTIVE)
   progressPercent  Float            @default(0)
   startedAt        DateTime         @default(now())
@@ -340,7 +338,7 @@ model Enrollment {
 }
 
 model LessonProgress {
-  id          String   @id @default(cuid())
+  id          String   @id @map("_id") @default(cuid())
   completed   Boolean  @default(false)
   completedAt DateTime?
   watchedSecs Int      @default(0)
@@ -360,15 +358,15 @@ model LessonProgress {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Certificate {
-  id          String   @id @default(cuid())
-  certificateNo String @unique @default(cuid())
-  issuedAt    DateTime @default(now())
+  id            String   @id @map("_id") @default(cuid())
+  certificateNo String   @unique @default(cuid())
+  issuedAt      DateTime @default(now())
 
-  userId      String
-  courseId    String
+  userId        String
+  courseId      String
 
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course        Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
   @@map("certificates")
@@ -379,14 +377,14 @@ model Certificate {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Invoice {
-  id          String        @id @default(cuid())
+  id          String        @id @map("_id") @default(cuid())
   invoiceNo   String        @unique
   amount      Float
   currency    String        @default("UGX")
   status      InvoiceStatus @default(DRAFT)
   dueDate     DateTime?
   paidAt      DateTime?
-  notes       String?       @db.Text
+  notes       String?
 
   userId      String
   courseId    String?
@@ -405,7 +403,7 @@ model Invoice {
 // ────────────────────────────────────────────────────────────────────────────
 
 model Conversation {
-  id           String    @id @default(cuid())
+  id           String    @id @map("_id") @default(cuid())
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
@@ -416,7 +414,7 @@ model Conversation {
 }
 
 model ConversationParticipant {
-  id             String       @id @default(cuid())
+  id             String       @id @map("_id") @default(cuid())
   userId         String
   conversationId String
 
@@ -427,8 +425,8 @@ model ConversationParticipant {
 }
 
 model Message {
-  id             String        @id @default(cuid())
-  content        String        @db.Text
+  id             String        @id @map("_id") @default(cuid())
+  content        String
   status         MessageStatus @default(SENT)
   senderId       String
   receiverId     String
@@ -450,8 +448,168 @@ model Message {
 // NOTIFICATIONS
 // ────────────────────────────────────────────────────────────────────────────
 
+// ────────────────────────────────────────────────────────────────────────────
+// CURRICULUM (teacher weekly roadmap)
+// ────────────────────────────────────────────────────────────────────────────
+
+model CurriculumWeek {
+  id         String            @id @map("_id") @default(cuid())
+  courseId   String
+  teacherId  String
+  weekNumber Int
+  title      String
+  topics     CurriculumTopic[]
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacher User   @relation("TeacherCurriculum", fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@index([teacherId])
+  @@map("curriculum_weeks")
+}
+
+model CurriculumTopic {
+  id               String    @id @map("_id") @default(cuid())
+  weekId           String
+  title            String
+  description      String?
+  duration         String?
+  type             String    @default("lecture")
+  order            Int       @default(0)
+  meetLink         String?
+  meetScheduledAt  DateTime?
+  createdAt        DateTime  @default(now())
+
+  week CurriculumWeek @relation(fields: [weekId], references: [id], onDelete: Cascade)
+
+  @@index([weekId])
+  @@map("curriculum_topics")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// ASSIGNMENT
+// ────────────────────────────────────────────────────────────────────────────
+
+model Assignment {
+  id             String   @id @map("_id") @default(cuid())
+  title          String
+  description    String?
+  instructions   String?
+  dueDate        DateTime
+  maxScore       Int      @default(100)
+  status         String   @default("DRAFT")
+  attachmentUrl  String?
+  attachmentName String?
+
+  courseId     String
+  teacherId    String
+
+  course       Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacher      User         @relation("TeacherAssignments", fields: [teacherId], references: [id], onDelete: Cascade)
+  submissions  Submission[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([courseId])
+  @@index([teacherId])
+  @@map("assignments")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// SUBMISSION (student submits assignment; teacher grades)
+// ────────────────────────────────────────────────────────────────────────────
+
+model Submission {
+  id           String    @id @map("_id") @default(cuid())
+  assignmentId String
+  studentId    String
+  content      String?
+  fileUrl      String?   // uploaded file path e.g. /uploads/submissions/uuid.pdf
+  fileName     String?   // original filename shown in UI
+  fileSize     Int?      // bytes
+  score        Float?
+  feedback     String?
+  status       String    @default("SUBMITTED")  // SUBMITTED | GRADED | LATE
+  submittedAt  DateTime  @default(now())
+  gradedAt     DateTime?
+
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student      User       @relation("StudentSubmissions", fields: [studentId], references: [id])
+
+  @@unique([assignmentId, studentId])
+  @@index([assignmentId])
+  @@index([studentId])
+  @@map("submissions")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// SUPPORT REQUEST (remote IT support from marketing get-started page)
+// ────────────────────────────────────────────────────────────────────────────
+
+enum SupportRequestStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+model SupportRequest {
+  id          String               @id @map("_id") @default(cuid())
+  status      SupportRequestStatus @default(OPEN)
+
+  // Contact info
+  fullName    String
+  email       String
+  phone       String?
+  company     String?
+  location    String?
+
+  // Device + problem
+  deviceType          String?
+  os                  String?
+  problemCategory     String?
+  problemDescription  String
+  errorMessages       String?
+  urgency             String   @default("Medium")
+
+  // Remote access
+  remoteTool    String?
+  remoteId      String?
+  availableTime String?
+
+  // Admin
+  adminNotes  String?
+  repliedAt   DateTime?
+
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@map("support_requests")
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// OTP CODES (password reset)
+// ────────────────────────────────────────────────────────────────────────────
+
+model OtpCode {
+  id        String   @id @map("_id") @default(cuid())
+  email     String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@map("otp_codes")
+}
+
 model Notification {
-  id        String           @id @default(cuid())
+  id        String           @id @map("_id") @default(cuid())
   title     String
   body      String
   type      NotificationType @default(INFO)
