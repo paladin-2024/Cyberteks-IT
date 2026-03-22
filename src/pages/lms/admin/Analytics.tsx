@@ -1,46 +1,145 @@
-import { TrendingUp, TrendingDown, Users, BookOpen, DollarSign, Target } from 'lucide-react';
-import { ChartArea, ChartBar, ChartLine, ChartPie } from '@/components/ui/chart';
+import { useEffect, useState } from 'react';
+import { TrendingUp, Users, BookOpen, DollarSign, Target, BarChart3 } from 'lucide-react';
+import { ChartArea, ChartBar, ChartPie } from '@/components/ui/chart';
+import { api } from '@/lib/api';
 
-const monthlyEnrollment = [
-  { month: 'Jan', students: 18 }, { month: 'Feb', students: 25 }, { month: 'Mar', students: 32 },
-  { month: 'Apr', students: 28 }, { month: 'May', students: 41 }, { month: 'Jun', students: 38 },
-  { month: 'Jul', students: 52 }, { month: 'Aug', students: 47 }, { month: 'Sep', students: 60 },
-  { month: 'Oct', students: 55 }, { month: 'Nov', students: 68 }, { month: 'Dec', students: 72 },
-];
+// ─── Types ────────────────────────────────────────────────────────────────────
 
-const revenueHistory = [
-  { month: 'Jan', revenue: 1200000 }, { month: 'Feb', revenue: 1800000 },
-  { month: 'Mar', revenue: 2400000 }, { month: 'Apr', revenue: 2100000 },
-  { month: 'May', revenue: 3200000 }, { month: 'Jun', revenue: 2900000 },
-  { month: 'Jul', revenue: 3800000 }, { month: 'Aug', revenue: 3500000 },
-  { month: 'Sep', revenue: 4200000 }, { month: 'Oct', revenue: 4100000 },
-  { month: 'Nov', revenue: 5000000 }, { month: 'Dec', revenue: 5400000 },
-];
+interface KPIs {
+  totalStudents: number;
+  totalRevenue: number;
+  avgCompletion: number;
+  retentionRate: number;
+}
 
-const completionByProgram = [
-  { program: 'Web Dev', rate: 81 }, { program: 'Cyber', rate: 73 },
-  { program: 'Networking', rate: 90 }, { program: 'AI/ML', rate: 62 }, { program: 'Data', rate: 75 },
-];
+interface ChartPoint {
+  month: string;
+  students?: number;
+  revenue?: number;
+}
 
-const retentionData = [
-  { month: 'Jul', retained: 94 }, { month: 'Aug', retained: 91 },
-  { month: 'Sep', retained: 88 }, { month: 'Oct', retained: 93 },
-  { month: 'Nov', retained: 96 }, { month: 'Dec', retained: 95 },
-];
+interface ProgramShare {
+  name: string;
+  value: number;
+}
 
-const programShare = [
-  { name: 'Web Dev', value: 34 }, { name: 'Cybersecurity', value: 22 },
-  { name: 'Networking', value: 18 }, { name: 'AI & ML', value: 14 }, { name: 'Data Analysis', value: 12 },
-];
+interface CompletionItem {
+  program: string;
+  rate: number;
+}
 
-const kpis = [
-  { label: 'Total Students', value: '248',  change: '+12%', up: true,  icon: Users,      iconBg: 'bg-blue-50',    iconColor: 'text-blue-600' },
-  { label: 'Total Revenue',  value: '42.1M', change: '+28%', up: true, icon: DollarSign, iconBg: 'bg-emerald-50', iconColor: 'text-emerald-600', note: 'UGX YTD' },
-  { label: 'Avg Completion', value: '76%',  change: '+4%',  up: true,  icon: Target,     iconBg: 'bg-violet-50',  iconColor: 'text-violet-600' },
-  { label: 'Retention Rate', value: '93%',  change: '-2%',  up: false, icon: BookOpen,   iconBg: 'bg-amber-50',   iconColor: 'text-amber-600' },
-];
+interface AnalyticsData {
+  kpis: KPIs;
+  enrollmentChart: ChartPoint[];
+  revenueChart: ChartPoint[];
+  programShare: ProgramShare[];
+  completionByProgram: CompletionItem[];
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatUGX(amount: number): string {
+  if (amount >= 1_000_000_000) return `UGX ${(amount / 1_000_000_000).toFixed(1)}B`;
+  if (amount >= 1_000_000) return `UGX ${(amount / 1_000_000).toFixed(1)}M`;
+  if (amount >= 1_000) return `UGX ${(amount / 1_000).toFixed(0)}K`;
+  return `UGX ${amount.toLocaleString('en-UG')}`;
+}
+
+// ─── Skeleton ────────────────────────────────────────────────────────────────
+
+function SkeletonBox({ className }: { className: string }) {
+  return <div className={`animate-pulse bg-slate-100 rounded-xl ${className}`} />;
+}
+
+// ─── Component ───────────────────────────────────────────────────────────────
 
 export default function AnalyticsPage() {
+  const [data, setData] = useState<AnalyticsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    api.get<AnalyticsData>('/analytics')
+      .then(setData)
+      .catch((err) => setError(err.message ?? 'Failed to load analytics'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // ── Loading ────────────────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <div className="space-y-6 max-w-7xl pb-8">
+        <SkeletonBox className="h-8 w-48" />
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => <SkeletonBox key={i} className="h-28" />)}
+        </div>
+        <div className="grid lg:grid-cols-3 gap-5">
+          <SkeletonBox className="lg:col-span-2 h-72" />
+          <SkeletonBox className="h-72" />
+        </div>
+        <div className="grid lg:grid-cols-2 gap-5">
+          <SkeletonBox className="h-64" />
+          <SkeletonBox className="h-64" />
+        </div>
+        <SkeletonBox className="h-64" />
+      </div>
+    );
+  }
+
+  // ── Error ──────────────────────────────────────────────────────────────────
+  if (error || !data) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center space-y-2">
+          <p className="text-slate-500 text-sm">{error ?? 'Something went wrong'}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="text-xs font-semibold text-primary-blue hover:underline"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const { kpis, enrollmentChart, revenueChart, programShare, completionByProgram } = data;
+
+  const kpiCards = [
+    {
+      label: 'Total Students',
+      value: String(kpis.totalStudents),
+      icon: Users,
+      iconBg: 'bg-blue-50',
+      iconColor: 'text-blue-600',
+      note: undefined,
+    },
+    {
+      label: 'Total Revenue',
+      value: formatUGX(kpis.totalRevenue),
+      icon: DollarSign,
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-600',
+      note: 'UGX — all time',
+    },
+    {
+      label: 'Avg Completion',
+      value: `${kpis.avgCompletion}%`,
+      icon: Target,
+      iconBg: 'bg-violet-50',
+      iconColor: 'text-violet-600',
+      note: undefined,
+    },
+    {
+      label: 'Retention Rate',
+      value: `${kpis.retentionRate}%`,
+      icon: BookOpen,
+      iconBg: 'bg-amber-50',
+      iconColor: 'text-amber-600',
+      note: undefined,
+    },
+  ];
+
   return (
     <div className="space-y-6 max-w-7xl pb-8">
 
@@ -52,49 +151,88 @@ export default function AnalyticsPage() {
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-        {kpis.map((k) => (
+        {kpiCards.map((k) => (
           <div key={k.label} className="bg-white border border-slate-200 rounded-2xl p-5">
             <div className="flex items-center justify-between mb-3">
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${k.iconBg}`}>
                 <k.icon className={`w-4 h-4 ${k.iconColor}`} />
               </div>
-              <span className={`flex items-center gap-1 text-xs font-semibold ${k.up ? 'text-emerald-600' : 'text-red-500'}`}>
-                {k.up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                {k.change}
-              </span>
+              <TrendingUp className="w-4 h-4 text-slate-300" />
             </div>
             <p className="font-display text-2xl font-extrabold text-slate-900 leading-none">{k.value}</p>
             <p className="text-xs font-medium text-slate-500 mt-1">{k.label}</p>
-            {k.note && <p className="text-[10px] text-slate-400">{k.note}</p>}
+            {k.note && <p className="text-[10px] text-slate-400 mt-0.5">{k.note}</p>}
           </div>
         ))}
       </div>
 
-      {/* Row 1 */}
+      {/* Row 1 — Enrollments + Program Distribution */}
       <div className="grid lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6">
           <h2 className="font-display font-bold text-slate-900 text-base mb-1">Monthly Enrollments</h2>
-          <p className="text-xs text-slate-400 mb-5">New students enrolled per month (full year)</p>
-          <ChartArea data={monthlyEnrollment} dataKeys={['students']} xKey="month" height={240} />
+          <p className="text-xs text-slate-400 mb-5">New students enrolled per month (last 12 months)</p>
+          {enrollmentChart.some((d) => (d.students ?? 0) > 0) ? (
+            <ChartArea data={enrollmentChart} dataKeys={['students']} xKey="month" height={240} />
+          ) : (
+            <div className="h-[240px] flex flex-col items-center justify-center text-slate-400 gap-2">
+              <BarChart3 className="w-8 h-8 opacity-30" />
+              <p className="text-sm">No enrollment data yet</p>
+            </div>
+          )}
         </div>
         <div className="bg-white border border-slate-200 rounded-2xl p-6">
           <h2 className="font-display font-bold text-slate-900 text-base mb-1">Program Distribution</h2>
-          <p className="text-xs text-slate-400 mb-4">Students by program</p>
-          <ChartPie data={programShare} donut height={240} />
+          <p className="text-xs text-slate-400 mb-4">Students by program category</p>
+          {programShare.length > 0 && programShare.some((p) => p.value > 0) ? (
+            <ChartPie data={programShare} donut height={240} />
+          ) : (
+            <div className="h-[240px] flex flex-col items-center justify-center text-slate-400 gap-2">
+              <BarChart3 className="w-8 h-8 opacity-30" />
+              <p className="text-sm">No enrollment data yet</p>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Row 2 */}
+      {/* Row 2 — Revenue + empty retention placeholder */}
       <div className="grid lg:grid-cols-2 gap-5">
         <div className="bg-white border border-slate-200 rounded-2xl p-6">
           <h2 className="font-display font-bold text-slate-900 text-base mb-1">Revenue (UGX)</h2>
-          <p className="text-xs text-slate-400 mb-5">Monthly revenue — full year</p>
-          <ChartBar data={revenueHistory} dataKeys={['revenue']} xKey="month" ugxFormat height={230} />
+          <p className="text-xs text-slate-400 mb-5">Monthly revenue — last 12 months</p>
+          {revenueChart.some((d) => (d.revenue ?? 0) > 0) ? (
+            <ChartBar data={revenueChart} dataKeys={['revenue']} xKey="month" ugxFormat height={230} />
+          ) : (
+            <div className="h-[230px] flex flex-col items-center justify-center text-slate-400 gap-2">
+              <BarChart3 className="w-8 h-8 opacity-30" />
+              <p className="text-sm">No revenue recorded yet</p>
+            </div>
+          )}
         </div>
         <div className="bg-white border border-slate-200 rounded-2xl p-6">
-          <h2 className="font-display font-bold text-slate-900 text-base mb-1">Student Retention</h2>
-          <p className="text-xs text-slate-400 mb-5">Monthly retention rate (%)</p>
-          <ChartLine data={retentionData} dataKeys={['retained']} xKey="month" height={230} />
+          <h2 className="font-display font-bold text-slate-900 text-base mb-1">Retention Rate</h2>
+          <p className="text-xs text-slate-400 mb-5">Overall student retention</p>
+          <div className="flex flex-col items-center justify-center h-[230px] gap-4">
+            <div className="relative w-36 h-36">
+              <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="#f1f5f9" strokeWidth="3" />
+                <circle
+                  cx="18" cy="18" r="15.9"
+                  fill="none"
+                  stroke="#023064"
+                  strokeWidth="3"
+                  strokeDasharray={`${kpis.retentionRate} ${100 - kpis.retentionRate}`}
+                  strokeLinecap="round"
+                />
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-2xl font-extrabold text-slate-900">{kpis.retentionRate}%</span>
+                <span className="text-[10px] text-slate-400">Retention</span>
+              </div>
+            </div>
+            <p className="text-xs text-slate-500 text-center max-w-[180px]">
+              Students who remain active and have not dropped or been suspended.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -102,28 +240,47 @@ export default function AnalyticsPage() {
       <div className="bg-white border border-slate-200 rounded-2xl p-6">
         <h2 className="font-display font-bold text-slate-900 text-base mb-1">Completion Rate by Program</h2>
         <p className="text-xs text-slate-400 mb-6">% of enrolled students who completed the course</p>
-        <div className="space-y-4">
-          {completionByProgram.map((p) => (
-            <div key={p.program}>
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-sm font-medium text-slate-700">{p.program}</span>
-                <span className="text-sm font-bold text-slate-900">{p.rate}%</span>
-              </div>
-              <div className="h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all ${p.rate >= 85 ? 'bg-emerald-500' : p.rate >= 70 ? 'bg-blue-500' : 'bg-amber-500'}`}
-                  style={{ width: `${p.rate}%` }}
-                />
-              </div>
+
+        {completionByProgram.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-24 text-slate-400 gap-2">
+            <BarChart3 className="w-8 h-8 opacity-30" />
+            <p className="text-sm">No completion data yet</p>
+          </div>
+        ) : (
+          <>
+            <div className="space-y-4">
+              {completionByProgram.map((p) => (
+                <div key={p.program}>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-sm font-medium text-slate-700">{p.program}</span>
+                    <span className="text-sm font-bold text-slate-900">{p.rate}%</span>
+                  </div>
+                  <div className="h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all ${
+                        p.rate >= 85 ? 'bg-emerald-500' : p.rate >= 70 ? 'bg-blue-500' : 'bg-amber-500'
+                      }`}
+                      style={{ width: `${p.rate}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="flex items-center gap-6 mt-5 pt-4 border-t border-slate-100 text-xs text-slate-500">
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" /> Excellent ≥ 85%</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0" /> Good 70–84%</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" /> Needs attention &lt;70%</span>
-        </div>
+            <div className="flex items-center gap-6 mt-5 pt-4 border-t border-slate-100 text-xs text-slate-500">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" /> Excellent ≥ 85%
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0" /> Good 70–84%
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" /> Needs attention &lt;70%
+              </span>
+            </div>
+          </>
+        )}
       </div>
+
     </div>
   );
 }
