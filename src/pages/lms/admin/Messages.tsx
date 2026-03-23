@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Send, MessageSquare, Plus, X } from 'lucide-react';
+import { Search, Send, MessageSquare, Plus, X, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useUnread } from '@/context/UnreadContext';
 import { api } from '@/lib/api';
@@ -47,6 +47,7 @@ export default function AdminMessagesPage() {
   const [sending, setSending] = useState(false);
   const [showNewChat, setShowNewChat] = useState(false);
   const [availableUsers, setAvailableUsers] = useState<OtherUser[]>([]);
+  const [mobileView, setMobileView] = useState<'list' | 'chat'>('list');
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const activeConv = conversations.find((c) => c.id === activeId) ?? null;
@@ -71,6 +72,11 @@ export default function AdminMessagesPage() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const selectConversation = (id: string) => {
+    setActiveId(id);
+    setMobileView('chat');
+  };
 
   const sendMessage = async () => {
     if (!text.trim() || !activeId || sending) return;
@@ -113,6 +119,7 @@ export default function AdminMessagesPage() {
       setConversations((prev) => [newConv, ...prev]);
     }
     setActiveId(conversationId);
+    setMobileView('chat');
   };
 
   const openNewChat = async () => {
@@ -129,20 +136,19 @@ export default function AdminMessagesPage() {
 
   return (
     <div className="max-w-6xl">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-4 sm:mb-6 flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-foreground">Messages</h1>
+          <h1 className="font-heading text-xl sm:text-2xl font-bold text-foreground">Messages</h1>
           <p className="text-sm text-muted-foreground mt-1">Communicate with teachers and students</p>
         </div>
         <button
           onClick={openNewChat}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-blue text-white rounded-xl text-sm font-medium hover:bg-blue-900 transition-colors"
+          className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-primary-blue text-white rounded-xl text-sm font-medium hover:bg-blue-900 transition-colors"
         >
-          <Plus className="w-4 h-4" /> New Message
+          <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New Message</span><span className="sm:hidden">New</span>
         </button>
       </div>
 
-      {/* New Message modal */}
       {showNewChat && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-card rounded-2xl border border-border w-full max-w-md p-6">
@@ -175,10 +181,14 @@ export default function AdminMessagesPage() {
         </div>
       )}
 
-      <div className="bg-card border border-border rounded-2xl overflow-hidden flex h-[calc(100vh-12rem)]">
-        {/* Sidebar */}
-        <div className="w-80 border-r border-border flex flex-col shrink-0">
-          <div className="p-4 border-b border-border">
+      <div className="bg-card border border-border rounded-2xl overflow-hidden flex h-[calc(100vh-10rem)] sm:h-[calc(100vh-12rem)]">
+
+        <div className={`
+          flex flex-col border-r border-border
+          w-full md:w-72 lg:w-80 shrink-0
+          ${mobileView === 'chat' ? 'hidden md:flex' : 'flex'}
+        `}>
+          <div className="p-3 sm:p-4 border-b border-border">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
@@ -211,7 +221,7 @@ export default function AdminMessagesPage() {
             ) : filtered.map((conv) => (
               <button
                 key={conv.id}
-                onClick={() => setActiveId(conv.id)}
+                onClick={() => selectConversation(conv.id)}
                 className={`w-full flex items-start gap-3 px-4 py-3.5 border-b border-border/50 transition-colors text-left ${
                   conv.id === activeId ? 'bg-primary-blue/5 border-l-2 border-l-primary-blue' : 'hover:bg-muted/40'
                 }`}
@@ -241,76 +251,86 @@ export default function AdminMessagesPage() {
           </div>
         </div>
 
-        {/* Chat area */}
-        {activeConv ? (
-          <div className="flex-1 flex flex-col">
-            <div className="px-6 py-4 border-b border-border flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-primary-blue flex items-center justify-center">
-                <span className="text-white text-xs font-bold">{initials(activeConv.otherUser?.name ?? null)}</span>
-              </div>
-              <div>
-                <p className="font-semibold text-foreground text-sm">{activeConv.otherUser?.name}</p>
-                <p className="text-xs text-muted-foreground capitalize">{activeConv.otherUser?.role?.toLowerCase()}</p>
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
-              {messages.length === 0 ? (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-sm text-muted-foreground">No messages yet. Say hello!</p>
-                </div>
-              ) : messages.map((msg) => {
-                const isMe = msg.senderId === user?.id;
-                return (
-                  <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-xs lg:max-w-md xl:max-w-lg ${
-                      isMe
-                        ? 'bg-primary-blue text-white rounded-2xl rounded-br-md'
-                        : 'bg-muted text-foreground rounded-2xl rounded-bl-md'
-                    } px-4 py-2.5`}>
-                      <p className="text-sm leading-relaxed">{msg.content}</p>
-                      <p className={`text-[10px] mt-1 ${isMe ? 'text-blue-200' : 'text-muted-foreground'}`}>
-                        {timeLabel(msg.createdAt)}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-              <div ref={bottomRef} />
-            </div>
-
-            <div className="px-6 py-4 border-t border-border">
-              <div className="flex items-center gap-3">
-                <input
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && sendMessage()}
-                  placeholder="Type a message..."
-                  className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue"
-                />
+        <div className={`
+          flex-1 flex flex-col min-w-0
+          ${mobileView === 'list' ? 'hidden md:flex' : 'flex'}
+        `}>
+          {activeConv ? (
+            <>
+              <div className="px-3 sm:px-6 py-3 sm:py-4 border-b border-border flex items-center gap-3">
                 <button
-                  onClick={sendMessage}
-                  disabled={!text.trim() || sending}
-                  className="w-10 h-10 bg-primary-blue text-white rounded-xl flex items-center justify-center hover:bg-blue-900 transition-colors shrink-0 disabled:opacity-50"
+                  onClick={() => setMobileView('list')}
+                  className="md:hidden p-1.5 -ml-1 rounded-lg hover:bg-muted/50 text-muted-foreground"
                 >
-                  <Send className="w-4 h-4" />
+                  <ArrowLeft className="w-5 h-5" />
                 </button>
+                <div className="w-9 h-9 rounded-xl bg-primary-blue flex items-center justify-center shrink-0">
+                  <span className="text-white text-xs font-bold">{initials(activeConv.otherUser?.name ?? null)}</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground text-sm">{activeConv.otherUser?.name}</p>
+                  <p className="text-xs text-muted-foreground capitalize">{activeConv.otherUser?.role?.toLowerCase()}</p>
+                </div>
               </div>
+
+              <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-5 space-y-4">
+                {messages.length === 0 ? (
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-sm text-muted-foreground">No messages yet. Say hello!</p>
+                  </div>
+                ) : messages.map((msg) => {
+                  const isMe = msg.senderId === user?.id;
+                  return (
+                    <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-[75%] sm:max-w-xs lg:max-w-md xl:max-w-lg ${
+                        isMe
+                          ? 'bg-primary-blue text-white rounded-2xl rounded-br-md'
+                          : 'bg-muted text-foreground rounded-2xl rounded-bl-md'
+                      } px-3 sm:px-4 py-2.5`}>
+                        <p className="text-sm leading-relaxed">{msg.content}</p>
+                        <p className={`text-[10px] mt-1 ${isMe ? 'text-blue-200' : 'text-muted-foreground'}`}>
+                          {timeLabel(msg.createdAt)}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div ref={bottomRef} />
+              </div>
+
+              <div className="px-3 sm:px-6 py-3 sm:py-4 border-t border-border">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <input
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && sendMessage()}
+                    placeholder="Type a message..."
+                    className="flex-1 px-3 sm:px-4 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue"
+                  />
+                  <button
+                    onClick={sendMessage}
+                    disabled={!text.trim() || sending}
+                    className="w-10 h-10 bg-primary-blue text-white rounded-xl flex items-center justify-center hover:bg-blue-900 transition-colors shrink-0 disabled:opacity-50"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
+              <MessageSquare className="w-14 h-14 text-muted-foreground mb-4" />
+              <p className="text-lg font-semibold text-foreground mb-1">Your messages</p>
+              <p className="text-sm text-muted-foreground mb-4">Select a conversation or start a new message</p>
+              <button
+                onClick={openNewChat}
+                className="flex items-center gap-2 px-4 py-2 bg-primary-blue text-white rounded-xl text-sm font-medium hover:bg-blue-900 transition-colors"
+              >
+                <Plus className="w-4 h-4" /> New Message
+              </button>
             </div>
-          </div>
-        ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-            <MessageSquare className="w-14 h-14 text-muted-foreground mb-4" />
-            <p className="text-lg font-semibold text-foreground mb-1">Your messages</p>
-            <p className="text-sm text-muted-foreground mb-4">Select a conversation or start a new message</p>
-            <button
-              onClick={openNewChat}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-blue text-white rounded-xl text-sm font-medium hover:bg-blue-900 transition-colors"
-            >
-              <Plus className="w-4 h-4" /> New Message
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
