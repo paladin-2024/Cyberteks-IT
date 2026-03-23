@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Block LMS/auth pages from indexing
+Disallow: /admin/
+Disallow: /student/
+Disallow: /teacher/
+Disallow: /login
+Disallow: /forgot-password
+
+Sitemap: https://cyberteks-it.com/sitemap.xml

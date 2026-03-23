@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://cyberteks-it.com/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/about</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/services</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/services/remote-it-support</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/services/cctv</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/services/access-control</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/services/voip</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/services/ict-skilling</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/services/software-ai</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/products</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/contact</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/apply</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/careers</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://cyberteks-it.com/get-started</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+</urlset>
