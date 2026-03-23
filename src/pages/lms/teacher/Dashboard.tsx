@@ -84,7 +84,7 @@ interface StatCardProps {
 
 function StatCard({ label, value, icon: Icon, iconBg, iconColor, badge, link, linkLabel }: StatCardProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+    <div className="bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconBg}`}>
           <Icon className={`w-4 h-4 ${iconColor}`} />
@@ -96,8 +96,8 @@ function StatCard({ label, value, icon: Icon, iconBg, iconColor, badge, link, li
         )}
       </div>
       <div>
-        <p className="font-display text-3xl font-extrabold text-slate-900 leading-none">{value}</p>
-        <p className="text-xs font-medium text-slate-500 mt-1">{label}</p>
+        <p className="font-display text-3xl font-extrabold text-foreground leading-none">{value}</p>
+        <p className="text-xs font-medium text-muted-foreground mt-1">{label}</p>
       </div>
       <Link to={link} className="text-xs font-semibold text-primary-blue hover:underline">
         {linkLabel} →
@@ -130,7 +130,7 @@ export default function TeacherDashboard() {
   // ── Loading ────────────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-full bg-white p-4 md:p-6 space-y-6">
+      <div className="min-h-full bg-card p-4 md:p-6 space-y-6">
         <SkeletonBox className="h-10 w-64" />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => <SkeletonBox key={i} className="h-32" />)}
@@ -147,9 +147,9 @@ export default function TeacherDashboard() {
   // ── Error ──────────────────────────────────────────────────────────────────
   if (error || !data) {
     return (
-      <div className="min-h-full bg-white p-6 flex items-center justify-center">
+      <div className="min-h-full bg-card p-6 flex items-center justify-center">
         <div className="text-center space-y-2">
-          <p className="text-slate-500 text-sm">{error ?? 'Something went wrong'}</p>
+          <p className="text-muted-foreground text-sm">{error ?? 'Something went wrong'}</p>
           <button onClick={() => window.location.reload()} className="text-xs font-semibold text-primary-blue hover:underline">
             Retry
           </button>
@@ -184,14 +184,14 @@ export default function TeacherDashboard() {
   ];
 
   return (
-    <div className="min-h-full bg-white p-4 md:p-6 space-y-6">
+    <div className="min-h-full bg-card p-4 md:p-6 space-y-6">
 
       {/* Page title */}
       <div>
-        <h1 className="font-display text-xl font-extrabold text-slate-900">
+        <h1 className="font-display text-xl font-extrabold text-foreground">
           Hello, {name} 👋
         </h1>
-        <p className="text-sm text-slate-500 mt-0.5">Here's an overview of your teaching activity.</p>
+        <p className="text-sm text-muted-foreground mt-0.5">Here's an overview of your teaching activity.</p>
       </div>
 
       {/* Row 1 — Stat cards */}
@@ -200,30 +200,30 @@ export default function TeacherDashboard() {
           <StatCard key={s.label} {...s} />
         ))}
         {/* Total enrollments card */}
-        <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+        <div className="bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-emerald-50">
             <Users className="w-4 h-4 text-emerald-600" />
           </div>
           <div>
-            <p className="font-display text-3xl font-extrabold text-slate-900 leading-none">
+            <p className="font-display text-3xl font-extrabold text-foreground leading-none">
               {coursesList.reduce((s, c) => s + c.enrollmentCount, 0)}
             </p>
-            <p className="text-xs font-medium text-slate-500 mt-1">Total Enrollments</p>
+            <p className="text-xs font-medium text-muted-foreground mt-1">Total Enrollments</p>
           </div>
-          <span className="text-xs text-slate-400">Across all courses</span>
+          <span className="text-xs text-muted-foreground">Across all courses</span>
         </div>
         {/* Completed card */}
-        <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+        <div className="bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-50">
             <BookOpen className="w-4 h-4 text-amber-600" />
           </div>
           <div>
-            <p className="font-display text-3xl font-extrabold text-slate-900 leading-none">
+            <p className="font-display text-3xl font-extrabold text-foreground leading-none">
               {coursesList.reduce((s, c) => s + c.completedCount, 0)}
             </p>
-            <p className="text-xs font-medium text-slate-500 mt-1">Completions</p>
+            <p className="text-xs font-medium text-muted-foreground mt-1">Completions</p>
           </div>
-          <span className="text-xs text-slate-400">Students finished</span>
+          <span className="text-xs text-muted-foreground">Students finished</span>
         </div>
       </div>
 
@@ -231,11 +231,11 @@ export default function TeacherDashboard() {
       <div className="grid lg:grid-cols-5 gap-5">
 
         {/* Student Activity chart — 60% */}
-        <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+        <div className="lg:col-span-3 bg-card rounded-2xl shadow-sm p-6 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="font-display font-bold text-slate-900 text-base">Student Activity</h2>
-              <p className="text-xs text-slate-400 mt-0.5">New enrollments per day this week</p>
+              <h2 className="font-display font-bold text-foreground text-base">Student Activity</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">New enrollments per day this week</p>
             </div>
           </div>
           <ResponsiveContainer width="100%" height={200}>
@@ -276,16 +276,16 @@ export default function TeacherDashboard() {
         </div>
 
         {/* Active Courses + completion breakdown — 40% */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-4">
+        <div className="lg:col-span-2 bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-display font-bold text-slate-900 text-sm">Active Courses</h2>
+            <h2 className="font-display font-bold text-foreground text-sm">Active Courses</h2>
             <Link to="/teacher/courses" className="text-[11px] font-semibold text-primary-blue hover:underline">
               View All →
             </Link>
           </div>
 
           {coursesList.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-slate-400 gap-2 py-6">
+            <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground gap-2 py-6">
               <BookOpen className="w-8 h-8 opacity-30" />
               <p className="text-sm">No courses yet</p>
             </div>
@@ -294,7 +294,7 @@ export default function TeacherDashboard() {
               {coursesList.slice(0, 3).map((c, idx) => (
                 <div
                   key={c.id}
-                  className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:border-slate-200 transition-colors"
+                  className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:border-border transition-colors"
                 >
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-white text-xs font-bold"
@@ -303,8 +303,8 @@ export default function TeacherDashboard() {
                     {c.title.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-slate-800 truncate">{c.title}</p>
-                    <p className="text-[10px] text-slate-400 truncate">
+                    <p className="text-xs font-semibold text-foreground truncate">{c.title}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">
                       {c.enrollmentCount} student{c.enrollmentCount !== 1 ? 's' : ''} · {c.completedCount} completed
                     </p>
                     <div className="flex items-center gap-2 mt-1.5">
@@ -314,11 +314,11 @@ export default function TeacherDashboard() {
                           style={{ width: `${c.avgProgress}%`, backgroundColor: courseColors[idx % courseColors.length] }}
                         />
                       </div>
-                      <span className="text-[10px] text-slate-400 shrink-0">{c.avgProgress}%</span>
+                      <span className="text-[10px] text-muted-foreground shrink-0">{c.avgProgress}%</span>
                     </div>
                   </div>
                   <div className="shrink-0 text-right">
-                    <div className="flex items-center gap-1 text-[10px] text-slate-400">
+                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                       <Clock className="w-3 h-3" />
                       {c.status}
                     </div>
@@ -330,7 +330,7 @@ export default function TeacherDashboard() {
 
           {/* Course Completion breakdown */}
           <div className="pt-2 border-t border-slate-100">
-            <p className="text-xs font-semibold text-slate-700 mb-2">Course Completion</p>
+            <p className="text-xs font-semibold text-foreground mb-2">Course Completion</p>
             <div className="flex h-2.5 rounded-full overflow-hidden gap-0.5">
               <div className="rounded-l-full bg-emerald-500" style={{ width: `${completed}%` }} />
               <div className="bg-primary-blue" style={{ width: `${inProgress}%` }} />
@@ -342,9 +342,9 @@ export default function TeacherDashboard() {
                 { label: 'In Progress', pct: inProgress,  dot: 'bg-primary-blue' },
                 { label: 'Not Started', pct: notStarted,  dot: 'bg-slate-300' },
               ].map(({ label, pct, dot }) => (
-                <div key={label} className="flex items-center gap-1.5 text-[10px] text-slate-500">
+                <div key={label} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
                   <span className={`w-2 h-2 rounded-full shrink-0 ${dot}`} />
-                  {label} <span className="font-semibold text-slate-700">{pct}%</span>
+                  {label} <span className="font-semibold text-foreground">{pct}%</span>
                 </div>
               ))}
             </div>
@@ -353,16 +353,16 @@ export default function TeacherDashboard() {
       </div>
 
       {/* Row 3 — Recent Students table */}
-      <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
-          <h2 className="font-display font-bold text-slate-900 text-base">Recent Students</h2>
+          <h2 className="font-display font-bold text-foreground text-base">Recent Students</h2>
           <Link to="/teacher/students" className="text-xs font-semibold text-primary-blue hover:underline">
             View All →
           </Link>
         </div>
 
         {recentStudents.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-32 text-slate-400 gap-2">
+          <div className="flex flex-col items-center justify-center h-32 text-muted-foreground gap-2">
             <Users className="w-8 h-8 opacity-30" />
             <p className="text-sm">No students enrolled yet</p>
           </div>
@@ -371,11 +371,11 @@ export default function TeacherDashboard() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/60">
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Name</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Course</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Enrolled</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide min-w-[120px]">Progress</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">View</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Name</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Course</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Enrolled</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide min-w-[120px]">Progress</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">View</th>
                 </tr>
               </thead>
               <tbody>
@@ -386,14 +386,14 @@ export default function TeacherDashboard() {
                         <div className="w-7 h-7 rounded-full bg-primary-blue flex items-center justify-center shrink-0">
                           <span className="text-white text-[10px] font-bold">{getInitials(s.name)}</span>
                         </div>
-                        <span className="font-medium text-slate-800 text-xs whitespace-nowrap">{s.name}</span>
+                        <span className="font-medium text-foreground text-xs whitespace-nowrap">{s.name}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3.5">
-                      <span className="text-xs text-slate-500 whitespace-nowrap">{s.course}</span>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{s.course}</span>
                     </td>
                     <td className="px-4 py-3.5">
-                      <span className="text-xs text-slate-400 whitespace-nowrap">{formatDate(s.enrolled)}</span>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{formatDate(s.enrolled)}</span>
                     </td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2">
@@ -403,7 +403,7 @@ export default function TeacherDashboard() {
                             style={{ width: `${s.progress}%` }}
                           />
                         </div>
-                        <span className="text-xs font-semibold text-slate-600 shrink-0 w-7 text-right">
+                        <span className="text-xs font-semibold text-muted-foreground shrink-0 w-7 text-right">
                           {s.progress}%
                         </span>
                       </div>
@@ -411,7 +411,7 @@ export default function TeacherDashboard() {
                     <td className="px-4 py-3.5">
                       <Link
                         to="/teacher/students"
-                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-primary-blue hover:text-white flex items-center justify-center text-slate-500 transition-colors"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-primary-blue hover:text-white flex items-center justify-center text-muted-foreground transition-colors"
                         title="View student"
                       >
                         <Eye className="w-3.5 h-3.5" />

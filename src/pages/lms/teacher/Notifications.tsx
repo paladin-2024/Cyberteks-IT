@@ -73,8 +73,8 @@ export default function TeacherNotificationsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-xl font-bold text-slate-900">Notifications</h1>
-          <p className="text-slate-500 text-sm mt-0.5">
+          <h1 className="font-display text-xl font-bold text-foreground">Notifications</h1>
+          <p className="text-muted-foreground text-sm mt-0.5">
             {unread > 0 ? `${unread} unread notification${unread !== 1 ? 's' : ''}` : 'All caught up'}
           </p>
         </div>
@@ -92,10 +92,10 @@ export default function TeacherNotificationsPage() {
 
       {/* Count chips */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-sm">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-card border border-border rounded-xl text-sm">
           <Bell className="w-4 h-4 text-primary-blue" />
-          <span className="font-semibold text-slate-700">{notifications.length}</span>
-          <span className="text-slate-400">total</span>
+          <span className="font-semibold text-foreground">{notifications.length}</span>
+          <span className="text-muted-foreground">total</span>
         </div>
         {unread > 0 && (
           <div className="flex items-center gap-2 px-3 py-1.5 bg-primary-red/10 border border-primary-red/20 rounded-xl text-sm">
@@ -108,17 +108,17 @@ export default function TeacherNotificationsPage() {
 
       {/* Body */}
       {loading ? (
-        <div className="flex items-center justify-center py-20 text-slate-400 gap-3">
+        <div className="flex items-center justify-center py-20 text-muted-foreground gap-3">
           <Loader2 className="w-5 h-5 animate-spin" />
           <span className="text-sm">Loading notifications…</span>
         </div>
       ) : notifications.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-2xl p-12 flex flex-col items-center gap-3 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center">
+        <div className="bg-card border border-border rounded-2xl p-12 flex flex-col items-center gap-3 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-border flex items-center justify-center">
             <Bell className="w-6 h-6 text-slate-300" />
           </div>
-          <p className="font-semibold text-slate-500">No notifications yet</p>
-          <p className="text-sm text-slate-400">System alerts and admin messages will appear here.</p>
+          <p className="font-semibold text-muted-foreground">No notifications yet</p>
+          <p className="text-sm text-muted-foreground">System alerts and admin messages will appear here.</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -129,10 +129,10 @@ export default function TeacherNotificationsPage() {
               <div
                 key={n.id}
                 className={cn(
-                  'bg-white border rounded-2xl p-4 transition-all',
+                  'bg-card border rounded-2xl p-4 transition-all',
                   n.isRead
-                    ? 'border-slate-200 opacity-70'
-                    : 'border-slate-200 shadow-sm ring-1 ring-primary-blue/10'
+                    ? 'border-border opacity-70'
+                    : 'border-border shadow-sm ring-1 ring-primary-blue/10'
                 )}
               >
                 <div className="flex items-start gap-4">
@@ -141,15 +141,15 @@ export default function TeacherNotificationsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
-                      <p className={cn('font-semibold text-sm', n.isRead ? 'text-slate-600' : 'text-slate-900')}>
+                      <p className={cn('font-semibold text-sm', n.isRead ? 'text-muted-foreground' : 'text-foreground')}>
                         {n.title}
                         {!n.isRead && (
                           <span className="ml-2 inline-block w-2 h-2 rounded-full bg-primary-red align-middle" />
                         )}
                       </p>
-                      <span className="text-[11px] text-slate-400 shrink-0">{timeAgo(n.createdAt)}</span>
+                      <span className="text-[11px] text-muted-foreground shrink-0">{timeAgo(n.createdAt)}</span>
                     </div>
-                    <p className="text-sm text-slate-500 mt-0.5 leading-snug">{n.body}</p>
+                    <p className="text-sm text-muted-foreground mt-0.5 leading-snug">{n.body}</p>
                     <div className="flex items-center gap-3 mt-3">
                       {n.link && (
                         <Link
@@ -162,7 +162,7 @@ export default function TeacherNotificationsPage() {
                       {!n.isRead && (
                         <button
                           onClick={() => markRead(n.id)}
-                          className="text-xs text-slate-400 hover:text-slate-600 transition-colors font-medium"
+                          className="text-xs text-muted-foreground hover:text-muted-foreground transition-colors font-medium"
                         >
                           Mark as read
                         </button>
@@ -176,7 +176,7 @@ export default function TeacherNotificationsPage() {
         </div>
       )}
 
-      <p className="text-xs text-slate-400 text-center">
+      <p className="text-xs text-muted-foreground text-center">
         Notifications from the admin and system will appear here.
       </p>
     </div>

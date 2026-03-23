@@ -4,62 +4,10 @@ import {
   CheckCircle2, ArrowRight, Phone, ShieldCheck, Wrench,
   Eye, Warehouse, GraduationCap, ShoppingCart, HeartPulse, Home,
 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
-const CORE_SERVICES = [
-  {
-    icon: Camera,
-    title: 'HD & 4K Camera Installation',
-    desc: 'High-definition cameras for crystal-clear footage, day or night — capturing every detail with precision.',
-  },
-  {
-    icon: Building2,
-    title: 'Indoor & Outdoor Systems',
-    desc: 'Weatherproof cameras built for any environment — offices, warehouses, parking lots, and open compounds.',
-  },
-  {
-    icon: Smartphone,
-    title: 'Remote Viewing & Mobile Access',
-    desc: 'Monitor your property from anywhere using your smartphone or laptop via a secure mobile app.',
-  },
-  {
-    icon: Bell,
-    title: 'Motion Detection & Smart Alerts',
-    desc: 'AI-powered motion detection with real-time alerts sent directly to your phone the moment activity is detected.',
-  },
-  {
-    icon: HardDrive,
-    title: 'DVR/NVR Storage Systems',
-    desc: 'Secure local and cloud-based recording systems for reliable footage retention and easy playback.',
-  },
-  {
-    icon: Link2,
-    title: 'Integration with Access Control',
-    desc: 'Seamlessly link your CCTV with biometric access control for a unified, total-security solution.',
-  },
-];
-
-const WHY_CHOOSE = [
-  {
-    icon: Wrench,
-    title: '12-Month Warranty',
-    desc: 'Professional installation backed by a full 12-month warranty on parts and workmanship.',
-  },
-  {
-    icon: Smartphone,
-    title: 'Mobile App Viewing',
-    desc: 'Live and recorded footage accessible from iOS and Android devices, anywhere in the world.',
-  },
-  {
-    icon: Bell,
-    title: 'AI Motion Alerts',
-    desc: 'Smart detection distinguishes real threats from false alarms and sends instant push notifications.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Competitive Packages',
-    desc: 'Flexible pricing and scalable packages tailored to your site size and security requirements.',
-  },
-];
+const CORE_SERVICE_ICONS = [Camera, Building2, Smartphone, Bell, HardDrive, Link2];
+const WHY_ICONS = [Wrench, Smartphone, Bell, ShieldCheck];
 
 const IDEAL_LOCATIONS = [
   {
@@ -113,11 +61,12 @@ const FEATURES = [
 ];
 
 export default function CCTVPage() {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-white">
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="pt-12 pb-20 bg-[#023064] px-6 relative overflow-hidden">
+      <section className="pt-8 pb-12 sm:pt-12 sm:pb-20 bg-[#023064] px-4 sm:px-6 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-10 pointer-events-none"
           style={{ backgroundImage: 'radial-gradient(ellipse at 75% 35%, #E11D48 0%, transparent 55%)' }}
@@ -125,17 +74,15 @@ export default function CCTVPage() {
         <div className="max-w-6xl mx-auto relative grid md:grid-cols-2 gap-12 items-center">
           <div>
             <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-              CCTV & Surveillance
+              {t.servicePages.cctv.hero.badge}
             </span>
-            <h1 className="font-heading text-5xl font-extrabold text-white mb-5 leading-tight">
-              See Everything.{' '}
-              <span className="text-[#E11D48]">Miss Nothing.</span>
+            <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5 leading-tight">
+              {t.servicePages.cctv.hero.title1}{' '}
+              <span className="text-[#E11D48]">{t.servicePages.cctv.hero.title2}</span>{' '}
+              {t.servicePages.cctv.hero.title3}
             </h1>
             <p className="text-blue-200 text-lg leading-relaxed mb-8">
-              At Cyberteks-IT, we provide intelligent CCTV and Surveillance solutions tailored to protect
-              your property, people, and assets 24/7. From homes and offices to large industrial
-              facilities, our surveillance systems are designed for reliability, clarity, and smart
-              monitoring.
+              {t.servicePages.cctv.hero.subtitle}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -163,7 +110,7 @@ export default function CCTVPage() {
       </section>
 
       {/* ── Stats Strip ──────────────────────────────────────────────── */}
-      <section className="bg-gradient-to-br from-[#023064] to-[#012550] py-10 px-6">
+      <section className="bg-gradient-to-br from-[#023064] to-[#012550] py-8 sm:py-10 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {STATS.map((s) => (
             <div key={s.label}>
@@ -175,14 +122,14 @@ export default function CCTVPage() {
       </section>
 
       {/* ── Core Services ────────────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
-              What We Provide
+              {t.servicePages.cctv.services.badge}
             </span>
             <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">
-              Our CCTV & Surveillance Services
+              {t.servicePages.cctv.services.title}
             </h2>
             <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
               End-to-end surveillance solutions — from camera supply and installation to remote
@@ -190,25 +137,28 @@ export default function CCTVPage() {
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CORE_SERVICES.map((svc) => (
-              <div
-                key={svc.title}
-                className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md hover:border-[#023064]/30 hover:scale-105 transition-all duration-300 p-6"
-              >
-                <div className="w-12 h-12 rounded-xl bg-[#023064]/10 flex items-center justify-center mb-4">
-                  <svc.icon className="w-6 h-6 text-[#023064]" />
+            {t.servicePages.cctv.services.items.map((item, i) => {
+              const Icon = CORE_SERVICE_ICONS[i];
+              return (
+                <div
+                  key={item.title}
+                  className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md hover:border-[#023064]/30 hover:scale-105 transition-all duration-300 p-6"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-[#023064]/10 flex items-center justify-center mb-4">
+                    <Icon className="w-6 h-6 text-[#023064]" />
+                  </div>
+                  <h3 className="font-heading text-base font-bold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
                 </div>
-                <h3 className="font-heading text-base font-bold text-gray-900 mb-2">{svc.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{svc.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* ── Why Choose Us ────────────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-14 items-center">
           <div className="relative">
             <img
               src="/assets/cctv-surveillance-systems.jpg"
@@ -222,36 +172,39 @@ export default function CCTVPage() {
           </div>
           <div>
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
-              Why Cyberteks-IT
+              {t.servicePages.cctv.why.badge}
             </span>
             <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2 mb-4">
-              Professional security with a warranty you can trust
+              {t.servicePages.cctv.why.title}
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
               We don't just install cameras — we design complete, future-proof surveillance ecosystems
               tailored to your premises and budget.
             </p>
             <div className="grid sm:grid-cols-2 gap-5">
-              {WHY_CHOOSE.map((w) => (
-                <div
-                  key={w.title}
-                  className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md hover:border-[#023064]/30 transition-all duration-300 p-5"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-[#E11D48]/10 flex items-center justify-center mb-3">
-                    <w.icon className="w-5 h-5 text-[#E11D48]" />
+              {t.servicePages.cctv.why.items.map((item, i) => {
+                const Icon = WHY_ICONS[i];
+                return (
+                  <div
+                    key={item.title}
+                    className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md hover:border-[#023064]/30 transition-all duration-300 p-5"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-[#E11D48]/10 flex items-center justify-center mb-3">
+                      <Icon className="w-5 h-5 text-[#E11D48]" />
+                    </div>
+                    <h3 className="font-heading text-sm font-bold text-gray-900 mb-1">{item.title}</h3>
+                    <p className="text-xs text-gray-600 leading-relaxed">{item.desc}</p>
                   </div>
-                  <h3 className="font-heading text-sm font-bold text-gray-900 mb-1">{w.title}</h3>
-                  <p className="text-xs text-gray-600 leading-relaxed">{w.desc}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
       {/* ── Everything Included ──────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-white">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-14 items-center">
           <div>
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
               Full Package
@@ -300,7 +253,7 @@ export default function CCTVPage() {
       </section>
 
       {/* ── Ideal Locations ──────────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-gray-50">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
@@ -334,24 +287,23 @@ export default function CCTVPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-gradient-to-br from-[#023064] to-[#012550]">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-br from-[#023064] to-[#012550]">
         <div className="max-w-3xl mx-auto text-center">
           <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-            Secure Your Premises
+            {t.servicePages.cctv.cta.title}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-white mb-4">
-            Ready to protect what matters most?
+            {t.servicePages.cctv.cta.title}
           </h2>
           <p className="text-blue-200 text-lg mb-10 leading-relaxed">
-            Get a free site survey and no-obligation quote from our CCTV specialists. We'll design the
-            perfect system for your space and budget.
+            {t.servicePages.cctv.cta.description}
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-8 py-4 rounded-xl transition-colors"
             >
-              Get a Free Quote <ArrowRight className="w-4 h-4" />
+              {t.servicePages.cctv.cta.button} <ArrowRight className="w-4 h-4" />
             </Link>
             <a
               href="tel:+256779367005"
@@ -360,7 +312,7 @@ export default function CCTVPage() {
               <Phone className="w-4 h-4" /> +256 779 367 005
             </a>
           </div>
-          <div className="mt-10 grid grid-cols-3 gap-6 max-w-md mx-auto">
+          <div className="mt-10 flex flex-wrap justify-center gap-6 max-w-md mx-auto">
             {[
               { icon: CheckCircle2, label: 'Free Site Survey' },
               { icon: CheckCircle2, label: '12-Month Warranty' },

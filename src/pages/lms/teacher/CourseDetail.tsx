@@ -103,12 +103,12 @@ function InlineEdit({
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter') save(); if (e.key === 'Escape') cancel(); }}
-        className={`border border-blue-400 rounded px-2 py-0.5 text-sm outline-none bg-white ${className}`}
+        className={`border border-blue-400 rounded px-2 py-0.5 text-sm outline-none bg-card ${className}`}
       />
-      {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-400" /> : (
+      {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin text-muted-foreground" /> : (
         <>
           <button onClick={save} className="text-emerald-600 hover:text-emerald-700"><Check className="w-3.5 h-3.5" /></button>
-          <button onClick={cancel} className="text-slate-400 hover:text-slate-600"><X className="w-3.5 h-3.5" /></button>
+          <button onClick={cancel} className="text-muted-foreground hover:text-muted-foreground"><X className="w-3.5 h-3.5" /></button>
         </>
       )}
     </span>
@@ -163,8 +163,8 @@ function LessonEditorPanel({
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100">
-        <h3 className="font-heading font-semibold text-slate-900 text-sm">Edit Lesson</h3>
-        <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+        <h3 className="font-heading font-semibold text-foreground text-sm">Edit Lesson</h3>
+        <button onClick={onClose} className="text-muted-foreground hover:text-muted-foreground">
           <X className="w-4 h-4" />
         </button>
       </div>
@@ -172,18 +172,18 @@ function LessonEditorPanel({
       <div className="flex-1 overflow-y-auto p-5 space-y-4">
         {/* Title */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 mb-1.5">Lesson Title</label>
+          <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Lesson Title</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-[#023064] focus:ring-1 focus:ring-[#023064]/20"
+            className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064] focus:ring-1 focus:ring-[#023064]/20"
             placeholder="e.g. Introduction to Networking"
           />
         </div>
 
         {/* Type */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 mb-1.5">Lesson Type</label>
+          <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Lesson Type</label>
           <div className="grid grid-cols-2 gap-2">
             {LESSON_TYPES.map((t) => {
               const Icon = t.icon;
@@ -194,7 +194,7 @@ function LessonEditorPanel({
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium transition-all ${
                     type === t.value
                       ? 'border-[#023064] bg-[#023064]/5 text-[#023064]'
-                      : 'border-slate-200 text-slate-500 hover:border-slate-300'
+                      : 'border-border text-muted-foreground hover:border-slate-300'
                   }`}
                 >
                   <Icon className={`w-3.5 h-3.5 ${type === t.value ? 'text-[#023064]' : t.color}`} />
@@ -207,26 +207,26 @@ function LessonEditorPanel({
 
         {/* Description */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 mb-1.5">Description</label>
+          <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Description</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
-            className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-[#023064] focus:ring-1 focus:ring-[#023064]/20 resize-none"
+            className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064] focus:ring-1 focus:ring-[#023064]/20 resize-none"
             placeholder="Brief overview of this lesson…"
           />
         </div>
 
         {/* Content */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 mb-1.5">
+          <label className="block text-xs font-semibold text-muted-foreground mb-1.5">
             {type === 'VIDEO' ? 'Video URL / Embed Code' : type === 'LIVE_SESSION' ? 'Meeting Link' : 'Notes & Content'}
           </label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={type === 'DOCUMENT' || type === 'ASSIGNMENT' ? 8 : 4}
-            className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-[#023064] focus:ring-1 focus:ring-[#023064]/20 resize-none font-mono"
+            className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064] focus:ring-1 focus:ring-[#023064]/20 resize-none font-mono"
             placeholder={
               type === 'VIDEO' ? 'https://youtube.com/watch?v=...' :
               type === 'LIVE_SESSION' ? 'https://meet.google.com/...' :
@@ -238,12 +238,12 @@ function LessonEditorPanel({
         {/* Duration + Free */}
         <div className="flex gap-3">
           <div className="flex-1">
-            <label className="block text-xs font-semibold text-slate-500 mb-1.5">Duration (minutes)</label>
+            <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Duration (minutes)</label>
             <input
               type="number"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-[#023064]"
+              className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064]"
               placeholder="30"
               min={0}
             />
@@ -254,9 +254,9 @@ function LessonEditorPanel({
                 onClick={() => setIsFree(!isFree)}
                 className={`w-9 h-5 rounded-full transition-all relative ${isFree ? 'bg-emerald-500' : 'bg-slate-200'}`}
               >
-                <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all ${isFree ? 'left-4' : 'left-0.5'}`} />
+                <div className={`absolute top-0.5 w-4 h-4 bg-card rounded-full shadow transition-all ${isFree ? 'left-4' : 'left-0.5'}`} />
               </div>
-              <span className="text-xs font-medium text-slate-600">Free preview</span>
+              <span className="text-xs font-medium text-muted-foreground">Free preview</span>
             </label>
           </div>
         </div>
@@ -417,7 +417,7 @@ export default function TeacherCourseDetailPage() {
     return (
       <div className="flex flex-col items-center gap-3 py-20">
         <AlertCircle className="w-10 h-10 text-red-400" />
-        <p className="text-slate-500">{error || 'Course not found'}</p>
+        <p className="text-muted-foreground">{error || 'Course not found'}</p>
         <Link to="/teacher/courses" className="text-sm text-[#023064] hover:underline">← Back to Courses</Link>
       </div>
     );
@@ -434,22 +434,22 @@ export default function TeacherCourseDetailPage() {
       <div className="flex items-start gap-4">
         <Link
           to="/teacher/courses"
-          className="mt-0.5 w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#023064] hover:border-[#023064] transition-all shrink-0"
+          className="mt-0.5 w-9 h-9 rounded-xl border border-border flex items-center justify-center text-muted-foreground hover:text-[#023064] hover:border-[#023064] transition-all shrink-0"
         >
           <ArrowLeft className="w-4 h-4" />
         </Link>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
-            <h1 className="font-heading text-xl font-bold text-slate-900 leading-tight">{course.title}</h1>
+            <h1 className="font-heading text-xl font-bold text-foreground leading-tight">{course.title}</h1>
             <span className={`text-[11px] px-2.5 py-1 rounded-full font-semibold shrink-0 ${
               course.status === 'PUBLISHED' ? 'bg-emerald-50 text-emerald-600' :
               course.status === 'DRAFT'     ? 'bg-amber-50 text-amber-600' :
-              'bg-slate-100 text-slate-400'
+              'bg-slate-100 text-muted-foreground'
             }`}>
               {course.status.charAt(0) + course.status.slice(1).toLowerCase()}
             </span>
           </div>
-          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" /> {course._count.enrollments} students</span>
             <span className="flex items-center gap-1"><BookOpen className="w-3.5 h-3.5" /> {course.sections.length} sections · {totalLessons} lessons</span>
             {course.duration && <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {course.duration}</span>}
@@ -462,9 +462,9 @@ export default function TeacherCourseDetailPage() {
       <div className="grid lg:grid-cols-[340px_1fr] gap-5 items-start">
 
         {/* Left: Sections & Lessons sidebar */}
-        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Course Content</span>
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Course Content</span>
             <button
               onClick={() => setAddingSection(true)}
               className="flex items-center gap-1 text-xs font-semibold text-[#023064] hover:text-[#012550] transition-colors"
@@ -481,7 +481,7 @@ export default function TeacherCourseDetailPage() {
                 value={newSectionTitle}
                 onChange={(e) => setNewSectionTitle(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') handleAddSection(); if (e.key === 'Escape') { setAddingSection(false); setNewSectionTitle(''); } }}
-                className="w-full text-sm border border-blue-300 rounded-lg px-3 py-1.5 outline-none focus:border-blue-500 bg-white mb-2"
+                className="w-full text-sm border border-blue-300 rounded-lg px-3 py-1.5 outline-none focus:border-blue-500 bg-card mb-2"
                 placeholder="Section title…"
               />
               <div className="flex gap-2">
@@ -494,7 +494,7 @@ export default function TeacherCourseDetailPage() {
                 </button>
                 <button
                   onClick={() => { setAddingSection(false); setNewSectionTitle(''); }}
-                  className="px-3 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 rounded-lg border border-slate-200 hover:bg-slate-50 transition-all"
+                  className="px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground rounded-lg border border-border hover:bg-slate-50 transition-all"
                 >
                   Cancel
                 </button>
@@ -506,8 +506,8 @@ export default function TeacherCourseDetailPage() {
           {course.sections.length === 0 && !addingSection && (
             <div className="py-12 flex flex-col items-center text-center px-6">
               <BookOpen className="w-8 h-8 text-slate-200 mb-3" />
-              <p className="text-sm font-medium text-slate-600 mb-1">No sections yet</p>
-              <p className="text-xs text-slate-400">Click "Add Section" to start building your course</p>
+              <p className="text-sm font-medium text-muted-foreground mb-1">No sections yet</p>
+              <p className="text-xs text-muted-foreground">Click "Add Section" to start building your course</p>
             </div>
           )}
 
@@ -520,16 +520,16 @@ export default function TeacherCourseDetailPage() {
                   {/* Section header */}
                   <div className="flex items-center gap-2 px-4 py-3 group hover:bg-slate-50/60 transition-colors">
                     <GripVertical className="w-3.5 h-3.5 text-slate-200 group-hover:text-slate-300 shrink-0 cursor-grab" />
-                    <button onClick={() => toggleSection(section.id)} className="shrink-0 text-slate-400">
+                    <button onClick={() => toggleSection(section.id)} className="shrink-0 text-muted-foreground">
                       {expanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
                     </button>
                     <div className="flex-1 min-w-0">
                       <InlineEdit
                         value={section.title}
                         onSave={(v) => handleRenameSection(section.id, v)}
-                        className="text-sm font-semibold text-slate-800"
+                        className="text-sm font-semibold text-foreground"
                       />
-                      <p className="text-[11px] text-slate-400 mt-0.5">
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
                         Section {sIdx + 1} · {section.lessons.length} lesson{section.lessons.length !== 1 ? 's' : ''}
                       </p>
                     </div>
@@ -554,11 +554,11 @@ export default function TeacherCourseDetailPage() {
                         >
                           <div className="shrink-0">{getLessonIcon(lesson.type)}</div>
                           <div className="flex-1 min-w-0">
-                            <p className={`text-xs font-medium truncate ${selectedLesson?.id === lesson.id ? 'text-[#023064]' : 'text-slate-700'}`}>
+                            <p className={`text-xs font-medium truncate ${selectedLesson?.id === lesson.id ? 'text-[#023064]' : 'text-foreground'}`}>
                               {lesson.title}
                             </p>
                             {lesson.duration && (
-                              <p className="text-[10px] text-slate-400">{lesson.duration} min</p>
+                              <p className="text-[10px] text-muted-foreground">{lesson.duration} min</p>
                             )}
                           </div>
                           <div className="shrink-0 flex items-center gap-1.5 opacity-0 group-hover:opacity-100">
@@ -597,7 +597,7 @@ export default function TeacherCourseDetailPage() {
                                   key={t.value}
                                   onClick={() => setNewLessonType(t.value)}
                                   className={`flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-medium border transition-all ${
-                                    newLessonType === t.value ? 'border-[#023064] bg-[#023064]/5 text-[#023064]' : 'border-slate-200 text-slate-400 hover:border-slate-300'
+                                    newLessonType === t.value ? 'border-[#023064] bg-[#023064]/5 text-[#023064]' : 'border-border text-muted-foreground hover:border-slate-300'
                                   }`}
                                 >
                                   <Icon className="w-2.5 h-2.5" /> {t.label}
@@ -615,7 +615,7 @@ export default function TeacherCourseDetailPage() {
                             </button>
                             <button
                               onClick={() => { setAddingLessonFor(null); setNewLessonTitle(''); }}
-                              className="px-2.5 py-1.5 text-[11px] font-semibold text-slate-500 rounded-md border border-slate-200 hover:bg-slate-50"
+                              className="px-2.5 py-1.5 text-[11px] font-semibold text-muted-foreground rounded-md border border-border hover:bg-slate-50"
                             >
                               Cancel
                             </button>
@@ -624,7 +624,7 @@ export default function TeacherCourseDetailPage() {
                       ) : (
                         <button
                           onClick={() => { setAddingLessonFor(section.id); setNewLessonTitle(''); setNewLessonType('VIDEO'); }}
-                          className="w-full flex items-center gap-2 px-5 py-2 text-xs font-medium text-slate-400 hover:text-[#023064] hover:bg-blue-50/40 transition-colors"
+                          className="w-full flex items-center gap-2 px-5 py-2 text-xs font-medium text-muted-foreground hover:text-[#023064] hover:bg-blue-50/40 transition-colors"
                         >
                           <Plus className="w-3.5 h-3.5" /> Add Lesson
                         </button>
@@ -638,7 +638,7 @@ export default function TeacherCourseDetailPage() {
         </div>
 
         {/* Right: Lesson editor or empty state */}
-        <div className="bg-white rounded-2xl shadow-sm min-h-[500px] flex flex-col overflow-hidden">
+        <div className="bg-card rounded-2xl shadow-sm min-h-[500px] flex flex-col overflow-hidden">
           {selectedLesson ? (
             <LessonEditorPanel
               key={selectedLesson.id}
@@ -651,8 +651,8 @@ export default function TeacherCourseDetailPage() {
               <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-4">
                 <Edit3 className="w-7 h-7 text-slate-200" />
               </div>
-              <p className="font-heading font-semibold text-slate-700 mb-1">Select a lesson to edit</p>
-              <p className="text-sm text-slate-400 max-w-xs">
+              <p className="font-heading font-semibold text-foreground mb-1">Select a lesson to edit</p>
+              <p className="text-sm text-muted-foreground max-w-xs">
                 Click any lesson on the left to edit its title, type, content, and notes. Or add new sections and lessons.
               </p>
             </div>

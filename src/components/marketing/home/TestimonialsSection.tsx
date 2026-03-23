@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const testimonials = [
   {
@@ -40,16 +41,18 @@ const testimonials = [
 ];
 
 export default function TestimonialsSection() {
+  const { t } = useLanguage();
+
   return (
-    <section className="py-24 bg-gray-50 border-t border-gray-100">
+    <section className="py-12 sm:py-16 lg:py-24 bg-gray-50 border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="mb-14">
           <p className="text-xs font-bold text-primary-blue uppercase tracking-[0.15em] mb-3">
-            Testimonials
+            {t.testimonials.badge}
           </p>
           <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight max-w-sm">
-            What They Say About Us
+            {t.testimonials.title}
           </h2>
         </div>
 

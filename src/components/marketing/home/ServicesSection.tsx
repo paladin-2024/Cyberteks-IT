@@ -16,7 +16,7 @@ export default function ServicesSection() {
   const { t } = useLanguage();
 
   return (
-    <section className="py-28 bg-white relative overflow-hidden">
+    <section className="py-14 sm:py-20 lg:py-28 bg-white relative overflow-hidden">
       {/* Subtle background accent */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#023064]/3 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3" />
 
@@ -31,7 +31,7 @@ export default function ServicesSection() {
                 {t.services.badge}
               </p>
             </div>
-            <h2 className="font-display text-4xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight max-w-sm">
+            <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight max-w-sm">
               {t.services.title}
             </h2>
           </div>

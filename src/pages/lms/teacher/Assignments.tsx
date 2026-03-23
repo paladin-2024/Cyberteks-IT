@@ -107,7 +107,7 @@ function timeAgo(iso: string): string {
 
 const statusConfig: Record<AssignmentStatus, { label: string; bg: string; text: string; border: string; icon: React.ElementType }> = {
   ACTIVE:   { label: 'Active',   bg: 'bg-blue-50',    text: 'text-blue-700',    border: 'border-blue-200',    icon: CheckCircle2 },
-  DRAFT:    { label: 'Draft',    bg: 'bg-slate-100',  text: 'text-slate-600',   border: 'border-slate-200',   icon: FileText },
+  DRAFT:    { label: 'Draft',    bg: 'bg-slate-100',  text: 'text-muted-foreground',   border: 'border-border',   icon: FileText },
   PAST_DUE: { label: 'Past Due', bg: 'bg-red-50',     text: 'text-red-700',     border: 'border-red-200',     icon: AlertCircle },
 };
 
@@ -732,7 +732,7 @@ function AssignmentDrawer({
                     form.status === s
                       ? s === 'ACTIVE'
                         ? 'bg-primary-blue text-white border-primary-blue shadow-sm'
-                        : 'bg-slate-200 text-slate-700 border-slate-300'
+                        : 'bg-slate-200 text-foreground border-slate-300'
                       : 'bg-transparent text-muted-foreground border-border hover:bg-muted'
                   }`}
                 >
@@ -913,10 +913,10 @@ export default function AssignmentsPage() {
       {/* Stats cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { key: 'all',      label: 'Total',    icon: ClipboardList, bg: 'bg-slate-50',  iconColor: 'text-slate-600' },
+          { key: 'all',      label: 'Total',    icon: ClipboardList, bg: 'bg-slate-50',  iconColor: 'text-muted-foreground' },
           { key: 'active',   label: 'Active',   icon: CheckCircle2,  bg: 'bg-blue-50',   iconColor: 'text-blue-600' },
           { key: 'past_due', label: 'Past Due', icon: AlertCircle,   bg: 'bg-red-50',    iconColor: 'text-red-600' },
-          { key: 'draft',    label: 'Draft',    icon: FileText,      bg: 'bg-slate-50',  iconColor: 'text-slate-500' },
+          { key: 'draft',    label: 'Draft',    icon: FileText,      bg: 'bg-slate-50',  iconColor: 'text-muted-foreground' },
         ].map((s) => (
           <button
             key={s.key}

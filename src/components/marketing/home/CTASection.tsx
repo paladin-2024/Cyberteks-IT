@@ -17,7 +17,7 @@ export default function CTASection() {
   const { t } = useLanguage();
 
   return (
-    <section className="py-28 bg-gray-50 relative overflow-hidden">
+    <section className="py-14 sm:py-20 lg:py-28 bg-gray-50 relative overflow-hidden">
       {/* Top gradient line */}
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#E11D48]/30 to-transparent" />
 
@@ -28,7 +28,7 @@ export default function CTASection() {
             <span className="w-8 h-0.5 bg-[#E11D48]" />
             <p className="text-sm font-bold text-[#E11D48] uppercase tracking-[0.15em]">Get Started Today</p>
           </div>
-          <h2 className="font-display text-4xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight max-w-md">
+          <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight max-w-md">
             Where do you want to begin?
           </h2>
         </div>
@@ -36,7 +36,7 @@ export default function CTASection() {
         <div className="grid md:grid-cols-2 gap-6">
 
           {/* Training CTA */}
-          <div className="bg-[#E11D48] rounded-3xl p-10 relative overflow-hidden group">
+          <div className="bg-[#E11D48] rounded-3xl p-6 sm:p-10 relative overflow-hidden group">
             {/* Decorative circles */}
             <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/8 pointer-events-none transition-transform duration-700 group-hover:scale-110" />
             <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-black/10 pointer-events-none" />
@@ -70,7 +70,7 @@ export default function CTASection() {
           </div>
 
           {/* IT Support CTA */}
-          <div className="bg-[#023064] rounded-3xl p-10 relative overflow-hidden group">
+          <div className="bg-[#023064] rounded-3xl p-6 sm:p-10 relative overflow-hidden group">
             <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5 pointer-events-none transition-transform duration-700 group-hover:scale-110" />
             <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-[#E11D48]/10 pointer-events-none" />
             <div className="absolute top-1/2 right-8 w-20 h-20 rounded-full border border-white/8 pointer-events-none" />

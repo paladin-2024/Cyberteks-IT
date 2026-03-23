@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Mail, ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function NewsletterSection() {
+  const { t } = useLanguage();
   const [email, setEmail]     = useState('');
   const [status, setStatus]   = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
@@ -27,7 +29,7 @@ export default function NewsletterSection() {
   }
 
   return (
-    <section className="bg-white py-20 relative overflow-hidden">
+    <section className="bg-white py-12 sm:py-16 lg:py-20 relative overflow-hidden">
       {/* Decorative background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
@@ -37,29 +39,24 @@ export default function NewsletterSection() {
       </div>
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
-        {/* Icon */}
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#023064]/6 border border-[#023064]/12 mb-6">
-          <Mail className="w-6 h-6 text-[#023064]" />
-        </div>
-
         {/* Eyebrow */}
         <div className="inline-flex items-center gap-2 mb-4">
           <span className="w-6 h-0.5 bg-[#E11D48]" />
-          <p className="text-sm font-bold text-[#E11D48] uppercase tracking-[0.15em]">Newsletter</p>
+          <p className="text-sm font-bold text-[#E11D48] uppercase tracking-[0.15em]">{t.newsletter.badge}</p>
           <span className="w-6 h-0.5 bg-[#E11D48]" />
         </div>
 
         <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight mb-4">
-          Stay ahead in ICT &amp; cybersecurity
+          {t.newsletter.title}
         </h2>
         <p className="text-base text-gray-500 leading-relaxed mb-10 max-w-lg mx-auto">
-          Get the latest tips, course updates, security alerts, and company news delivered straight to your inbox. No spam — unsubscribe any time.
+          {t.newsletter.description}
         </p>
 
         {status === 'success' ? (
           <div className="inline-flex items-center gap-3 px-7 py-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-700">
             <CheckCircle2 className="w-5 h-5 shrink-0" />
-            <span className="font-semibold text-base">You're subscribed! Thanks for joining.</span>
+            <span className="font-semibold text-base">{t.newsletter.subscribed}</span>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
@@ -70,7 +67,7 @@ export default function NewsletterSection() {
                 required
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); setStatus('idle'); }}
-                placeholder="Enter your email address"
+                placeholder={t.newsletter.placeholder}
                 className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-200 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:border-[#023064] focus:ring-2 focus:ring-[#023064]/10 transition-all"
               />
             </div>
@@ -82,7 +79,7 @@ export default function NewsletterSection() {
               {status === 'loading' ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <>Subscribe <ArrowRight className="w-4 h-4" /></>
+                <>{t.newsletter.subscribe} <ArrowRight className="w-4 h-4" /></>
               )}
             </button>
           </form>
@@ -93,9 +90,9 @@ export default function NewsletterSection() {
         )}
 
         <p className="mt-5 text-xs text-gray-400">
-          By subscribing you agree to our{' '}
-          <a href="/privacy-policy" className="underline hover:text-gray-600 transition-colors">Privacy Policy</a>.
-          Unsubscribe at any time.
+          {t.newsletter.privacy}{' '}
+          <a href="/privacy-policy" className="underline hover:text-gray-600 transition-colors">{t.newsletter.privacyLink}</a>.{' '}
+          {t.newsletter.unsubscribe}
         </p>
       </div>
     </section>

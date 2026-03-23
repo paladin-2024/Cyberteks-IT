@@ -238,7 +238,7 @@ export default function ProfilePage() {
     );
   }
 
-  const roleCfg = roleConfig[profile?.role ?? ''] ?? { label: profile?.role ?? 'User', bg: 'bg-slate-50', text: 'text-slate-700', border: 'border-slate-200' };
+  const roleCfg = roleConfig[profile?.role ?? ''] ?? { label: profile?.role ?? 'User', bg: 'bg-slate-50', text: 'text-foreground', border: 'border-border' };
   const avatarBg = profile?.role === 'ADMIN' ? 'bg-rose-500' : profile?.role === 'TEACHER' ? 'bg-blue-600' : 'bg-emerald-600';
 
   return (

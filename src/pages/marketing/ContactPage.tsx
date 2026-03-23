@@ -6,50 +6,7 @@ import {
 } from 'lucide-react';
 import PhoneInput, { type Country } from '@/components/ui/PhoneInput';
 import { cn } from '@/lib/utils';
-
-// ─── Constants ────────────────────────────────────────────────────────────────
-
-const TOPICS = [
-  'Remote IT Support',
-  'CCTV & Surveillance',
-  'Access Control / Biometrics',
-  'VoIP & Networking',
-  'ICT Skills Training',
-  'Web & Software Development',
-  'Partnership / Business',
-  'General Inquiry',
-];
-
-const CONTACT_ITEMS = [
-  {
-    icon: Phone, label: 'Call Us',
-    lines: [
-      { text: '+256 779 367 005 (MTN)',    href: 'tel:+256779367005' },
-      { text: '+256 706 911 732 (Airtel)', href: 'tel:+256706911732' },
-    ],
-  },
-  {
-    icon: Mail, label: 'Email Us',
-    lines: [
-      { text: 'info@cyberteks-it.com',    href: 'mailto:info@cyberteks-it.com' },
-      { text: 'support@cyberteks-it.com', href: 'mailto:support@cyberteks-it.com' },
-    ],
-  },
-  {
-    icon: MapPin, label: 'Visit Us',
-    lines: [
-      { text: 'Plot 15, Nakasero Road', href: null },
-      { text: 'Kampala, Uganda',        href: null },
-    ],
-  },
-  {
-    icon: Clock, label: 'Working Hours',
-    lines: [
-      { text: 'Mon – Fri: 8:00 AM – 6:00 PM', href: null },
-      { text: 'Sat: 9:00 AM – 2:00 PM',       href: null },
-    ],
-  },
-];
+import { useLanguage } from '@/context/LanguageContext';
 
 const SOCIALS = [
   { icon: Linkedin,  href: 'https://linkedin.com/company/cyberteks-it', label: 'LinkedIn',  color: 'hover:bg-[#0077B5]' },
@@ -92,10 +49,18 @@ function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInputEleme
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ContactPage() {
+  const { t } = useLanguage();
   const [fd, setFd]           = useState<FormData>(initial);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
   const [done, setDone]       = useState(false);
+
+  const contactItems = [
+    { icon: Phone, label: t.contact.info.callUs, lines: [{ text: '+256 779 367 005 (MTN)', href: 'tel:+256779367005' }, { text: '+256 706 911 732 (Airtel)', href: 'tel:+256706911732' }] },
+    { icon: Mail, label: t.contact.info.emailUs, lines: [{ text: 'info@cyberteks-it.com', href: 'mailto:info@cyberteks-it.com' }, { text: 'support@cyberteks-it.com', href: 'mailto:support@cyberteks-it.com' }] },
+    { icon: MapPin, label: t.contact.info.visitUs, lines: [{ text: 'Plot 15, Nakasero Road', href: null }, { text: 'Kampala, Uganda', href: null }] },
+    { icon: Clock, label: t.contact.info.workingHours, lines: [{ text: t.contact.info.workingHoursLine1, href: null }, { text: t.contact.info.workingHoursLine2, href: null }] },
+  ];
 
   const set = (partial: Partial<FormData>) => setFd(prev => ({ ...prev, ...partial }));
   const handlePhone = (full: string, _n: string, _c: Country) => set({ phone: full });
@@ -125,7 +90,7 @@ export default function ContactPage() {
     <div className="min-h-screen bg-[#f8f9fc]">
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <div className="relative bg-[#023064] overflow-hidden pt-12 pb-20">
+      <div className="relative bg-[#023064] overflow-hidden pt-12 pb-14 sm:pb-20">
         {/* Mesh glow */}
         <div className="absolute inset-0 bg-mesh-dark opacity-60 pointer-events-none" />
         {/* Decorative ring */}
@@ -137,16 +102,15 @@ export default function ContactPage() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="inline-flex items-center gap-2 text-xs font-bold text-white/50 uppercase tracking-[0.2em] mb-5">
             <span className="w-6 h-px bg-white/30" />
-            Contact Us
+            {t.contact.hero.badge}
             <span className="w-6 h-px bg-white/30" />
           </p>
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-5 leading-tight">
-            Let's Start a{' '}
-            <span className="text-primary-red">Conversation</span>
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white mb-5 leading-tight">
+            {t.contact.hero.title1}{' '}
+            <span className="text-primary-red">{t.contact.hero.title2}</span>
           </h1>
           <p className="text-white/60 text-lg max-w-xl mx-auto leading-relaxed">
-            Whether you need IT support, want to enrol in training, or have a business
-            enquiry — our team in Kampala is ready to help.
+            {t.contact.hero.subtitle}
           </p>
         </div>
 
@@ -161,16 +125,16 @@ export default function ContactPage() {
             <div className="bg-[#023064] rounded-3xl overflow-hidden shadow-2xl">
 
               {/* Panel header */}
-              <div className="px-8 pt-8 pb-6 border-b border-white/10">
-                <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">Get in Touch</p>
+              <div className="px-5 sm:px-8 pt-6 sm:pt-8 pb-5 sm:pb-6 border-b border-white/10">
+                <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">{t.contact.hero.badge}</p>
                 <h2 className="font-display text-2xl font-extrabold text-white leading-tight">
-                  We're here<br />to help you
+                  {t.contact.info.title}
                 </h2>
               </div>
 
               {/* Contact items */}
-              <div className="px-8 py-6 space-y-6">
-                {CONTACT_ITEMS.map(({ icon: Icon, label, lines }) => (
+              <div className="px-5 sm:px-8 py-6 space-y-6">
+                {contactItems.map(({ icon: Icon, label, lines }) => (
                   <div key={label} className="flex gap-4">
                     <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0 mt-0.5">
                       <Icon className="w-4.5 h-4.5 text-white" />
@@ -196,26 +160,26 @@ export default function ContactPage() {
               <div className="mx-6 mb-6 rounded-2xl bg-primary-red/20 border border-primary-red/30 p-5">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-xs font-bold text-white/60 uppercase tracking-wide">24/7 Support</span>
+                  <span className="text-xs font-bold text-white/60 uppercase tracking-wide">{t.contact.info.support24}</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-xl bg-primary-red/30 flex items-center justify-center shrink-0">
                     <Headphones className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-white mb-0.5">Need urgent help?</p>
-                    <p className="text-xs text-white/50 mb-3">Our technicians respond within 30 minutes.</p>
+                    <p className="text-sm font-bold text-white mb-0.5">{t.contact.info.urgentHelp}</p>
+                    <p className="text-xs text-white/50 mb-3">{t.contact.info.urgentDesc}</p>
                     <a href="/get-started"
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-primary-red px-3 py-1.5 rounded-lg hover:bg-red-700 transition-colors">
-                      Request Support <ChevronRight className="w-3.5 h-3.5" />
+                      {t.contact.info.requestSupport} <ChevronRight className="w-3.5 h-3.5" />
                     </a>
                   </div>
                 </div>
               </div>
 
               {/* Social links */}
-              <div className="px-8 pb-8">
-                <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Follow Us</p>
+              <div className="px-5 sm:px-8 pb-6 sm:pb-8">
+                <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">{t.contact.info.followUs}</p>
                 <div className="flex gap-2">
                   {SOCIALS.map(({ icon: Icon, href, label, color }) => (
                     <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
@@ -243,8 +207,8 @@ export default function ContactPage() {
                   <MessageSquare className="w-5 h-5 text-primary-blue" />
                 </div>
                 <div>
-                  <h2 className="font-display text-xl font-extrabold text-gray-900">Send a Message</h2>
-                  <p className="text-sm text-gray-400 mt-0.5">We reply within 2 business hours</p>
+                  <h2 className="font-display text-xl font-extrabold text-gray-900">{t.contact.form.title}</h2>
+                  <p className="text-sm text-gray-400 mt-0.5">{t.contact.form.subtitle}</p>
                 </div>
               </div>
 
@@ -254,7 +218,7 @@ export default function ContactPage() {
                   <div className="w-20 h-20 rounded-full bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center mx-auto mb-6">
                     <CheckCircle2 className="w-10 h-10 text-emerald-500" />
                   </div>
-                  <h3 className="font-display text-2xl font-extrabold text-gray-900 mb-3">Message Sent!</h3>
+                  <h3 className="font-display text-2xl font-extrabold text-gray-900 mb-3">{t.contact.form.successTitle}</h3>
                   <p className="text-gray-500 max-w-sm mx-auto mb-8">
                     Thanks <span className="font-semibold text-gray-700">{fd.name}</span> — we'll reply to{' '}
                     <span className="font-semibold text-gray-700">{fd.email}</span> within 2 business hours.
@@ -263,27 +227,27 @@ export default function ContactPage() {
                     onClick={() => { setDone(false); setFd(initial); }}
                     className="px-6 py-2.5 rounded-xl bg-gray-100 text-gray-700 font-semibold text-sm hover:bg-gray-200 transition-all"
                   >
-                    Send Another Message
+                    {t.contact.form.sendAnother}
                   </button>
                 </div>
               ) : (
                 /* ── Form ── */
-                <form onSubmit={submit} className="px-8 py-8 space-y-6">
+                <form onSubmit={submit} className="px-4 sm:px-8 py-6 sm:py-8 space-y-6">
 
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <FieldLabel required>Full Name</FieldLabel>
+                      <FieldLabel required>{t.contact.form.fullName}</FieldLabel>
                       <Input
-                        placeholder="Your full name"
+                        placeholder={t.contact.form.fullNamePlaceholder}
                         value={fd.name}
                         onChange={e => set({ name: e.target.value })}
                       />
                     </div>
                     <div>
-                      <FieldLabel required>Email Address</FieldLabel>
+                      <FieldLabel required>{t.contact.form.email}</FieldLabel>
                       <Input
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder={t.contact.form.emailPlaceholder}
                         value={fd.email}
                         onChange={e => set({ email: e.target.value })}
                       />
@@ -292,7 +256,7 @@ export default function ContactPage() {
 
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <FieldLabel>Phone Number</FieldLabel>
+                      <FieldLabel>{t.contact.form.phone}</FieldLabel>
                       <PhoneInput
                         value={fd.phone}
                         onChange={handlePhone}
@@ -301,7 +265,7 @@ export default function ContactPage() {
                       />
                     </div>
                     <div>
-                      <FieldLabel required>Topic</FieldLabel>
+                      <FieldLabel required>{t.contact.form.topic}</FieldLabel>
                       <select
                         value={fd.topic}
                         onChange={e => set({ topic: e.target.value })}
@@ -312,17 +276,17 @@ export default function ContactPage() {
                           fd.topic ? 'text-gray-900' : 'text-gray-400',
                         )}
                       >
-                        <option value="">Select a topic…</option>
-                        {TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
+                        <option value="">{t.contact.form.topicPlaceholder}</option>
+                        {t.contact.form.topics.map(topic => <option key={topic} value={topic}>{topic}</option>)}
                       </select>
                     </div>
                   </div>
 
                   <div>
-                    <FieldLabel required>Message</FieldLabel>
+                    <FieldLabel required>{t.contact.form.message}</FieldLabel>
                     <textarea
                       rows={5}
-                      placeholder="Tell us more about your needs…"
+                      placeholder={t.contact.form.messagePlaceholder}
                       value={fd.message}
                       onChange={e => set({ message: e.target.value })}
                       className={cn(
@@ -340,10 +304,10 @@ export default function ContactPage() {
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+                  <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-gray-100">
                     <p className="text-xs text-gray-400">
-                      By submitting, you agree to our{' '}
-                      <a href="/privacy-policy" className="text-primary-blue hover:underline">Privacy Policy</a>.
+                      {t.contact.form.privacy}{' '}
+                      <a href="/privacy-policy" className="text-primary-blue hover:underline">{t.contact.form.privacyLink}</a>.
                     </p>
                     <button
                       type="submit"
@@ -356,8 +320,8 @@ export default function ContactPage() {
                       )}
                     >
                       {loading
-                        ? <><Loader2 className="w-4 h-4 animate-spin" /> Sending…</>
-                        : <>Send Message <ChevronRight className="w-4 h-4" /></>
+                        ? <><Loader2 className="w-4 h-4 animate-spin" /> {t.contact.form.sending}</>
+                        : <>{t.contact.form.send} <ChevronRight className="w-4 h-4" /></>
                       }
                     </button>
                   </div>

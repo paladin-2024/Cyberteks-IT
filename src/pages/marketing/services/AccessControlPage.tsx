@@ -4,6 +4,7 @@ import {
   CheckCircle2, ArrowRight, Phone, ShieldCheck, Building2,
   Factory, FlaskConical, LandmarkIcon, Server,
 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const SERVICES = [
   {
@@ -92,11 +93,12 @@ const STATS = [
 ];
 
 export default function AccessControlPage() {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-white">
 
       {/* Hero */}
-      <section className="pt-12 pb-20 bg-[#023064] px-6 relative overflow-hidden">
+      <section className="pt-8 pb-12 sm:pt-12 sm:pb-20 bg-[#023064] px-4 sm:px-6 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-10 pointer-events-none"
           style={{ backgroundImage: 'radial-gradient(ellipse at 80% 40%, #E11D48 0%, transparent 55%)' }}
@@ -104,17 +106,14 @@ export default function AccessControlPage() {
         <div className="max-w-6xl mx-auto relative grid md:grid-cols-2 gap-12 items-center">
           <div>
             <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-              Access Control
+              {t.servicePages.accessControl.hero.badge}
             </span>
-            <h1 className="font-heading text-5xl font-extrabold text-white mb-5 leading-tight">
-              Control Who Gets In.{' '}
-              <span className="text-[#E11D48]">Know Who Was Here.</span>
+            <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5 leading-tight">
+              {t.servicePages.accessControl.hero.title1}{' '}
+              <span className="text-[#E11D48]">{t.servicePages.accessControl.hero.title2}</span>
             </h1>
             <p className="text-blue-200 text-lg leading-relaxed mb-8">
-              Your business, property, and sensitive data deserve more than just a lock and key.
-              At Cyberteks-IT, we provide advanced Biometric Access Control Solutions that combine
-              cutting-edge technology with robust security management — giving you full control over
-              who enters your premises and when.
+              {t.servicePages.accessControl.hero.subtitle}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -142,7 +141,7 @@ export default function AccessControlPage() {
       </section>
 
       {/* Stats Strip */}
-      <section className="bg-gradient-to-br from-[#023064] to-[#012550] py-10 px-6 border-t border-white/10">
+      <section className="bg-gradient-to-br from-[#023064] to-[#012550] py-8 sm:py-10 px-4 sm:px-6 border-t border-white/10">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {STATS.map((s) => (
             <div key={s.label}>
@@ -154,11 +153,11 @@ export default function AccessControlPage() {
       </section>
 
       {/* Services / Features */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">What We Offer</span>
-            <h2 className="font-heading text-4xl font-bold text-gray-900 mt-2">
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mt-2">
               Comprehensive Access Control Services
             </h2>
             <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-base">
@@ -184,8 +183,8 @@ export default function AccessControlPage() {
       </section>
 
       {/* Why Choose Biometric */}
-      <section className="py-20 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-14 items-center">
           <div className="relative">
             <img
               src="/assets/access-control-systems.jpg"
@@ -228,11 +227,11 @@ export default function AccessControlPage() {
       </section>
 
       {/* Use Cases / Ideal Clients */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Ideal Installation Locations</span>
-            <h2 className="font-heading text-4xl font-bold text-gray-900 mt-2">
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mt-2">
               Where We Deploy Access Control
             </h2>
             <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-base">
@@ -260,24 +259,23 @@ export default function AccessControlPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 bg-gradient-to-br from-[#023064] to-[#012550]">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-br from-[#023064] to-[#012550]">
         <div className="max-w-3xl mx-auto text-center">
           <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-            Get Started Today
+            {t.servicePages.accessControl.cta.title}
           </span>
-          <h2 className="font-heading text-4xl font-bold text-white mb-4">
-            Ready to Secure Your Premises?
+          <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
+            {t.servicePages.accessControl.cta.title}
           </h2>
           <p className="text-blue-200 text-lg mb-10 leading-relaxed">
-            Contact us for a free consultation and site assessment. Our engineers will design
-            the right system for your facility — whether it's one door or a hundred.
+            {t.servicePages.accessControl.cta.description}
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-8 py-4 rounded-xl transition-colors duration-300 text-base"
             >
-              Request a Demo <ArrowRight className="w-5 h-5" />
+              {t.servicePages.accessControl.cta.button} <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               to="/contact"

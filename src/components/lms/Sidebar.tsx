@@ -176,7 +176,7 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          'hidden lg:flex flex-col h-full bg-white border-r border-gray-100 transition-all duration-300 ease-in-out shrink-0 overflow-hidden',
+          'hidden lg:flex flex-col h-full bg-background border-r border-border transition-all duration-300 ease-in-out shrink-0 overflow-hidden',
           collapsed ? 'w-[60px]' : 'w-[240px]'
         )}
       >
@@ -197,7 +197,7 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
       {/* Mobile sidebar (overlay drawer) */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-40 flex flex-col h-full w-[260px] bg-white border-r border-gray-100',
+          'fixed inset-y-0 left-0 z-40 flex flex-col h-full w-[260px] bg-background border-r border-border',
           'shadow-2xl shadow-slate-900/20 transition-transform duration-300 ease-in-out lg:hidden',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
@@ -205,7 +205,7 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
         <button
           onClick={onClose}
           aria-label="Close sidebar"
-          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all"
+          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-xl bg-muted text-muted-foreground hover:bg-accent hover:text-foreground transition-all"
         >
           <X className="w-4 h-4" />
         </button>
@@ -262,7 +262,7 @@ function SidebarContent({
       {/* Logo header */}
       <div
         className={cn(
-          'flex items-center h-[64px] border-b border-gray-100 shrink-0 px-4',
+          'flex items-center h-[64px] border-b border-border shrink-0 px-4',
           collapsed ? 'justify-center px-0' : 'gap-3'
         )}
       >
@@ -313,7 +313,7 @@ function SidebarContent({
                       'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 relative group',
                       active
                         ? 'bg-[#023064] text-white shadow-sm'
-                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800',
+                        : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
                       collapsed && 'justify-center px-0 py-2.5'
                     )}
                   >
@@ -321,7 +321,7 @@ function SidebarContent({
                       className={cn(
                         'shrink-0 transition-colors',
                         collapsed ? 'w-5 h-5' : 'w-4 h-4',
-                        active ? 'text-white' : 'text-gray-400 group-hover:text-gray-600'
+                        active ? 'text-white' : 'text-muted-foreground group-hover:text-foreground'
                       )}
                     />
                     {!collapsed && (
@@ -332,7 +332,7 @@ function SidebarContent({
                             className={cn(
                               'text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center tabular-nums',
                               active
-                                ? 'bg-white/20 text-white'
+                                ? 'bg-card/20 text-white'
                                 : 'bg-primary-red text-white'
                             )}
                           >
@@ -353,20 +353,20 @@ function SidebarContent({
       </nav>
 
       {/* Bottom actions */}
-      <div className="border-t border-gray-100 p-3 space-y-1 shrink-0">
+      <div className="border-t border-border p-3 space-y-1 shrink-0">
         {/* My Profile */}
         <Link
           to={profileHref}
           onClick={onLinkClick}
           title={collapsed ? 'My Profile' : undefined}
           className={cn(
-            'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-all group',
+            'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-all group',
             collapsed && 'justify-center px-0'
           )}
         >
           <UserCircle
             className={cn(
-              'shrink-0 text-gray-400 group-hover:text-gray-600 transition-colors',
+              'shrink-0 text-muted-foreground group-hover:text-foreground transition-colors',
               collapsed ? 'w-5 h-5' : 'w-4 h-4'
             )}
           />
@@ -379,13 +379,13 @@ function SidebarContent({
           onClick={onLinkClick}
           title={collapsed ? 'Help Center' : undefined}
           className={cn(
-            'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-all group',
+            'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-all group',
             collapsed && 'justify-center px-0'
           )}
         >
           <HelpCircle
             className={cn(
-              'shrink-0 text-gray-400 group-hover:text-gray-600 transition-colors',
+              'shrink-0 text-muted-foreground group-hover:text-foreground transition-colors',
               collapsed ? 'w-5 h-5' : 'w-4 h-4'
             )}
           />
@@ -415,7 +415,7 @@ function SidebarContent({
           <button
             onClick={onCollapseToggle}
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            className="flex items-center justify-center w-full py-1.5 rounded-xl text-gray-300 hover:bg-gray-50 hover:text-gray-500 transition-all"
+            className="flex items-center justify-center w-full py-1.5 rounded-xl text-muted-foreground hover:bg-muted/50 hover:text-muted-foreground transition-all"
           >
             {collapsed ? (
               <ChevronRight className="w-3.5 h-3.5" />

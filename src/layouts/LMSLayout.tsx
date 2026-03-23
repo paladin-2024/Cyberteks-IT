@@ -8,7 +8,7 @@ export default function LMSLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-white">
+    <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       {mobileOpen && (
         <div
@@ -19,7 +19,7 @@ export default function LMSLayout() {
       <div className="flex flex-col flex-1 overflow-hidden min-w-0">
         <TopBar onMenuToggle={() => setMobileOpen((v) => !v)} />
         <div className="flex flex-1 overflow-hidden">
-          <main className="flex-1 overflow-y-auto p-4 md:p-6 min-w-0">
+          <main className="flex-1 overflow-y-auto p-4 md:p-6 min-w-0 bg-muted/30">
             <Outlet />
           </main>
           <RightSidebar />

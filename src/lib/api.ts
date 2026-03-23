@@ -1,4 +1,4 @@
-const BASE = '/api';
+const BASE = (import.meta.env.VITE_API_URL ?? '') + '/api';
 
 function getToken() {
   return localStorage.getItem('token');
@@ -29,7 +29,7 @@ export function toDownloadUrl(url: string | null | undefined, originalName?: str
   const m = url.match(/^\/uploads\/(avatars|covers|submissions)\/(.+)$/);
   if (!m) return url; // not a managed upload, return as-is
   const [, type, filename] = m;
-  const base = `/api/upload/download/${type}/${encodeURIComponent(filename)}`;
+  const base = `${import.meta.env.VITE_API_URL ?? ''}/api/upload/download/${type}/${encodeURIComponent(filename)}`;
   return originalName ? `${base}?name=${encodeURIComponent(originalName)}` : base;
 }
 

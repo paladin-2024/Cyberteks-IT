@@ -50,15 +50,15 @@ function KpiCard({
   iconColor: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+    <div className="bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-3">
       <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconBg}`}>
         <Icon className={`w-4 h-4 ${iconColor}`} />
       </div>
       <div>
-        <p className="font-display text-3xl font-extrabold text-slate-900 leading-none">
+        <p className="font-display text-3xl font-extrabold text-foreground leading-none">
           {value}{unit}
         </p>
-        <p className="text-xs font-medium text-slate-500 mt-1">{label}</p>
+        <p className="text-xs font-medium text-muted-foreground mt-1">{label}</p>
       </div>
     </div>
   );
@@ -80,7 +80,7 @@ export default function TeacherAnalytics() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[300px] text-slate-400 gap-3">
+      <div className="flex items-center justify-center min-h-[300px] text-muted-foreground gap-3">
         <Loader2 className="w-5 h-5 animate-spin" />
         <span className="text-sm">Loading analytics…</span>
       </div>
@@ -89,7 +89,7 @@ export default function TeacherAnalytics() {
 
   if (error || !data) {
     return (
-      <div className="flex items-center justify-center min-h-[300px] text-slate-400 flex-col gap-2">
+      <div className="flex items-center justify-center min-h-[300px] text-muted-foreground flex-col gap-2">
         <p className="text-sm">{error ?? 'Something went wrong'}</p>
         <button onClick={() => window.location.reload()} className="text-xs font-semibold text-primary-blue hover:underline">
           Retry
@@ -104,8 +104,8 @@ export default function TeacherAnalytics() {
     <div className="space-y-6 pb-8">
       {/* Header */}
       <div>
-        <h1 className="font-display text-xl font-extrabold text-slate-900">Analytics</h1>
-        <p className="text-sm text-slate-500 mt-0.5">Performance overview across all your courses</p>
+        <h1 className="font-display text-xl font-extrabold text-foreground">Analytics</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">Performance overview across all your courses</p>
       </div>
 
       {/* KPI row */}
@@ -120,10 +120,10 @@ export default function TeacherAnalytics() {
       <div className="grid lg:grid-cols-2 gap-6">
 
         {/* Monthly enrollments */}
-        <div className="bg-white rounded-2xl shadow-sm p-6">
+        <div className="bg-card rounded-2xl shadow-sm p-6">
           <div className="mb-5">
-            <h2 className="font-display font-bold text-slate-900 text-base">Monthly Enrollments</h2>
-            <p className="text-xs text-slate-400 mt-0.5">New students per month (last 6 months)</p>
+            <h2 className="font-display font-bold text-foreground text-base">Monthly Enrollments</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">New students per month (last 6 months)</p>
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={enrollmentChart} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
@@ -140,13 +140,13 @@ export default function TeacherAnalytics() {
         </div>
 
         {/* Completion by course */}
-        <div className="bg-white rounded-2xl shadow-sm p-6">
+        <div className="bg-card rounded-2xl shadow-sm p-6">
           <div className="mb-5">
-            <h2 className="font-display font-bold text-slate-900 text-base">Completion by Course</h2>
-            <p className="text-xs text-slate-400 mt-0.5">% of students who completed each course</p>
+            <h2 className="font-display font-bold text-foreground text-base">Completion by Course</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">% of students who completed each course</p>
           </div>
           {completionByProgram.length === 0 ? (
-            <div className="flex items-center justify-center h-[200px] text-slate-400 text-sm">
+            <div className="flex items-center justify-center h-[200px] text-muted-foreground text-sm">
               No data yet
             </div>
           ) : (
@@ -171,8 +171,8 @@ export default function TeacherAnalytics() {
       </div>
 
       {/* Retention bar */}
-      <div className="bg-white rounded-2xl shadow-sm p-6">
-        <h2 className="font-display font-bold text-slate-900 text-base mb-4">Student Retention</h2>
+      <div className="bg-card rounded-2xl shadow-sm p-6">
+        <h2 className="font-display font-bold text-foreground text-base mb-4">Student Retention</h2>
         <div className="flex items-center gap-4">
           <div className="flex-1 h-3 rounded-full bg-slate-100 overflow-hidden">
             <div
@@ -180,9 +180,9 @@ export default function TeacherAnalytics() {
               style={{ width: `${kpis.retentionRate}%` }}
             />
           </div>
-          <span className="text-xl font-extrabold text-slate-900 shrink-0">{kpis.retentionRate}%</span>
+          <span className="text-xl font-extrabold text-foreground shrink-0">{kpis.retentionRate}%</span>
         </div>
-        <p className="text-xs text-slate-400 mt-2">
+        <p className="text-xs text-muted-foreground mt-2">
           Students still actively enrolled (not dropped or suspended)
         </p>
       </div>

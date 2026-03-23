@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '@/context/LanguageContext';
 import {
   GraduationCap, Users, Building2, BookOpen, Award, CheckCircle2,
   ArrowRight, Phone, Mail, Play, MessageCircle, Clock, Tag,
@@ -127,6 +128,7 @@ function VideoCard({ src, title, tag }: { src: string; title: string; tag: strin
 type Tab = 'online' | 'corporate' | 'vacation';
 
 export default function ICTSkillingPage() {
+  const { t } = useLanguage();
   const [tab, setTab] = useState<Tab>('online');
   const [selected, setSelected] = useState<number | null>(null);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
@@ -137,7 +139,7 @@ export default function ICTSkillingPage() {
     <main className="min-h-screen bg-white">
 
       {/* Hero */}
-      <section className="bg-[#023064] pt-12 pb-20 px-6 relative overflow-hidden">
+      <section className="bg-[#023064] pt-8 pb-12 sm:pt-12 sm:pb-20 px-4 sm:px-6 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10"
           style={{ backgroundImage: 'radial-gradient(ellipse at 80% 30%, #E11D48 0%, transparent 50%), radial-gradient(ellipse at 10% 80%, #3b82f6 0%, transparent 45%)' }} />
         {/* Grid pattern overlay */}
@@ -146,15 +148,14 @@ export default function ICTSkillingPage() {
         <div className="max-w-6xl mx-auto relative">
           <div className="max-w-3xl">
             <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-              ICT Skilling & Capacity Building
+              {t.servicePages.ictSkilling.hero.badge}
             </span>
-            <h1 className="font-heading text-5xl md:text-6xl font-extrabold text-white mb-5 leading-tight">
-              Transform Your Career with{' '}
-              <span className="text-[#E11D48]">Real Digital Skills</span>
+            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-5 leading-tight">
+              {t.servicePages.ictSkilling.hero.title1}{' '}
+              <span className="text-[#E11D48]">{t.servicePages.ictSkilling.hero.title2}</span>
             </h1>
             <p className="text-blue-200 text-xl leading-relaxed mb-8 max-w-2xl">
-              Practical, job-ready ICT training for individuals, professionals, and organizations.
-              Online classes, corporate workshops, and vacation programmes — learn anywhere, grow everywhere.
+              {t.servicePages.ictSkilling.hero.subtitle}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/apply"
@@ -172,7 +173,7 @@ export default function ICTSkillingPage() {
       </section>
 
       {/* Stats strip */}
-      <section className="bg-[#011a45] py-6 px-6">
+      <section className="bg-[#011a45] py-6 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
             { val: '11+', label: 'Online Programs' },
@@ -189,7 +190,7 @@ export default function ICTSkillingPage() {
       </section>
 
       {/* Category Tabs + Content */}
-      <section className="py-16 px-6 bg-gray-50">
+      <section className="py-10 sm:py-14 lg:py-16 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Browse Programs</span>
@@ -205,7 +206,7 @@ export default function ICTSkillingPage() {
               { key: 'vacation' as Tab,  label: 'Vacation Programs',   icon: GraduationCap, count: 'P7 · S4 · S6' },
             ]).map(({ key, label, icon: Icon, count }) => (
               <button key={key} onClick={() => { setTab(key); setSelected(null); }}
-                className={`group inline-flex flex-col items-center gap-1 px-8 py-4 rounded-2xl font-bold text-sm transition-all border-2 ${
+                className={`group inline-flex flex-col items-center gap-1 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-sm transition-all border-2 ${
                   tab === key
                     ? 'bg-[#023064] text-white border-[#023064] shadow-xl scale-105'
                     : 'bg-white text-gray-700 border-gray-200 hover:border-[#023064]/40 hover:shadow-md'
@@ -322,7 +323,7 @@ export default function ICTSkillingPage() {
           {/* ── CORPORATE TRAINING ── */}
           {tab === 'corporate' && (
             <div>
-              <div className="bg-[#023064]/5 border border-[#023064]/20 rounded-2xl p-5 mb-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="bg-[#023064]/5 border border-[#023064]/20 rounded-2xl p-4 sm:p-5 mb-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <Building2 className="w-6 h-6 text-[#023064] shrink-0" />
                 <p className="text-sm text-gray-700 leading-relaxed">
                   Corporate training is delivered at your premises or our facility. Pricing is per training session (group).
@@ -333,7 +334,7 @@ export default function ICTSkillingPage() {
                   Get Custom Quote
                 </Link>
               </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {CORPORATE_PROGRAMS.map(p => (
                   <div key={p.title} className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl hover:border-[#023064]/30 transition-all p-6 flex flex-col">
                     <div className="w-12 h-12 rounded-2xl bg-[#023064] flex items-center justify-center mb-4">
@@ -392,7 +393,7 @@ export default function ICTSkillingPage() {
                   competitive edge before their next academic or career journey.
                 </p>
               </div>
-              <div className="grid md:grid-cols-3 gap-8">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {VACATION_PROGRAMS.map(vp => (
                   <div key={vp.level} className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl transition-all overflow-hidden">
                     <div className={`${vp.color} p-6 text-center text-white`}>
@@ -430,13 +431,13 @@ export default function ICTSkillingPage() {
       </section>
 
       {/* WhatsApp Community + Mentorship Hub */}
-      <section className="py-16 px-6 bg-white">
+      <section className="py-10 sm:py-14 lg:py-16 px-4 sm:px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Community & Mentorship</span>
             <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">Join Our Learning Ecosystem</h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-2 gap-6">
 
             {/* WhatsApp Group */}
             <div className="bg-[#25D366]/5 border-2 border-[#25D366]/30 rounded-3xl p-8">
@@ -502,16 +503,16 @@ export default function ICTSkillingPage() {
       </section>
 
       {/* Previous Training Sessions (Video Gallery) */}
-      <section className="py-20 px-6 bg-gray-50">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">See Us In Action</span>
-            <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">Previous Training Sessions</h2>
+            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">{t.servicePages.ictSkilling.sessions.badge}</span>
+            <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">{t.servicePages.ictSkilling.sessions.title}</h2>
             <p className="text-gray-600 mt-2 max-w-xl mx-auto">
-              Get a glimpse of what learning at CyberteksIT looks like — live sessions, hands-on projects, and real results.
+              {t.servicePages.ictSkilling.sessions.subtitle}
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {VIDEOS.map((v, i) => (
               <VideoCard key={i} src={v.src} title={v.title} tag={v.tag} />
             ))}
@@ -527,8 +528,8 @@ export default function ICTSkillingPage() {
       </section>
 
       {/* Who We Train + Image */}
-      <section className="py-20 px-6 bg-[#023064]">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-[#023064]">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div>
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Our Students</span>
             <h2 className="font-heading text-3xl font-bold text-white mt-2 mb-6">Who We Train</h2>
@@ -559,7 +560,7 @@ export default function ICTSkillingPage() {
       </section>
 
       {/* Why Choose */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Why CyberteksIT</span>
@@ -580,12 +581,12 @@ export default function ICTSkillingPage() {
       </section>
 
       {/* Payment Info */}
-      <section className="py-16 px-6 bg-gray-50">
+      <section className="py-10 sm:py-14 lg:py-16 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-3xl mx-auto text-center">
           <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Easy Payment</span>
           <h2 className="font-heading text-2xl font-bold text-gray-900 mt-2 mb-3">Flexible Payment Options</h2>
           <p className="text-gray-600 text-sm mb-8">We accept payment online and offline for your convenience.</p>
-          <div className="grid sm:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             {[
               { label: 'Mobile Money', desc: 'MTN MoMo / Airtel Money — instant & easy', emoji: '📱' },
               { label: 'Bank Transfer', desc: 'Direct deposit to our bank account', emoji: '🏦' },
@@ -608,16 +609,16 @@ export default function ICTSkillingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 bg-[#023064] text-center">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-[#023064] text-center">
         <div className="max-w-2xl mx-auto">
-          <h2 className="font-heading text-3xl font-bold text-white mb-3">Ready to upskill?</h2>
+          <h2 className="font-heading text-3xl font-bold text-white mb-3">{t.servicePages.ictSkilling.cta.title}</h2>
           <p className="text-blue-200 mb-8">
-            Apply for a course, join our community, or contact us to find the right programme for you.
+            {t.servicePages.ictSkilling.cta.description}
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link to="/apply"
               className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-8 py-3.5 rounded-xl transition-all hover:scale-105">
-              Apply for a Course <ArrowRight className="w-4 h-4" />
+              {t.servicePages.ictSkilling.cta.button} <ArrowRight className="w-4 h-4" />
             </Link>
             <Link to="/contact"
               className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-3.5 rounded-xl transition-all">

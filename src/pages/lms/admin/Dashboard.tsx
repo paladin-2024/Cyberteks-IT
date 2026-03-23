@@ -105,14 +105,14 @@ export default function AdminDashboard() {
   // ── Loading state ──────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="bg-white min-h-screen p-6 space-y-6">
+      <div className="bg-background min-h-screen p-6 space-y-6">
         <div className="flex items-center justify-between">
           <SkeletonBox className="h-8 w-40" />
           <SkeletonBox className="h-7 w-44" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl shadow-sm p-6 space-y-3">
+            <div key={i} className="bg-card rounded-2xl shadow-sm p-6 space-y-3">
               <SkeletonBox className="h-10 w-10" />
               <SkeletonBox className="h-9 w-24" />
               <SkeletonBox className="h-4 w-32" />
@@ -135,9 +135,9 @@ export default function AdminDashboard() {
   // ── Error state ────────────────────────────────────────────────────────────
   if (error || !data) {
     return (
-      <div className="bg-white min-h-screen p-6 flex items-center justify-center">
+      <div className="bg-background min-h-screen p-6 flex items-center justify-center">
         <div className="text-center space-y-2">
-          <p className="text-slate-500 text-sm">{error ?? 'Something went wrong'}</p>
+          <p className="text-muted-foreground text-sm">{error ?? 'Something went wrong'}</p>
           <button
             onClick={() => window.location.reload()}
             className="text-xs font-semibold text-[#023064] hover:underline"
@@ -159,12 +159,12 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="bg-white min-h-screen p-6 space-y-6">
+    <div className="bg-background min-h-screen p-6 space-y-6">
 
       {/* ── Page title ──────────────────────────────────────────────── */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-[#023064]">Dashboard</h1>
-        <span className="text-xs text-slate-500 bg-white border border-slate-200 rounded-xl px-3 py-1.5">
+        <span className="text-xs text-muted-foreground bg-card border border-border rounded-xl px-3 py-1.5">
           Last updated: {now}
         </span>
       </div>
@@ -173,12 +173,12 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
 
         {/* Total Students */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-3">
+        <div className="bg-card rounded-2xl shadow-sm p-6 flex flex-col gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
             <Users className="w-5 h-5 text-[#023064]" />
           </div>
           <p className="text-3xl font-extrabold text-[#023064]">{totalStudents}</p>
-          <p className="text-sm font-medium text-slate-500">Total Students</p>
+          <p className="text-sm font-medium text-muted-foreground">Total Students</p>
           <span className="inline-block text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-2 py-0.5 w-fit">
             Active learners
           </span>
@@ -188,12 +188,12 @@ export default function AdminDashboard() {
         </div>
 
         {/* Active Courses */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-3">
+        <div className="bg-card rounded-2xl shadow-sm p-6 flex flex-col gap-3">
           <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
             <BookOpen className="w-5 h-5 text-[#023064]" />
           </div>
           <p className="text-3xl font-extrabold text-[#023064]">{totalCourses}</p>
-          <p className="text-sm font-medium text-slate-500">Active Courses</p>
+          <p className="text-sm font-medium text-muted-foreground">Active Courses</p>
           <span className="inline-block text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100 rounded-full px-2 py-0.5 w-fit">
             Published
           </span>
@@ -203,12 +203,12 @@ export default function AdminDashboard() {
         </div>
 
         {/* Pending Applications */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-3">
+        <div className="bg-card rounded-2xl shadow-sm p-6 flex flex-col gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
             <FileText className="w-5 h-5 text-amber-600" />
           </div>
           <p className="text-3xl font-extrabold text-[#023064]">{pendingApplications}</p>
-          <p className="text-sm font-medium text-slate-500">Pending Applications</p>
+          <p className="text-sm font-medium text-muted-foreground">Pending Applications</p>
           <span className="inline-block text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-100 rounded-full px-2 py-0.5 w-fit">
             {pendingApplications > 0 ? 'Needs Review' : 'All Clear'}
           </span>
@@ -218,12 +218,12 @@ export default function AdminDashboard() {
         </div>
 
         {/* Monthly Revenue */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-3">
+        <div className="bg-card rounded-2xl shadow-sm p-6 flex flex-col gap-3">
           <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
             <TrendingUp className="w-5 h-5 text-emerald-600" />
           </div>
           <p className="text-3xl font-extrabold text-[#023064]">{formatUGX(monthlyRevenue)}</p>
-          <p className="text-sm font-medium text-slate-500">Monthly Revenue</p>
+          <p className="text-sm font-medium text-muted-foreground">Monthly Revenue</p>
           <span className="inline-block text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-2 py-0.5 w-fit">
             This month
           </span>
@@ -238,12 +238,12 @@ export default function AdminDashboard() {
       <div className="grid lg:grid-cols-5 gap-5">
 
         {/* Enrollment Analytics (60%) */}
-        <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-6">
+        <div className="lg:col-span-3 bg-card rounded-2xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-1">
             <h2 className="font-bold text-[#023064] text-base">Enrollment Analytics</h2>
-            <span className="text-xs text-slate-400 bg-slate-100 rounded-lg px-2 py-1 font-medium">Last 6 Months</span>
+            <span className="text-xs text-muted-foreground bg-slate-100 rounded-lg px-2 py-1 font-medium">Last 6 Months</span>
           </div>
-          <p className="text-xs text-slate-400 mb-5">Monthly new student enrollments</p>
+          <p className="text-xs text-muted-foreground mb-5">Monthly new student enrollments</p>
           {enrollmentChart.length > 0 ? (
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={enrollmentChart} barCategoryGap="35%">
@@ -267,7 +267,7 @@ export default function AdminDashboard() {
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <div className="h-[220px] flex flex-col items-center justify-center text-slate-400 gap-2">
+            <div className="h-[220px] flex flex-col items-center justify-center text-muted-foreground gap-2">
               <BarChart3 className="w-8 h-8 opacity-30" />
               <p className="text-sm">No enrollment data yet</p>
             </div>
@@ -275,10 +275,10 @@ export default function AdminDashboard() {
         </div>
 
         {/* Recent Applications (40%) */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6 flex flex-col">
+        <div className="lg:col-span-2 bg-card rounded-2xl shadow-sm p-6 flex flex-col">
           <h2 className="font-bold text-[#023064] text-base mb-4">Recent Applications</h2>
           {recentApplications.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-slate-400 gap-2">
+            <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground gap-2">
               <Inbox className="w-8 h-8 opacity-30" />
               <p className="text-sm">No applications yet</p>
             </div>
@@ -290,14 +290,14 @@ export default function AdminDashboard() {
                     {getInitials(app.fullName)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-800 truncate">{app.fullName}</p>
-                    <p className="text-xs text-slate-400 truncate">{app.programs[0] ?? '—'}</p>
+                    <p className="text-sm font-semibold text-foreground truncate">{app.fullName}</p>
+                    <p className="text-xs text-muted-foreground truncate">{app.programs[0] ?? '—'}</p>
                   </div>
                   <div className="text-right shrink-0 space-y-1">
                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold block ${statusStyles[app.status] ?? statusStyles['PENDING']}`}>
                       {statusLabel[app.status] ?? app.status}
                     </span>
-                    <p className="text-[10px] text-slate-400">{relativeTime(app.createdAt)}</p>
+                    <p className="text-[10px] text-muted-foreground">{relativeTime(app.createdAt)}</p>
                   </div>
                 </div>
               ))}
@@ -317,13 +317,13 @@ export default function AdminDashboard() {
       <div className="grid lg:grid-cols-5 gap-5">
 
         {/* Recent Activity — applications feed (60%) */}
-        <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-6">
+        <div className="lg:col-span-3 bg-card rounded-2xl shadow-sm p-6">
           <div className="flex items-center gap-2 mb-5">
             <Activity className="w-4 h-4 text-[#023064]" />
             <h2 className="font-bold text-[#023064] text-base">Recent Activity</h2>
           </div>
           {recentApplications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-32 text-slate-400 gap-2">
+            <div className="flex flex-col items-center justify-center h-32 text-muted-foreground gap-2">
               <Inbox className="w-8 h-8 opacity-30" />
               <p className="text-sm">No recent activity</p>
             </div>
@@ -340,11 +340,11 @@ export default function AdminDashboard() {
                   <div key={app.id} className="flex items-start gap-3">
                     <span className={`mt-1.5 w-2.5 h-2.5 rounded-full shrink-0 ${dotColor}`} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-slate-700 leading-snug">
+                      <p className="text-sm text-foreground leading-snug">
                         New application from <span className="font-semibold">{app.fullName}</span>
                         {app.programs[0] ? ` — ${app.programs[0]}` : ''}
                       </p>
-                      <p className="text-xs text-slate-400 mt-0.5">{relativeTime(app.createdAt)}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{relativeTime(app.createdAt)}</p>
                     </div>
                   </div>
                 );
@@ -354,7 +354,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Platform Overview (40%) */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6">
+        <div className="lg:col-span-2 bg-card rounded-2xl shadow-sm p-6">
           <div className="flex items-center gap-2 mb-5">
             <BarChart3 className="w-4 h-4 text-[#023064]" />
             <h2 className="font-bold text-[#023064] text-base">Platform Overview</h2>
@@ -362,26 +362,26 @@ export default function AdminDashboard() {
 
           {/* 3 big stat highlights */}
           <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="text-center bg-white rounded-xl p-3">
+            <div className="text-center bg-card rounded-xl p-3">
               <div className="flex items-center justify-center gap-1 mb-1">
                 <Zap className="w-3.5 h-3.5 text-emerald-500" />
               </div>
               <p className="text-lg font-extrabold text-[#023064]">99.9%</p>
-              <p className="text-[10px] text-slate-500 mt-0.5">Uptime</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">Uptime</p>
             </div>
-            <div className="text-center bg-white rounded-xl p-3">
+            <div className="text-center bg-card rounded-xl p-3">
               <div className="flex items-center justify-center gap-1 mb-1">
                 <Star className="w-3.5 h-3.5 text-amber-400" />
               </div>
               <p className="text-lg font-extrabold text-[#023064]">4.8 ★</p>
-              <p className="text-[10px] text-slate-500 mt-0.5">Rating</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">Rating</p>
             </div>
-            <div className="text-center bg-white rounded-xl p-3">
+            <div className="text-center bg-card rounded-xl p-3">
               <div className="flex items-center justify-center gap-1 mb-1">
                 <CheckCircle className="w-3.5 h-3.5 text-blue-500" />
               </div>
               <p className="text-lg font-extrabold text-[#023064]">{totalStudents}</p>
-              <p className="text-[10px] text-slate-500 mt-0.5">Active Users</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">Active Users</p>
             </div>
           </div>
 
@@ -392,7 +392,7 @@ export default function AdminDashboard() {
               return (
                 <div key={item.label}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-medium text-slate-600">{item.label}</span>
+                    <span className="text-xs font-medium text-muted-foreground">{item.label}</span>
                     <span className="text-xs font-bold text-[#023064]">{item.value}</span>
                   </div>
                   <div className="h-2 rounded-full bg-slate-100 overflow-hidden">

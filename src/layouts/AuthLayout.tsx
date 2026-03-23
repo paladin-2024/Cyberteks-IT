@@ -5,7 +5,7 @@ export default function AuthLayout() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left — decorative panel */}
-      <div className="hidden lg:flex relative flex-col justify-between bg-[#080f2a] p-12 overflow-hidden">
+      <div className="hidden lg:flex relative flex-col justify-between bg-[#023064] p-12 overflow-hidden">
         <div className="absolute inset-0 bg-grid" />
         <div className="absolute inset-0 dot-pattern opacity-10" />
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-red/10 rounded-full blur-3xl" />
@@ -39,9 +39,9 @@ export default function AuthLayout() {
         {/* Bottom stats */}
         <div className="relative grid grid-cols-3 gap-6">
           {[
-            { value: '3,000+', label: 'Graduates' },
-            { value: '7',      label: 'Programs' },
-            { value: '98%',    label: 'Completion Rate' },
+            { value: '100+',  label: 'Graduates' },
+            { value: '10+',   label: 'Courses' },
+            { value: '98%',   label: 'Completion Rate' },
           ].map((s) => (
             <div key={s.label}>
               <p className="font-display text-2xl font-bold text-white">{s.value}</p>

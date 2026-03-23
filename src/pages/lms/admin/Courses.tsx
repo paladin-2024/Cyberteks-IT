@@ -83,7 +83,7 @@ function getCategoryConfig(category: string | null) {
 const statusBadge: Record<string, string> = {
   PUBLISHED: 'bg-emerald-100 text-emerald-700 border border-emerald-200',
   DRAFT:     'bg-amber-100  text-amber-700  border border-amber-200',
-  ARCHIVED:  'bg-slate-100  text-slate-600  border border-slate-200',
+  ARCHIVED:  'bg-slate-100  text-muted-foreground  border border-border',
 };
 const statusLabel: Record<string, string> = {
   PUBLISHED: 'Published', DRAFT: 'Draft', ARCHIVED: 'Archived',

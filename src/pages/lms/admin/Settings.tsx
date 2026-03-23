@@ -49,7 +49,7 @@ export default function SettingsPage() {
               <p className="text-xs text-muted-foreground">{item.desc}</p>
             </div>
             <div className={`w-10 h-6 rounded-full relative transition-colors shrink-0 ${item.enabled ? 'bg-primary-blue' : 'bg-muted'}`}>
-              <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${item.enabled ? 'left-5' : 'left-1'}`} />
+              <div className={`absolute top-1 w-4 h-4 bg-card rounded-full shadow transition-all ${item.enabled ? 'left-5' : 'left-1'}`} />
             </div>
           </label>
         ))}

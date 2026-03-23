@@ -123,7 +123,7 @@ export default function FileUploader({
               className="w-12 h-12 rounded-xl object-cover shrink-0 ring-1 ring-emerald-200"
             />
           ) : (
-            <div className="w-10 h-10 rounded-xl bg-white border border-emerald-200 flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-card border border-emerald-200 flex items-center justify-center shrink-0">
               <Icon className="w-5 h-5 text-emerald-700" />
             </div>
           )}

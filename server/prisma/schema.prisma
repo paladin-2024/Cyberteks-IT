@@ -76,18 +76,18 @@ enum MessageStatus {
 // ────────────────────────────────────────────────────────────────────────────
 
 model User {
-  id            String   @id @map("_id") @default(cuid())
+  id            String    @id @map("_id") @default(cuid())
   name          String
-  email         String   @unique
+  email         String    @unique
   emailVerified DateTime?
   password      String?
   image         String?
-  role          Role     @default(STUDENT)
+  role          Role      @default(STUDENT)
   phone         String?
   bio           String?
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   accounts      Account[]
   sessions      Session[]
@@ -469,8 +469,8 @@ model CurriculumWeek {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  course  Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  teacher User             @relation("TeacherCurriculum", fields: [teacherId], references: [id], onDelete: Cascade)
+  course  Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacher User              @relation("TeacherCurriculum", fields: [teacherId], references: [id], onDelete: Cascade)
   topics  CurriculumTopic[]
 
   @@map("curriculum_weeks")

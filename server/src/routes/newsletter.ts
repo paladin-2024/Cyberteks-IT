@@ -107,7 +107,7 @@ router.post('/broadcast', requireAuth, requireRole('ADMIN'), async (req: AuthReq
 // DELETE /api/newsletter/subscribers/:email — admin only
 router.delete('/subscribers/:email', requireAuth, requireRole('ADMIN'), async (req: AuthRequest, res: Response) => {
   try {
-    const email = decodeURIComponent(req.params.email).toLowerCase();
+    const email = decodeURIComponent(String(req.params.email)).toLowerCase();
     await withRetry(() => prisma.newsletterSubscriber.delete({ where: { email } }));
     res.json({ success: true });
   } catch (err) {

@@ -6,14 +6,7 @@ import {
 } from 'lucide-react';
 import PhoneInput, { type Country } from '@/components/ui/PhoneInput';
 import { cn } from '@/lib/utils';
-
-const STEPS = [
-  { id: 1, title: 'Your Information',     icon: User },
-  { id: 2, title: 'Device Details',       icon: Monitor },
-  { id: 3, title: 'Describe the Problem', icon: AlertTriangle },
-  { id: 4, title: 'Remote Access Setup',  icon: Wifi },
-  { id: 5, title: 'Consent & Submit',     icon: ShieldCheck },
-];
+import { useLanguage } from '@/context/LanguageContext';
 
 const DEVICE_TYPES = [
   { value: 'Laptop',   label: 'Laptop',   icon: Laptop },
@@ -113,16 +106,17 @@ function Textarea({ className, ...props }: React.TextareaHTMLAttributes<HTMLText
 
 /* ── Step panels ─────────────────────────────────────────────────── */
 function Step1({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void }) {
+  const { t } = useLanguage();
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <FieldLabel required>Full Name</FieldLabel>
+          <FieldLabel required>{t.getStarted.yourInfo.fullName}</FieldLabel>
           <Input placeholder="e.g. John Mukasa" value={fd.fullName}
             onChange={e => set({ fullName: e.target.value })} />
         </div>
         <div>
-          <FieldLabel required>Phone Number</FieldLabel>
+          <FieldLabel required>{t.getStarted.yourInfo.phone}</FieldLabel>
           <PhoneInput
             value={fd.phone}
             onChange={(full: string, _n: string, _c: Country) => set({ phone: full })}
@@ -132,18 +126,18 @@ function Step1({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
         </div>
       </div>
       <div>
-        <FieldLabel required>Email Address</FieldLabel>
+        <FieldLabel required>{t.getStarted.yourInfo.email}</FieldLabel>
         <Input type="email" placeholder="you@example.com" value={fd.email}
           onChange={e => set({ email: e.target.value })} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <FieldLabel>Company / Organisation</FieldLabel>
+          <FieldLabel>{t.getStarted.yourInfo.company}</FieldLabel>
           <Input placeholder="Optional" value={fd.company}
             onChange={e => set({ company: e.target.value })} />
         </div>
         <div>
-          <FieldLabel>Location / City</FieldLabel>
+          <FieldLabel>{t.getStarted.yourInfo.location}</FieldLabel>
           <Input placeholder="e.g. Kampala" value={fd.location}
             onChange={e => set({ location: e.target.value })} />
         </div>
@@ -153,10 +147,11 @@ function Step1({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
 }
 
 function Step2({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void }) {
+  const { t } = useLanguage();
   return (
     <div className="space-y-6">
       <div>
-        <FieldLabel required>Device Type</FieldLabel>
+        <FieldLabel required>{t.getStarted.device.deviceType}</FieldLabel>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
           {DEVICE_TYPES.map(({ value, label, icon: Icon }) => (
             <button
@@ -177,7 +172,7 @@ function Step2({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
       </div>
 
       <div>
-        <FieldLabel required>Operating System</FieldLabel>
+        <FieldLabel required>{t.getStarted.device.os}</FieldLabel>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-2">
           {OS_OPTIONS.map(os => (
             <button
@@ -206,35 +201,36 @@ function Step2({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
 }
 
 function Step3({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void }) {
+  const { t } = useLanguage();
   const urgencies = [
-    { value: 'Low',      label: 'Low',      desc: 'Can wait a few days',  color: 'border-green-400 bg-green-50 text-green-700' },
-    { value: 'Medium',   label: 'Medium',   desc: 'Within today',         color: 'border-yellow-400 bg-yellow-50 text-yellow-700' },
-    { value: 'High',     label: 'High',     desc: 'Need help ASAP',       color: 'border-primary-red bg-red-50 text-primary-red' },
+    { value: 'Low',    label: t.getStarted.problem.urgencyOptions[0].label, color: 'border-green-400 bg-green-50 text-green-700' },
+    { value: 'Medium', label: t.getStarted.problem.urgencyOptions[1].label, color: 'border-yellow-400 bg-yellow-50 text-yellow-700' },
+    { value: 'High',   label: t.getStarted.problem.urgencyOptions[2].label, color: 'border-primary-red bg-red-50 text-primary-red' },
   ];
   return (
     <div className="space-y-5">
       <div>
-        <FieldLabel required>Problem Category</FieldLabel>
+        <FieldLabel required>{t.getStarted.problem.category}</FieldLabel>
         <Select value={fd.problemCategory} onChange={e => set({ problemCategory: e.target.value })}>
-          <option value="">Select a category…</option>
+          <option value="">{t.getStarted.problem.categoryPlaceholder}</option>
           {PROBLEM_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
         </Select>
       </div>
 
       <div>
-        <FieldLabel required>Describe the Problem</FieldLabel>
-        <Textarea rows={4} placeholder="Explain what is happening in as much detail as possible…"
+        <FieldLabel required>{t.getStarted.problem.description}</FieldLabel>
+        <Textarea rows={4} placeholder={t.getStarted.problem.descriptionPlaceholder}
           value={fd.problemDescription} onChange={e => set({ problemDescription: e.target.value })} />
       </div>
 
       <div>
-        <FieldLabel>Error Messages (if any)</FieldLabel>
-        <Textarea rows={3} placeholder="Copy and paste any error messages you see on screen…"
+        <FieldLabel>{t.getStarted.problem.errors}</FieldLabel>
+        <Textarea rows={3} placeholder={t.getStarted.problem.errorsPlaceholder}
           value={fd.errorMessages} onChange={e => set({ errorMessages: e.target.value })} />
       </div>
 
       <div>
-        <FieldLabel required>Urgency Level</FieldLabel>
+        <FieldLabel required>{t.getStarted.problem.urgency}</FieldLabel>
         <div className="grid grid-cols-3 gap-3 mt-2">
           {urgencies.map(u => (
             <button
@@ -246,7 +242,6 @@ function Step3({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
               )}
             >
               <div className="font-bold text-sm">{u.label}</div>
-              <div className="text-xs mt-0.5 opacity-75">{u.desc}</div>
             </button>
           ))}
         </div>
@@ -256,19 +251,19 @@ function Step3({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
 }
 
 function Step4({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void }) {
+  const { t } = useLanguage();
   return (
     <div className="space-y-6">
       {/* Info callout */}
       <div className="flex gap-3 p-4 bg-blue-50 border border-blue-100 rounded-2xl text-sm text-primary-blue">
         <Headphones className="w-5 h-5 mt-0.5 shrink-0" />
         <p>
-          Our technician will use a remote desktop tool to securely connect to your device.
-          You can close the session at any time. Your data remains private and encrypted.
+          {t.getStarted.remoteAccess.permissionText}
         </p>
       </div>
 
       <div>
-        <FieldLabel required>Preferred Remote Support Tool</FieldLabel>
+        <FieldLabel required>{t.getStarted.remoteAccess.tool}</FieldLabel>
         <div className="space-y-2.5 mt-2">
           {REMOTE_TOOLS.map(t => (
             <button
@@ -310,7 +305,7 @@ function Step4({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
       )}
 
       <div>
-        <FieldLabel required>When are you available for the support session?</FieldLabel>
+        <FieldLabel required>{t.getStarted.remoteAccess.permission}</FieldLabel>
         <Input placeholder="e.g. Today after 2pm, or Mon–Fri 9am–5pm"
           value={fd.availableTime} onChange={e => set({ availableTime: e.target.value })} />
       </div>
@@ -319,6 +314,7 @@ function Step4({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
 }
 
 function Step5({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void }) {
+  const { t } = useLanguage();
   const rows: [string, string][] = [
     ['Name',               fd.fullName   || '—'],
     ['Phone',              fd.phone      || '—'],
@@ -336,7 +332,7 @@ function Step5({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
     <div className="space-y-6">
       {/* Summary table */}
       <div>
-        <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Request Summary</h3>
+        <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">{t.getStarted.consent.title}</h3>
         <div className="rounded-2xl border border-gray-100 overflow-hidden">
           {rows.map(([label, value], i) => (
             <div key={label} className={cn(
@@ -365,9 +361,7 @@ function Step5({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
           {fd.consent && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
         </div>
         <p className="text-sm text-gray-700 leading-relaxed select-none">
-          I consent to CyberteksIT remotely accessing my device for the purpose of diagnosing and resolving the
-          IT issue I have described. I understand that I can revoke access at any time and that the session
-          is securely encrypted.
+          {t.getStarted.consent.confirm}
         </p>
       </div>
 
@@ -384,11 +378,20 @@ function Step5({ fd, set }: { fd: FormData; set: (f: Partial<FormData>) => void 
 
 /* ── Main page ───────────────────────────────────────────────────── */
 export default function GetStartedPage() {
+  const { t } = useLanguage();
   const [step, setStep]       = useState(1);
   const [fd, setFd]           = useState<FormData>(initial);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
   const [done, setDone]       = useState(false);
+
+  const STEPS = [
+    { id: 1, title: t.getStarted.steps[0], icon: User },
+    { id: 2, title: t.getStarted.steps[1], icon: Monitor },
+    { id: 3, title: t.getStarted.steps[2], icon: AlertTriangle },
+    { id: 4, title: t.getStarted.steps[3], icon: Wifi },
+    { id: 5, title: t.getStarted.steps[4], icon: ShieldCheck },
+  ];
 
   const set = (partial: Partial<FormData>) => setFd(prev => ({ ...prev, ...partial }));
 
@@ -435,19 +438,17 @@ export default function GetStartedPage() {
             <CheckCircle2 className="w-10 h-10 text-green-500" />
           </div>
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-3">
-            Request Submitted!
+            {t.getStarted.success.title}
           </h2>
           <p className="text-gray-500 mb-2">
             Thank you, <span className="font-semibold text-gray-700">{fd.fullName}</span>.
           </p>
           <p className="text-gray-500 mb-8">
-            One of our certified technicians will contact you at{' '}
-            <span className="font-semibold text-gray-700">{fd.phone}</span> within{' '}
-            <span className="font-semibold text-primary-blue">30 minutes</span>.
+            {t.getStarted.success.description}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/" className="px-6 py-3 rounded-xl bg-gray-100 text-gray-700 font-semibold text-sm hover:bg-gray-200 transition-all">
-              Back to Home
+              {t.getStarted.success.home}
             </a>
             <a href="tel:+256779367005" className="px-6 py-3 rounded-xl bg-primary-blue text-white font-semibold text-sm hover:bg-blue-900 transition-all">
               Call Us Directly
@@ -469,14 +470,14 @@ export default function GetStartedPage() {
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 mb-5">
             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-white/80 text-xs font-semibold tracking-wide uppercase">Technicians Online</span>
+            <span className="text-white/80 text-xs font-semibold tracking-wide uppercase">{t.getStarted.hero.badge}</span>
           </div>
           <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight">
-            Remote IT Support<br />
-            <span className="text-primary-red">Request Form</span>
+            {t.getStarted.hero.title1}<br />
+            <span className="text-primary-red">{t.getStarted.hero.title2}</span>
           </h1>
           <p className="text-white/70 text-lg max-w-xl mx-auto">
-            Fill in your details and a CyberteksIT technician will connect to your device within 30 minutes.
+            {t.getStarted.hero.subtitle}
           </p>
           {/* Quick stats */}
           <div className="flex flex-wrap justify-center gap-6 mt-8">
@@ -552,11 +553,11 @@ export default function GetStartedPage() {
                   {STEPS[step - 1].title}
                 </h2>
                 <p className="text-sm text-gray-500 mt-1">
-                  {step === 1 && 'Tell us who you are so we can reach you.'}
-                  {step === 2 && 'Help us understand what device you need support on.'}
-                  {step === 3 && 'Describe the issue in as much detail as possible.'}
-                  {step === 4 && 'Tell us how to connect to your device remotely.'}
-                  {step === 5 && 'Review your request and give your consent.'}
+                  {step === 1 && t.getStarted.yourInfo.title}
+                  {step === 2 && t.getStarted.device.title}
+                  {step === 3 && t.getStarted.problem.title}
+                  {step === 4 && t.getStarted.remoteAccess.title}
+                  {step === 5 && t.getStarted.consent.title}
                 </p>
               </div>
 
@@ -585,7 +586,7 @@ export default function GetStartedPage() {
                 )}
               >
                 <ChevronLeft className="w-4 h-4" />
-                Back
+                {t.getStarted.nav.back}
               </button>
 
               {step < 5 ? (
@@ -599,7 +600,7 @@ export default function GetStartedPage() {
                       : 'bg-gray-100 text-gray-400 cursor-not-allowed',
                   )}
                 >
-                  Continue
+                  {t.getStarted.nav.next}
                   <ChevronRight className="w-4 h-4" />
                 </button>
               ) : (
@@ -614,9 +615,9 @@ export default function GetStartedPage() {
                   )}
                 >
                   {loading ? (
-                    <><Loader2 className="w-4 h-4 animate-spin" /> Submitting…</>
+                    <><Loader2 className="w-4 h-4 animate-spin" /> {t.getStarted.nav.submitting}</>
                   ) : (
-                    <>Submit Request <ChevronRight className="w-4 h-4" /></>
+                    <>{t.getStarted.nav.submit} <ChevronRight className="w-4 h-4" /></>
                   )}
                 </button>
               )}

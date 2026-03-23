@@ -91,7 +91,7 @@ export default function AnalyticsPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center space-y-2">
-          <p className="text-slate-500 text-sm">{error ?? 'Something went wrong'}</p>
+          <p className="text-muted-foreground text-sm">{error ?? 'Something went wrong'}</p>
           <button
             onClick={() => window.location.reload()}
             className="text-xs font-semibold text-primary-blue hover:underline"
@@ -145,48 +145,48 @@ export default function AnalyticsPage() {
 
       {/* Header */}
       <div>
-        <h1 className="font-display text-xl font-bold text-slate-900">Analytics</h1>
-        <p className="text-slate-500 text-sm mt-0.5">Platform-wide performance metrics and trends</p>
+        <h1 className="font-display text-xl font-bold text-foreground">Analytics</h1>
+        <p className="text-muted-foreground text-sm mt-0.5">Platform-wide performance metrics and trends</p>
       </div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         {kpiCards.map((k) => (
-          <div key={k.label} className="bg-white border border-slate-200 rounded-2xl p-5">
+          <div key={k.label} className="bg-card border border-border rounded-2xl p-5">
             <div className="flex items-center justify-between mb-3">
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${k.iconBg}`}>
                 <k.icon className={`w-4 h-4 ${k.iconColor}`} />
               </div>
               <TrendingUp className="w-4 h-4 text-slate-300" />
             </div>
-            <p className="font-display text-2xl font-extrabold text-slate-900 leading-none">{k.value}</p>
-            <p className="text-xs font-medium text-slate-500 mt-1">{k.label}</p>
-            {k.note && <p className="text-[10px] text-slate-400 mt-0.5">{k.note}</p>}
+            <p className="font-display text-2xl font-extrabold text-foreground leading-none">{k.value}</p>
+            <p className="text-xs font-medium text-muted-foreground mt-1">{k.label}</p>
+            {k.note && <p className="text-[10px] text-muted-foreground mt-0.5">{k.note}</p>}
           </div>
         ))}
       </div>
 
       {/* Row 1 — Enrollments + Program Distribution */}
       <div className="grid lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6">
-          <h2 className="font-display font-bold text-slate-900 text-base mb-1">Monthly Enrollments</h2>
-          <p className="text-xs text-slate-400 mb-5">New students enrolled per month (last 12 months)</p>
+        <div className="lg:col-span-2 bg-card border border-border rounded-2xl p-6">
+          <h2 className="font-display font-bold text-foreground text-base mb-1">Monthly Enrollments</h2>
+          <p className="text-xs text-muted-foreground mb-5">New students enrolled per month (last 12 months)</p>
           {enrollmentChart.some((d) => (d.students ?? 0) > 0) ? (
             <ChartArea data={enrollmentChart} dataKeys={['students']} xKey="month" height={240} />
           ) : (
-            <div className="h-[240px] flex flex-col items-center justify-center text-slate-400 gap-2">
+            <div className="h-[240px] flex flex-col items-center justify-center text-muted-foreground gap-2">
               <BarChart3 className="w-8 h-8 opacity-30" />
               <p className="text-sm">No enrollment data yet</p>
             </div>
           )}
         </div>
-        <div className="bg-white border border-slate-200 rounded-2xl p-6">
-          <h2 className="font-display font-bold text-slate-900 text-base mb-1">Program Distribution</h2>
-          <p className="text-xs text-slate-400 mb-4">Students by program category</p>
+        <div className="bg-card border border-border rounded-2xl p-6">
+          <h2 className="font-display font-bold text-foreground text-base mb-1">Program Distribution</h2>
+          <p className="text-xs text-muted-foreground mb-4">Students by program category</p>
           {programShare.length > 0 && programShare.some((p) => p.value > 0) ? (
             <ChartPie data={programShare} donut height={240} />
           ) : (
-            <div className="h-[240px] flex flex-col items-center justify-center text-slate-400 gap-2">
+            <div className="h-[240px] flex flex-col items-center justify-center text-muted-foreground gap-2">
               <BarChart3 className="w-8 h-8 opacity-30" />
               <p className="text-sm">No enrollment data yet</p>
             </div>
@@ -196,21 +196,21 @@ export default function AnalyticsPage() {
 
       {/* Row 2 — Revenue + empty retention placeholder */}
       <div className="grid lg:grid-cols-2 gap-5">
-        <div className="bg-white border border-slate-200 rounded-2xl p-6">
-          <h2 className="font-display font-bold text-slate-900 text-base mb-1">Revenue (UGX)</h2>
-          <p className="text-xs text-slate-400 mb-5">Monthly revenue — last 12 months</p>
+        <div className="bg-card border border-border rounded-2xl p-6">
+          <h2 className="font-display font-bold text-foreground text-base mb-1">Revenue (UGX)</h2>
+          <p className="text-xs text-muted-foreground mb-5">Monthly revenue — last 12 months</p>
           {revenueChart.some((d) => (d.revenue ?? 0) > 0) ? (
             <ChartBar data={revenueChart} dataKeys={['revenue']} xKey="month" ugxFormat height={230} />
           ) : (
-            <div className="h-[230px] flex flex-col items-center justify-center text-slate-400 gap-2">
+            <div className="h-[230px] flex flex-col items-center justify-center text-muted-foreground gap-2">
               <BarChart3 className="w-8 h-8 opacity-30" />
               <p className="text-sm">No revenue recorded yet</p>
             </div>
           )}
         </div>
-        <div className="bg-white border border-slate-200 rounded-2xl p-6">
-          <h2 className="font-display font-bold text-slate-900 text-base mb-1">Retention Rate</h2>
-          <p className="text-xs text-slate-400 mb-5">Overall student retention</p>
+        <div className="bg-card border border-border rounded-2xl p-6">
+          <h2 className="font-display font-bold text-foreground text-base mb-1">Retention Rate</h2>
+          <p className="text-xs text-muted-foreground mb-5">Overall student retention</p>
           <div className="flex flex-col items-center justify-center h-[230px] gap-4">
             <div className="relative w-36 h-36">
               <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
@@ -225,11 +225,11 @@ export default function AnalyticsPage() {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-extrabold text-slate-900">{kpis.retentionRate}%</span>
-                <span className="text-[10px] text-slate-400">Retention</span>
+                <span className="text-2xl font-extrabold text-foreground">{kpis.retentionRate}%</span>
+                <span className="text-[10px] text-muted-foreground">Retention</span>
               </div>
             </div>
-            <p className="text-xs text-slate-500 text-center max-w-[180px]">
+            <p className="text-xs text-muted-foreground text-center max-w-[180px]">
               Students who remain active and have not dropped or been suspended.
             </p>
           </div>
@@ -237,12 +237,12 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Completion by program */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6">
-        <h2 className="font-display font-bold text-slate-900 text-base mb-1">Completion Rate by Program</h2>
-        <p className="text-xs text-slate-400 mb-6">% of enrolled students who completed the course</p>
+      <div className="bg-card border border-border rounded-2xl p-6">
+        <h2 className="font-display font-bold text-foreground text-base mb-1">Completion Rate by Program</h2>
+        <p className="text-xs text-muted-foreground mb-6">% of enrolled students who completed the course</p>
 
         {completionByProgram.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-24 text-slate-400 gap-2">
+          <div className="flex flex-col items-center justify-center h-24 text-muted-foreground gap-2">
             <BarChart3 className="w-8 h-8 opacity-30" />
             <p className="text-sm">No completion data yet</p>
           </div>
@@ -252,8 +252,8 @@ export default function AnalyticsPage() {
               {completionByProgram.map((p) => (
                 <div key={p.program}>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-sm font-medium text-slate-700">{p.program}</span>
-                    <span className="text-sm font-bold text-slate-900">{p.rate}%</span>
+                    <span className="text-sm font-medium text-foreground">{p.program}</span>
+                    <span className="text-sm font-bold text-foreground">{p.rate}%</span>
                   </div>
                   <div className="h-2.5 rounded-full bg-slate-100 overflow-hidden">
                     <div
@@ -266,7 +266,7 @@ export default function AnalyticsPage() {
                 </div>
               ))}
             </div>
-            <div className="flex items-center gap-6 mt-5 pt-4 border-t border-slate-100 text-xs text-slate-500">
+            <div className="flex items-center gap-6 mt-5 pt-4 border-t border-slate-100 text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" /> Excellent ≥ 85%
               </span>

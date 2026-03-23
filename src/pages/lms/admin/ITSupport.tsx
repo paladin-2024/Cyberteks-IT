@@ -34,7 +34,7 @@ const STATUS_META: Record<string, { label: string; color: string; dot: string }>
   OPEN:        { label: 'Open',        color: 'bg-amber-100 text-amber-700 border border-amber-200',  dot: 'bg-amber-500' },
   IN_PROGRESS: { label: 'In Progress', color: 'bg-blue-100 text-blue-700 border border-blue-200',    dot: 'bg-blue-500' },
   RESOLVED:    { label: 'Resolved',    color: 'bg-green-100 text-green-700 border border-green-200', dot: 'bg-green-500' },
-  CLOSED:      { label: 'Closed',      color: 'bg-gray-100 text-gray-600 border border-gray-200',    dot: 'bg-gray-400' },
+  CLOSED:      { label: 'Closed',      color: 'bg-gray-100 text-gray-600 border border-border',    dot: 'bg-gray-400' },
 };
 
 const URGENCY_META: Record<string, { color: string }> = {
@@ -199,7 +199,7 @@ export default function AdminITSupport() {
               {s === 'ALL' ? 'All' : (STATUS_META[s]?.label ?? s)}{' '}
               <span className={cn(
                 'ml-1 px-1.5 py-0.5 rounded-full text-[10px]',
-                filter === s ? 'bg-white/20 text-white' : 'bg-background text-foreground'
+                filter === s ? 'bg-card/20 text-white' : 'bg-background text-foreground'
               )}>
                 {counts[s]}
               </span>

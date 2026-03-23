@@ -3,6 +3,7 @@ import {
   Code2, Brain, MessageCircle, BarChart3, Zap, Plug,
   CheckCircle2, ArrowRight, Layers, ShieldCheck, Cloud, Headphones,
 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const STATS = [
   { value: '50+', label: 'Apps Built' },
@@ -106,11 +107,12 @@ const INDUSTRIES = [
 ];
 
 export default function SoftwareAIPage() {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-white">
 
       {/* ── Hero ── */}
-      <section className="pt-12 pb-20 px-6 bg-[#023064] relative overflow-hidden">
+      <section className="pt-8 pb-12 sm:pt-12 sm:pb-20 px-4 sm:px-6 bg-[#023064] relative overflow-hidden">
         {/* subtle radial glows */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -121,16 +123,14 @@ export default function SoftwareAIPage() {
         />
         <div className="max-w-4xl mx-auto relative text-center">
           <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-            AI &amp; Software Solutions
+            {t.servicePages.softwareAi.hero.badge}
           </span>
-          <h1 className="font-heading text-5xl md:text-6xl font-extrabold text-white mb-5 leading-tight">
-            Intelligent Software, <br />
-            <span className="text-[#E11D48]">Built for Results</span>
+          <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-5 leading-tight">
+            {t.servicePages.softwareAi.hero.title1} <br />
+            <span className="text-[#E11D48]">{t.servicePages.softwareAi.hero.title2}</span>
           </h1>
           <p className="text-blue-200 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            At Cyberteks-IT, we develop intelligent Software and AI Solutions that help businesses
-            automate processes, make data-driven decisions, and deliver exceptional digital
-            experiences. From custom applications to AI-powered automation, we bring your vision to life.
+            {t.servicePages.softwareAi.hero.subtitle}
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
@@ -151,7 +151,7 @@ export default function SoftwareAIPage() {
 
       {/* ── Stats Strip ── */}
       <section className="bg-gradient-to-br from-[#023064] to-[#012550] border-t border-white/10">
-        <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10 grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
           {STATS.map((s) => (
             <div key={s.label} className="text-center px-4 py-2">
               <p className="font-heading text-3xl md:text-4xl font-extrabold text-[#E11D48]">
@@ -164,7 +164,7 @@ export default function SoftwareAIPage() {
       </section>
 
       {/* ── Services ── */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
@@ -178,7 +178,7 @@ export default function SoftwareAIPage() {
               real business problems with measurable impact.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {SERVICES.map((s) => (
               <div
                 key={s.title}
@@ -208,7 +208,7 @@ export default function SoftwareAIPage() {
       </section>
 
       {/* ── Why Choose Us ── */}
-      <section className="py-24 px-6 bg-gray-50">
+      <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
@@ -255,7 +255,7 @@ export default function SoftwareAIPage() {
       </section>
 
       {/* ── Process ── */}
-      <section className="py-24 px-6 bg-gradient-to-br from-[#023064] to-[#012550]">
+      <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 bg-gradient-to-br from-[#023064] to-[#012550]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
@@ -287,7 +287,7 @@ export default function SoftwareAIPage() {
       </section>
 
       {/* ── Industries ── */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 bg-white">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
             Sectors We Serve
@@ -313,24 +313,23 @@ export default function SoftwareAIPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-6 bg-gradient-to-br from-[#023064] to-[#012550] text-center">
+      <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 bg-gradient-to-br from-[#023064] to-[#012550] text-center">
         <div className="max-w-2xl mx-auto">
           <span className="inline-block bg-[#E11D48]/20 text-[#E11D48] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-            Ready to Build?
+            {t.servicePages.softwareAi.cta.title}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">
-            Have a project in mind?
+            {t.servicePages.softwareAi.cta.title}
           </h2>
           <p className="text-blue-200 mb-10 leading-relaxed">
-            Tell us about it. We'll scope it, price it, and build it — on time and within budget.
-            Your first consultation is completely free.
+            {t.servicePages.softwareAi.cta.description}
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-9 py-4 rounded-xl transition-colors duration-300 hover:scale-105 transform"
             >
-              Start Your Project <ArrowRight className="w-4 h-4" />
+              {t.servicePages.softwareAi.cta.button} <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               to="/services"

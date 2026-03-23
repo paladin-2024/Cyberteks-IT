@@ -5,39 +5,9 @@ import {
   CheckCircle2, MessageCircle, Globe, Shield,
   Code2, Wifi, Headphones, BarChart3,
 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
-const PERKS = [
-  {
-    icon: TrendingUp,
-    title: 'Career Growth',
-    desc: 'Clear progression paths and mentorship from senior engineers with real-world enterprise experience.',
-  },
-  {
-    icon: BookOpen,
-    title: 'Free Training',
-    desc: 'Full access to all CyberteksIT courses and professional certifications — completely on us.',
-  },
-  {
-    icon: Heart,
-    title: 'Meaningful Work',
-    desc: 'Help shape Uganda\'s digital future with work that genuinely improves businesses and communities.',
-  },
-  {
-    icon: Users,
-    title: 'Great Team',
-    desc: 'A small, driven team where your ideas get heard and implemented — not buried in bureaucracy.',
-  },
-  {
-    icon: Zap,
-    title: 'Cutting-Edge Tech',
-    desc: 'Work with modern tools — cloud platforms, AI systems, enterprise networking, and security infrastructure.',
-  },
-  {
-    icon: Globe,
-    title: 'Remote-First',
-    desc: 'Results-focused environment with genuine flexibility for remote and hybrid work — anywhere in the world.',
-  },
-];
+const PERK_ICONS = [TrendingUp, BookOpen, Heart, Users, Zap, Globe];
 
 const WHY_US = [
   {
@@ -119,11 +89,12 @@ const STEPS = [
 ];
 
 export default function CareersPage() {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-white">
 
       {/* ── Hero ── */}
-      <section className="bg-[#023064] pt-12 pb-28 px-6 relative overflow-hidden">
+      <section className="bg-[#023064] pt-12 pb-20 sm:pb-28 px-4 sm:px-6 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -141,15 +112,14 @@ export default function CareersPage() {
         />
         <div className="max-w-5xl mx-auto relative">
           <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-            Join Our Team
+            {t.careers.hero.badge}
           </span>
-          <h1 className="font-heading text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight max-w-3xl">
-            Build the Digital Future<br />
-            <span className="text-[#E11D48]">With CyberteksIT</span>
+          <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight max-w-3xl">
+            {t.careers.hero.title1}<br />
+            <span className="text-[#E11D48]">{t.careers.hero.title2}</span>
           </h1>
-          <p className="text-blue-200 text-xl max-w-2xl leading-relaxed mb-10">
-            At Cyberteks-IT, we believe that talent knows no borders — just like our services. We're a
-            modern, tech-driven company where innovation thrives, ideas matter, and people grow.
+          <p className="text-blue-200 text-base sm:text-xl max-w-2xl leading-relaxed mb-10">
+            {t.careers.hero.description}
           </p>
           <div className="flex flex-wrap gap-4">
             <a
@@ -157,7 +127,7 @@ export default function CareersPage() {
               className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-7 py-3.5 rounded-xl transition-colors duration-200 shadow-lg"
             >
               <Mail className="w-4 h-4" />
-              Send Your CV
+              {t.careers.cta.email}
             </a>
             <a
               href="https://wa.me/256779367005?text=Hi%20CyberteksIT%2C%20I%20am%20interested%20in%20joining%20your%20team"
@@ -166,7 +136,7 @@ export default function CareersPage() {
               className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 text-white font-semibold px-7 py-3.5 rounded-xl transition-colors duration-200"
             >
               <MessageCircle className="w-4 h-4" />
-              WhatsApp Us
+              {t.careers.cta.whatsapp}
             </a>
           </div>
         </div>
@@ -179,8 +149,8 @@ export default function CareersPage() {
       </section>
 
       {/* ── Culture / Intro with Image ── */}
-      <section className="py-20 px-6 bg-white">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-14 items-center">
           <div className="relative">
             <div className="absolute -inset-4 bg-gradient-to-br from-[#023064]/10 to-[#E11D48]/5 rounded-3xl" />
             <img
@@ -195,7 +165,7 @@ export default function CareersPage() {
           </div>
           <div>
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Our Culture</span>
-            <h2 className="font-heading text-4xl font-bold text-gray-900 mt-2 mb-5">
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mt-2 mb-5">
               Where great people do great work
             </h2>
             <p className="text-gray-600 leading-relaxed mb-4">
@@ -226,7 +196,7 @@ export default function CareersPage() {
       </section>
 
       {/* ── Why Work With Us ── */}
-      <section className="py-20 px-6 bg-gray-50">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Reasons to Join</span>
@@ -257,8 +227,8 @@ export default function CareersPage() {
       </section>
 
       {/* ── Who We Look For ── */}
-      <section className="py-20 px-6 bg-white">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-start">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
           <div>
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">The Right Fit</span>
             <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2 mb-5">Who We Look For</h2>
@@ -296,38 +266,41 @@ export default function CareersPage() {
       </section>
 
       {/* ── Perks / Benefits ── */}
-      <section className="py-20 px-6 bg-gray-50">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Benefits</span>
-            <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">Why you'll love working here</h2>
+            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">{t.careers.perks.badge}</span>
+            <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">{t.careers.perks.title}</h2>
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto">{t.careers.perks.subtitle}</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PERKS.map((p) => (
-              <div
-                key={p.title}
-                className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 group"
-              >
-                <div className="w-11 h-11 rounded-xl bg-[#023064]/10 flex items-center justify-center mb-4 group-hover:bg-[#023064] transition-colors duration-200">
-                  <p.icon className="w-5 h-5 text-[#023064] group-hover:text-white transition-colors duration-200" />
+            {t.careers.perks.items.map((item, i) => {
+              const Icon = PERK_ICONS[i];
+              return (
+                <div
+                  key={item.title}
+                  className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 group"
+                >
+                  <div className="w-11 h-11 rounded-xl bg-[#023064]/10 flex items-center justify-center mb-4 group-hover:bg-[#023064] transition-colors duration-200">
+                    <Icon className="w-5 h-5 text-[#023064] group-hover:text-white transition-colors duration-200" />
+                  </div>
+                  <h3 className="font-heading text-base font-bold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
                 </div>
-                <h3 className="font-heading text-base font-bold text-gray-900 mb-2">{p.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{p.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* ── Current Openings ── */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Now Hiring</span>
-            <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">Current Openings</h2>
+            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">{t.careers.openings.badge}</span>
+            <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">{t.careers.openings.title}</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
-              We have 4 open positions right now. Click "Apply Now" to send a tailored application directly
-              to our team.
+              {t.careers.openings.subtitle}
             </p>
           </div>
           <div className="space-y-5">
@@ -366,7 +339,7 @@ export default function CareersPage() {
                       href={`mailto:careers@cyberteks-it.com?subject=Application: ${encodeURIComponent(job.title)}`}
                       className="inline-flex items-center gap-2 bg-[#023064] hover:bg-[#E11D48] text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200 whitespace-nowrap"
                     >
-                      Apply Now <ArrowRight className="w-3.5 h-3.5" />
+                      {t.careers.openings.apply} <ArrowRight className="w-3.5 h-3.5" />
                     </a>
                   </div>
                 </div>
@@ -387,7 +360,7 @@ export default function CareersPage() {
       </section>
 
       {/* ── How to Apply ── */}
-      <section className="py-20 px-6 bg-gray-50">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Process</span>
@@ -396,7 +369,7 @@ export default function CareersPage() {
               Our hiring process is straightforward, respectful of your time, and moves fast.
             </p>
           </div>
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {STEPS.map((s) => (
               <div
                 key={s.step}
@@ -417,7 +390,7 @@ export default function CareersPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-6 bg-[#023064] text-center relative overflow-hidden">
+      <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 bg-[#023064] text-center relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -427,12 +400,11 @@ export default function CareersPage() {
         />
         <div className="max-w-2xl mx-auto relative">
           <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-            We're Hiring
+            {t.careers.cta.badge}
           </span>
-          <h2 className="font-heading text-4xl font-bold text-white mb-4">Ready to make an impact?</h2>
+          <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">{t.careers.cta.title}</h2>
           <p className="text-blue-200 mb-10 text-lg">
-            Join Uganda's most exciting ICT team. Help us build the digital future — one client,
-            one student, one solution at a time.
+            {t.careers.cta.description}
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <a
@@ -440,7 +412,7 @@ export default function CareersPage() {
               className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-8 py-3.5 rounded-xl transition-colors duration-200 shadow-lg"
             >
               <Mail className="w-4 h-4" />
-              careers@cyberteks-it.com
+              {t.careers.cta.email}
             </a>
             <a
               href="https://wa.me/256779367005?text=Hi%20CyberteksIT%2C%20I%20am%20interested%20in%20a%20career%20opportunity"
@@ -449,7 +421,7 @@ export default function CareersPage() {
               className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors duration-200"
             >
               <MessageCircle className="w-4 h-4" />
-              WhatsApp
+              {t.careers.cta.whatsapp}
             </a>
           </div>
         </div>

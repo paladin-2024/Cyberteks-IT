@@ -5,9 +5,9 @@ import { useLanguage } from '@/context/LanguageContext';
 import { cn } from '@/lib/utils';
 
 const TRUST_ITEMS = [
-  '500+ Businesses Served', 'Remote-First Delivery', '24/7 Expert Support',
-  'Certified Technicians', '3,000+ Professionals Trained', 'Kampala HQ + Remote Everywhere',
-  '10+ Years in ICT', 'ISO-Aligned Processes',
+  '100+ Businesses Served', 'Remote-First Delivery', '24/7 Expert Support',
+  'Certified Technicians', '200+ Professionals Trained', 'Kampala HQ + Remote Everywhere',
+  '5+ Years in ICT', 'ISO-Aligned Processes',
 ];
 
 const SLIDES = [
@@ -67,7 +67,7 @@ export default function HeroSection() {
             </div>
 
             {/* Headline */}
-            <h1 className="font-display text-[2.75rem] sm:text-[3.25rem] lg:text-[3.75rem] font-extrabold text-gray-900 leading-[1.04] tracking-tight mb-7">
+            <h1 className="font-display text-[2rem] sm:text-[2.75rem] lg:text-[3.75rem] font-extrabold text-gray-900 leading-[1.1] tracking-tight mb-5 sm:mb-7">
               {t.hero.title1}{' '}
               <span className="relative inline-block text-[#023064]">
                 {t.hero.title2}
@@ -89,12 +89,12 @@ export default function HeroSection() {
               {t.hero.title3}
             </h1>
 
-            <p className="text-lg text-gray-500 leading-relaxed mb-10 max-w-[480px]">
+            <p className="text-base sm:text-lg text-gray-500 leading-relaxed mb-8 sm:mb-10 max-w-[480px]">
               {t.hero.description}
             </p>
 
             {/* CTAs — Apply primary, Explore Services secondary */}
-            <div className="flex flex-wrap gap-3 mb-14">
+            <div className="flex flex-wrap gap-3 mb-10 sm:mb-14">
               <Link
                 to="/apply"
                 className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#E11D48] text-white font-bold text-base rounded-xl hover:bg-[#c41640] transition-all duration-200 shadow-lg shadow-[#E11D48]/25 hover:shadow-[#E11D48]/40 hover:-translate-y-0.5"
@@ -103,7 +103,7 @@ export default function HeroSection() {
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                to="/services"
+                to="/get-started"
                 className="inline-flex items-center gap-2.5 px-7 py-4 bg-white text-[#023064] font-bold text-base rounded-xl border-2 border-[#023064]/20 hover:border-[#023064] hover:bg-[#023064]/4 transition-all duration-200"
               >
                 {t.hero.exploreServices}
@@ -113,9 +113,9 @@ export default function HeroSection() {
             {/* Stats row */}
             <div className="flex flex-wrap gap-6">
               {[
-                { icon: Monitor,       value: '1,200+', label: t.stats.projects },
-                { icon: Shield,        value: '500+',   label: t.stats.clients },
-                { icon: GraduationCap, value: '3,000+', label: t.stats.trained },
+                { icon: Monitor,       value: '100+', label: t.stats.projects },
+                { icon: Shield,        value: '100+', label: t.stats.clients },
+                { icon: GraduationCap, value: '200+', label: t.stats.trained },
               ].map(({ icon: Icon, value, label }) => (
                 <div key={label} className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-[#023064]/6 border border-[#023064]/10 flex items-center justify-center shrink-0">
@@ -195,7 +195,7 @@ export default function HeroSection() {
 
             {/* Floating badge — experience */}
             <div className="absolute -top-4 -right-5 bg-[#023064] rounded-2xl px-4 py-3 shadow-lg">
-              <p className="text-xs font-extrabold text-white leading-none">10+ Years</p>
+              <p className="text-xs font-extrabold text-white leading-none">5+ Years</p>
               <p className="text-[11px] text-white/50 mt-0.5">ICT Excellence</p>
             </div>
           </div>

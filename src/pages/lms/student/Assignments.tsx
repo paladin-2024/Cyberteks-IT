@@ -442,7 +442,7 @@ export default function StudentAssignments() {
             {label}
             <span className={cn(
               'text-xs font-bold px-1.5 py-0.5 rounded-full',
-              filter === key ? 'bg-white/20 text-white' : 'bg-muted text-muted-foreground'
+              filter === key ? 'bg-card/20 text-white' : 'bg-muted text-muted-foreground'
             )}>
               {count}
             </span>

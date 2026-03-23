@@ -75,7 +75,7 @@ function StatCard({
   linkLabel: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+    <div className="bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconBg}`}>
           <Icon className={`w-4 h-4 ${iconColor}`} />
@@ -87,8 +87,8 @@ function StatCard({
         )}
       </div>
       <div>
-        <p className="font-display text-3xl font-extrabold text-slate-900 leading-none">{value}</p>
-        <p className="text-xs font-medium text-slate-500 mt-1">{label}</p>
+        <p className="font-display text-3xl font-extrabold text-foreground leading-none">{value}</p>
+        <p className="text-xs font-medium text-muted-foreground mt-1">{label}</p>
       </div>
       {progress !== undefined && (
         <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
@@ -129,7 +129,7 @@ export default function StudentDashboard() {
   // ── Loading ────────────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-full bg-white p-4 md:p-6 space-y-6">
+      <div className="min-h-full bg-card p-4 md:p-6 space-y-6">
         <SkeletonBox className="h-10 w-64" />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => <SkeletonBox key={i} className="h-32" />)}
@@ -146,9 +146,9 @@ export default function StudentDashboard() {
   // ── Error ──────────────────────────────────────────────────────────────────
   if (error || !data) {
     return (
-      <div className="min-h-full bg-white p-6 flex items-center justify-center">
+      <div className="min-h-full bg-card p-6 flex items-center justify-center">
         <div className="text-center space-y-2">
-          <p className="text-slate-500 text-sm">{error ?? 'Something went wrong'}</p>
+          <p className="text-muted-foreground text-sm">{error ?? 'Something went wrong'}</p>
           <button onClick={() => window.location.reload()} className="text-xs font-semibold text-primary-blue hover:underline">
             Retry
           </button>
@@ -189,14 +189,14 @@ export default function StudentDashboard() {
   ];
 
   return (
-    <div className="min-h-full bg-white p-4 md:p-6 space-y-6">
+    <div className="min-h-full bg-card p-4 md:p-6 space-y-6">
 
       {/* Page title */}
       <div>
-        <h1 className="font-display text-xl font-extrabold text-slate-900">
+        <h1 className="font-display text-xl font-extrabold text-foreground">
           Welcome back, {name} 👋
         </h1>
-        <p className="text-sm text-slate-500 mt-0.5">Here's what's happening with your learning today.</p>
+        <p className="text-sm text-muted-foreground mt-0.5">Here's what's happening with your learning today.</p>
       </div>
 
       {/* Row 1 — Stat cards */}
@@ -206,30 +206,30 @@ export default function StudentDashboard() {
         ))}
 
         {/* Avg progress card */}
-        <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+        <div className="bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-violet-50">
             <BookOpen className="w-4 h-4 text-violet-600" />
           </div>
           <div>
-            <p className="font-display text-3xl font-extrabold text-slate-900 leading-none">{avgProgress}%</p>
-            <p className="text-xs font-medium text-slate-500 mt-1">Avg Progress</p>
+            <p className="font-display text-3xl font-extrabold text-foreground leading-none">{avgProgress}%</p>
+            <p className="text-xs font-medium text-muted-foreground mt-1">Avg Progress</p>
           </div>
           <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
             <div className="h-full rounded-full bg-violet-500 transition-all" style={{ width: `${avgProgress}%` }} />
           </div>
-          <span className="text-xs text-slate-400">Across active courses</span>
+          <span className="text-xs text-muted-foreground">Across active courses</span>
         </div>
 
         {/* Total enrollments card */}
-        <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+        <div className="bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-50">
             <Award className="w-4 h-4 text-amber-600" />
           </div>
           <div>
-            <p className="font-display text-3xl font-extrabold text-slate-900 leading-none">{enrollments.length}</p>
-            <p className="text-xs font-medium text-slate-500 mt-1">Total Enrollments</p>
+            <p className="font-display text-3xl font-extrabold text-foreground leading-none">{enrollments.length}</p>
+            <p className="text-xs font-medium text-muted-foreground mt-1">Total Enrollments</p>
           </div>
-          <span className="text-xs text-slate-400">All time</span>
+          <span className="text-xs text-muted-foreground">All time</span>
         </div>
       </div>
 
@@ -237,10 +237,10 @@ export default function StudentDashboard() {
       <div className="grid lg:grid-cols-5 gap-5">
 
         {/* Study Analytics — 60% */}
-        <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-4">
+        <div className="lg:col-span-3 bg-card rounded-2xl shadow-sm p-6 flex flex-col gap-4">
           <div>
-            <h2 className="font-display font-bold text-slate-900 text-base">Study Analytics</h2>
-            <p className="text-xs text-slate-400 mt-0.5">Hours studied this week</p>
+            <h2 className="font-display font-bold text-foreground text-base">Study Analytics</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Hours studied this week</p>
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={studyChart} barSize={28} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
@@ -283,9 +283,9 @@ export default function StudentDashboard() {
         <div className="lg:col-span-2 flex flex-col gap-4">
 
           {/* Upcoming Sessions — empty state */}
-          <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-3 flex-1">
-            <h2 className="font-display font-bold text-slate-900 text-sm">Upcoming Sessions</h2>
-            <div className="flex-1 flex flex-col items-center justify-center text-slate-400 gap-2 py-6">
+          <div className="bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-3 flex-1">
+            <h2 className="font-display font-bold text-foreground text-sm">Upcoming Sessions</h2>
+            <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground gap-2 py-6">
               <Inbox className="w-8 h-8 opacity-30" />
               <p className="text-sm">No upcoming sessions</p>
               <p className="text-xs text-center">Live sessions will appear here when scheduled.</p>
@@ -293,16 +293,16 @@ export default function StudentDashboard() {
           </div>
 
           {/* Quick stats */}
-          <div className="bg-white rounded-2xl shadow-sm p-5 space-y-3">
-            <h2 className="font-display font-bold text-slate-900 text-sm">Progress Summary</h2>
+          <div className="bg-card rounded-2xl shadow-sm p-5 space-y-3">
+            <h2 className="font-display font-bold text-foreground text-sm">Progress Summary</h2>
             {activeEnrollments.length === 0 ? (
-              <p className="text-xs text-slate-400">No active courses.</p>
+              <p className="text-xs text-muted-foreground">No active courses.</p>
             ) : (
               activeEnrollments.slice(0, 3).map((e) => (
                 <div key={e.id}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs text-slate-600 truncate max-w-[140px]">{e.title}</span>
-                    <span className="text-xs font-semibold text-slate-800">{e.progress}%</span>
+                    <span className="text-xs text-muted-foreground truncate max-w-[140px]">{e.title}</span>
+                    <span className="text-xs font-semibold text-foreground">{e.progress}%</span>
                   </div>
                   <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
                     <div
@@ -318,16 +318,16 @@ export default function StudentDashboard() {
       </div>
 
       {/* Row 3 — Continue Watching table */}
-      <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
-          <h2 className="font-display font-bold text-slate-900 text-base">Continue Watching</h2>
+          <h2 className="font-display font-bold text-foreground text-base">Continue Watching</h2>
           <Link to="/student/courses" className="text-xs font-semibold text-primary-blue hover:underline">
             View All →
           </Link>
         </div>
 
         {enrollments.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-32 text-slate-400 gap-2">
+          <div className="flex flex-col items-center justify-center h-32 text-muted-foreground gap-2">
             <BookOpen className="w-8 h-8 opacity-30" />
             <p className="text-sm">No courses enrolled yet</p>
             <Link to="/student/courses" className="text-xs font-semibold text-primary-blue hover:underline">
@@ -342,11 +342,11 @@ export default function StudentDashboard() {
                   <th className="w-10 px-4 py-3">
                     <input type="checkbox" className="rounded border-slate-300 accent-primary-blue" />
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Subject</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Started</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide min-w-[160px]">Progress</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Instructor</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Action</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Subject</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Started</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide min-w-[160px]">Progress</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Instructor</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -356,10 +356,10 @@ export default function StudentDashboard() {
                       <input type="checkbox" className="rounded border-slate-300 accent-primary-blue" />
                     </td>
                     <td className="px-4 py-3.5">
-                      <span className="font-medium text-slate-800 text-sm">{row.title}</span>
+                      <span className="font-medium text-foreground text-sm">{row.title}</span>
                     </td>
                     <td className="px-4 py-3.5">
-                      <span className="text-xs text-slate-400">{formatDate(row.startedAt)}</span>
+                      <span className="text-xs text-muted-foreground">{formatDate(row.startedAt)}</span>
                     </td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2">
@@ -369,7 +369,7 @@ export default function StudentDashboard() {
                             style={{ width: `${row.progress}%` }}
                           />
                         </div>
-                        <span className="text-xs font-semibold text-slate-600 shrink-0 w-8 text-right">
+                        <span className="text-xs font-semibold text-muted-foreground shrink-0 w-8 text-right">
                           {row.progress}%
                         </span>
                       </div>
@@ -383,13 +383,13 @@ export default function StudentDashboard() {
                       <div className="flex items-center gap-2">
                         <Link
                           to="/student/courses"
-                          className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-primary-blue hover:text-white flex items-center justify-center text-slate-500 transition-colors"
+                          className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-primary-blue hover:text-white flex items-center justify-center text-muted-foreground transition-colors"
                           title="View course"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </Link>
                         <button
-                          className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors"
+                          className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-muted-foreground transition-colors"
                           title="More options"
                         >
                           <MoreVertical className="w-3.5 h-3.5" />

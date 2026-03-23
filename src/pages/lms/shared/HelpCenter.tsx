@@ -85,7 +85,7 @@ const adminFaq: FaqSection[] = [
   {
     title: 'System Settings',
     icon: Settings,
-    color: 'text-slate-600',
+    color: 'text-muted-foreground',
     items: [
       {
         question: 'How do I update platform information?',
@@ -215,7 +215,7 @@ const studentFaq: FaqSection[] = [
   {
     title: 'Account',
     icon: UserCircle,
-    color: 'text-slate-600',
+    color: 'text-muted-foreground',
     items: [
       {
         question: 'How do I update my profile picture?',
@@ -371,7 +371,7 @@ export default function HelpCenterPage() {
       {/* Contact support */}
       <div className="mt-10 bg-gradient-to-br from-[#023064] to-blue-800 rounded-2xl p-6 text-white">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-card/15 flex items-center justify-center shrink-0">
             <MessageSquare className="w-5 h-5 text-white" />
           </div>
           <div className="flex-1">
@@ -382,14 +382,14 @@ export default function HelpCenterPage() {
             <div className="flex flex-wrap gap-3">
               <a
                 href="mailto:support@cyberteks-it.com"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-sm font-semibold transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-card/15 hover:bg-card/25 text-sm font-semibold transition-colors"
               >
                 <Mail className="w-4 h-4" />
                 support@cyberteks-it.com
               </a>
               <a
                 href="tel:+256700000000"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-sm font-semibold transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-card/15 hover:bg-card/25 text-sm font-semibold transition-colors"
               >
                 <Phone className="w-4 h-4" />
                 +256 700 000 000
@@ -398,7 +398,7 @@ export default function HelpCenterPage() {
                 href="/contact"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-sm font-semibold transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-card/15 hover:bg-card/25 text-sm font-semibold transition-colors"
               >
                 <ExternalLink className="w-4 h-4" />
                 Contact Form
@@ -413,7 +413,7 @@ export default function HelpCenterPage() {
         {[
           { icon: Shield, title: 'Security', desc: 'Never share your password. Use the Forgot Password flow if locked out.', color: 'text-red-500' },
           { icon: Bell, title: 'Notifications', desc: 'Check the bell icon for assignment grades, messages, and announcements.', color: 'text-amber-500' },
-          { icon: Settings, title: 'Profile', desc: 'Keep your profile photo and contact info up to date for a better experience.', color: 'text-slate-500' },
+          { icon: Settings, title: 'Profile', desc: 'Keep your profile photo and contact info up to date for a better experience.', color: 'text-muted-foreground' },
         ].map(({ icon: Icon, title, desc, color }) => (
           <div key={title} className="bg-card border border-border rounded-2xl p-4">
             <Icon className={cn('w-5 h-5 mb-2', color)} />

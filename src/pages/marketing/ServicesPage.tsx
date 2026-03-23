@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import {
   Monitor, Camera, Lock, Phone, GraduationCap, Code2,
-  ArrowRight, CheckCircle2, Headphones, Clock, Shield,
+  ArrowRight, CheckCircle2,
 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const SERVICES = [
   {
@@ -67,36 +68,31 @@ const SERVICES = [
   },
 ];
 
-const WHY = [
-  { icon: Headphones, title: 'Dedicated Support',  desc: 'Every client gets a dedicated contact and fast-response SLA.' },
-  { icon: Shield,     title: 'Certified Engineers', desc: 'Our team holds CompTIA, Microsoft, and Cisco certifications.' },
-  { icon: Clock,      title: 'Fast Turnaround',     desc: 'Remote issues resolved same day. On-site within 24 hours.' },
-  { icon: CheckCircle2, title: 'Guaranteed Quality', desc: 'All installations and projects come with a service warranty.' },
-];
 
 export default function ServicesPage() {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-white">
 
       {/* Hero */}
-      <section className="bg-[#023064] pt-12 pb-20 px-6 relative overflow-hidden">
+      <section className="bg-[#023064] pt-12 pb-14 sm:pb-20 px-4 sm:px-6 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10"
           style={{ backgroundImage: 'radial-gradient(ellipse at 80% 50%, #E11D48 0%, transparent 50%)' }} />
         <div className="max-w-5xl mx-auto relative text-center">
-          <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">What We Offer</span>
-          <h1 className="font-heading text-5xl md:text-6xl font-extrabold text-white mb-5 leading-tight">
-            End-to-End ICT Solutions
+          <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">{t.servicesPage.hero.badge}</span>
+          <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-5 leading-tight">
+            {t.servicesPage.hero.title}
           </h1>
-          <p className="text-blue-200 text-xl max-w-2xl mx-auto">
-            From remote IT support to enterprise software — one trusted partner for all your technology needs in Uganda and East Africa.
+          <p className="text-blue-200 text-base sm:text-xl max-w-2xl mx-auto">
+            {t.servicesPage.hero.subtitle}
           </p>
         </div>
       </section>
 
       {/* Services Grid */}
-      <section className="py-20 px-6 bg-gray-50">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {SERVICES.map((s) => (
               <Link key={s.title} to={s.href}
                 className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
@@ -131,35 +127,41 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Why Us */}
-      <section className="py-20 px-6 bg-white">
+      {/* Why Us / Trust */}
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Why CyberteksIT</span>
-            <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">The difference that matters</h2>
+            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">{t.servicesPage.trust.badge}</span>
+            <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">{t.servicesPage.trust.title}</h2>
+            <p className="text-gray-500 mt-3 max-w-2xl mx-auto">{t.servicesPage.trust.description}</p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {WHY.map((w) => (
-              <div key={w.title} className="text-center p-6 rounded-2xl bg-gray-50 border border-gray-100">
-                <div className="w-12 h-12 rounded-2xl bg-[#023064]/10 flex items-center justify-center mx-auto mb-4">
-                  <w.icon className="w-6 h-6 text-[#023064]" />
-                </div>
-                <h3 className="font-heading text-base font-bold text-gray-900 mb-2">{w.title}</h3>
-                <p className="text-xs text-gray-600 leading-relaxed">{w.desc}</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            {t.servicesPage.trust.stats.map((stat) => (
+              <div key={stat.label} className="text-center p-6 rounded-2xl bg-gray-50 border border-gray-100">
+                <p className="font-heading text-3xl font-extrabold text-[#023064] mb-1">{stat.value}</p>
+                <p className="text-xs text-gray-600 leading-relaxed">{stat.label}</p>
               </div>
             ))}
           </div>
+          <ul className="max-w-2xl mx-auto space-y-3">
+            {t.servicesPage.trust.qualities.map((q) => (
+              <li key={q} className="flex items-center gap-3 text-sm text-gray-700">
+                <CheckCircle2 className="w-4 h-4 text-[#023064] shrink-0" />
+                {q}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 bg-[#023064] text-center">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-[#023064] text-center">
         <div className="max-w-2xl mx-auto">
-          <h2 className="font-heading text-3xl font-bold text-white mb-3">Not sure which service you need?</h2>
-          <p className="text-blue-200 mb-8">Talk to our team — we'll recommend the right solution for your business.</p>
+          <h2 className="font-heading text-3xl font-bold text-white mb-3">{t.servicesPage.cta.title}</h2>
+          <p className="text-blue-200 mb-8">{t.servicesPage.cta.description}</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link to="/contact" className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-7 py-3.5 rounded-xl transition-colors">
-              Talk to Us <ArrowRight className="w-4 h-4" />
+              {t.servicesPage.cta.button} <ArrowRight className="w-4 h-4" />
             </Link>
             <Link to="/get-started" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-7 py-3.5 rounded-xl transition-colors">
               Request IT Support

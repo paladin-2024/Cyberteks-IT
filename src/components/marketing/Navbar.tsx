@@ -56,30 +56,15 @@ export default function Navbar() {
       <div className="bg-[#023064]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-12">
-            <div className="hidden md:flex items-center gap-6">
-              <div className="flex items-center gap-2 text-white/60 text-sm font-medium">
-                <MapPin className="w-4 h-4 text-primary-red shrink-0" />
-                <span>Plot 15 Nakasero Road, Kampala, Uganda</span>
-              </div>
-              <div className="w-px h-4 bg-white/15" />
-              <a href="mailto:info@cyberteks-it.com" className="flex items-center gap-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
-                <Mail className="w-4 h-4 text-primary-red shrink-0" />
-                info@cyberteks-it.com
-              </a>
-            </div>
-            <div className="flex items-center gap-3 ml-auto">
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-red/20 border border-primary-red/30">
-                <Phone className="w-4 h-4 text-primary-red shrink-0" />
-                <a href="tel:+256779367005" className="text-lg font-extrabold text-white tracking-tight hover:text-primary-red transition-colors">
-                  +256 779 367 005
-                </a>
-              </div>
+            {/* LEFT: socials (always) + address+email (desktop only) */}
+            <div className="flex items-center gap-3">
+              {/* Social icons — always visible */}
               <div className="flex items-center gap-1.5">
                 {[
-                  { icon: Facebook, href: 'https://facebook.com/cyberteksit',             label: 'Facebook' },
-                  { icon: Twitter,  href: 'https://twitter.com/cyberteksit',              label: 'Twitter' },
-                  { icon: Linkedin, href: 'https://linkedin.com/company/cyberteks-it',    label: 'LinkedIn' },
-                  { icon: Instagram, href: 'https://instagram.com/cyberteksit',            label: 'Instagram' },
+                  { icon: Facebook,  href: 'https://facebook.com/cyberteksit',          label: 'Facebook' },
+                  { icon: Twitter,   href: 'https://twitter.com/cyberteksit',           label: 'Twitter' },
+                  { icon: Linkedin,  href: 'https://linkedin.com/company/cyberteks-it', label: 'LinkedIn' },
+                  { icon: Instagram, href: 'https://instagram.com/cyberteksit',         label: 'Instagram' },
                 ].map(({ icon: Icon, href, label }) => (
                   <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                     aria-label={label}
@@ -88,7 +73,31 @@ export default function Navbar() {
                   </a>
                 ))}
               </div>
+              {/* Address + email — desktop only */}
+              <div className="hidden md:flex items-center gap-6">
+                <div className="w-px h-4 bg-white/15" />
+                <div className="flex items-center gap-2 text-white/60 text-sm font-medium">
+                  <MapPin className="w-4 h-4 text-primary-red shrink-0" />
+                  <span>Plot 15 Nakasero Road, Kampala, Uganda</span>
+                </div>
+                <div className="w-px h-4 bg-white/15" />
+                <a href="mailto:info@cyberteks-it.com" className="flex items-center gap-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
+                  <Mail className="w-4 h-4 text-primary-red shrink-0" />
+                  info@cyberteks-it.com
+                </a>
+              </div>
             </div>
+
+            {/* RIGHT: phone number — always visible */}
+            <a
+              href="tel:+256779367005"
+              className="flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-primary-red/20 border border-primary-red/30 hover:bg-primary-red/30 transition-colors"
+            >
+              <Phone className="w-4 h-4 text-primary-red shrink-0" />
+              <span className="text-sm sm:text-lg font-extrabold text-white tracking-tight whitespace-nowrap">
+                +256 779 367 005
+              </span>
+            </a>
           </div>
         </div>
       </div>

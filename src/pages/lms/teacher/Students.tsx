@@ -50,7 +50,7 @@ export default function StudentsPage() {
   function statusConfig(e: Enrollment) {
     if (e.status === 'COMPLETED') return { label: 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' };
     if (e.progressPercent < 25) return { label: 'At Risk', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500' };
-    if (e.status === 'SUSPENDED') return { label: 'Suspended', bg: 'bg-slate-100', text: 'text-slate-500', dot: 'bg-slate-400' };
+    if (e.status === 'SUSPENDED') return { label: 'Suspended', bg: 'bg-slate-100', text: 'text-muted-foreground', dot: 'bg-slate-400' };
     return { label: 'Active', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500' };
   }
 

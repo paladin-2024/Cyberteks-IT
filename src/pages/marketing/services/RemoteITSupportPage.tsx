@@ -4,6 +4,7 @@ import {
   CheckCircle2, ArrowRight, Phone, Clock, Lock, Zap, Users,
   Building2, GraduationCap, HeartPulse, Landmark, Briefcase,
 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const CORE_SERVICES = [
   {
@@ -78,11 +79,12 @@ const STATS = [
 ];
 
 export default function RemoteITSupportPage() {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-white">
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="pt-12 pb-20 bg-[#023064] px-6 relative overflow-hidden">
+      <section className="pt-8 pb-12 sm:pt-12 sm:pb-20 bg-[#023064] px-4 sm:px-6 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-10 pointer-events-none"
           style={{ backgroundImage: 'radial-gradient(ellipse at 80% 40%, #E11D48 0%, transparent 55%)' }}
@@ -90,16 +92,14 @@ export default function RemoteITSupportPage() {
         <div className="max-w-6xl mx-auto relative grid md:grid-cols-2 gap-12 items-center">
           <div>
             <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-              Remote IT Support
+              {t.servicePages.remoteIt.hero.badge}
             </span>
-            <h1 className="font-heading text-5xl font-extrabold text-white mb-5 leading-tight">
-              Your IT Problems Fixed{' '}
-              <span className="text-[#E11D48]">Instantly</span> — Remotely
+            <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5 leading-tight">
+              {t.servicePages.remoteIt.hero.title1}{' '}
+              <span className="text-[#E11D48]">{t.servicePages.remoteIt.hero.title2}</span>
             </h1>
             <p className="text-blue-200 text-lg leading-relaxed mb-8">
-              At Cyberteks-IT, we understand that IT issues can disrupt your business operations at any
-              moment. That's why we offer Remote IT Support services designed to deliver fast, efficient,
-              and secure technical assistance — without the need for an on-site visit.
+              {t.servicePages.remoteIt.hero.subtitle}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -127,7 +127,7 @@ export default function RemoteITSupportPage() {
       </section>
 
       {/* ── Stats Strip ──────────────────────────────────────────────── */}
-      <section className="bg-gradient-to-br from-[#023064] to-[#012550] py-10 px-6">
+      <section className="bg-gradient-to-br from-[#023064] to-[#012550] py-8 sm:py-10 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {STATS.map((s) => (
             <div key={s.label}>
@@ -139,14 +139,14 @@ export default function RemoteITSupportPage() {
       </section>
 
       {/* ── Core Services ────────────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
-              What We Offer
+              {t.servicePages.remoteIt.services.badge}
             </span>
             <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">
-              Our Remote IT Support Services
+              {t.servicePages.remoteIt.services.title}
             </h2>
             <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
               From helpdesk to cybersecurity, we cover every layer of your IT environment — delivered
@@ -171,8 +171,8 @@ export default function RemoteITSupportPage() {
       </section>
 
       {/* ── Why Choose Us ────────────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-14 items-center">
           <div>
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
               Why Cyberteks-IT
@@ -214,7 +214,7 @@ export default function RemoteITSupportPage() {
       </section>
 
       {/* ── Ideal Clients ────────────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">
@@ -247,24 +247,23 @@ export default function RemoteITSupportPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-gradient-to-br from-[#023064] to-[#012550]">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-br from-[#023064] to-[#012550]">
         <div className="max-w-3xl mx-auto text-center">
           <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-            Get Help Today
+            {t.servicePages.remoteIt.cta.title}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-white mb-4">
-            Having an IT issue right now?
+            {t.servicePages.remoteIt.cta.title}
           </h2>
           <p className="text-blue-200 text-lg mb-10 leading-relaxed">
-            Submit a support request and our technician will respond within 30 minutes — any time,
-            any day.
+            {t.servicePages.remoteIt.cta.description}
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               to="/get-started"
               className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-8 py-4 rounded-xl transition-colors"
             >
-              Get IT Support Now <ArrowRight className="w-4 h-4" />
+              {t.servicePages.remoteIt.cta.button} <ArrowRight className="w-4 h-4" />
             </Link>
             <a
               href="tel:+256779367005"
@@ -273,7 +272,7 @@ export default function RemoteITSupportPage() {
               <Phone className="w-4 h-4" /> +256 779 367 005
             </a>
           </div>
-          <div className="mt-10 grid grid-cols-3 gap-6 max-w-md mx-auto">
+          <div className="mt-10 flex flex-wrap justify-center gap-6 max-w-md mx-auto">
             {[
               { icon: CheckCircle2, label: 'No Travel Fees' },
               { icon: CheckCircle2, label: 'Encrypted Sessions' },

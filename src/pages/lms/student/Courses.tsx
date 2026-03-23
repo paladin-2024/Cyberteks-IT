@@ -122,13 +122,13 @@ export default function StudentCoursesPage() {
                     : <Icon className="w-12 h-12 text-white/80" />
                   }
                   <div className="absolute top-3 right-3">
-                    <span className={`text-[11px] px-2.5 py-1 rounded-full font-semibold ${statusCls[e.status] ?? 'bg-slate-100 text-slate-400'}`}>
+                    <span className={`text-[11px] px-2.5 py-1 rounded-full font-semibold ${statusCls[e.status] ?? 'bg-slate-100 text-muted-foreground'}`}>
                       {statusLabel[e.status] ?? e.status}
                     </span>
                   </div>
                   {/* Progress overlay at bottom */}
                   <div className="absolute bottom-0 inset-x-0 h-1 bg-black/20">
-                    <div className="h-full bg-white/70 transition-all" style={{ width: `${progress}%` }} />
+                    <div className="h-full bg-card/70 transition-all" style={{ width: `${progress}%` }} />
                   </div>
                 </div>
 

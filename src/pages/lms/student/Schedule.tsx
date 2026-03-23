@@ -87,13 +87,13 @@ export default function SchedulePage() {
               return (
                 <div key={e.id} className={`rounded-2xl border p-5 ${palette.bg} ${palette.border}`}>
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-sm">
+                    <div className="w-10 h-10 rounded-xl bg-card flex items-center justify-center shrink-0 shadow-sm">
                       <BookOpen className={`w-5 h-5 ${palette.text}`} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-3 mb-1">
                         <p className={`font-semibold text-sm ${palette.text}`}>{e.course.title}</p>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/70 ${palette.text} shrink-0`}>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full bg-card/70 ${palette.text} shrink-0`}>
                           {progress}% complete
                         </span>
                       </div>
@@ -101,7 +101,7 @@ export default function SchedulePage() {
                         {e.course.teacher.name}
                         {e.course.category ? ` · ${e.course.category}` : ''}
                       </p>
-                      <div className="h-1.5 rounded-full bg-white/60 overflow-hidden">
+                      <div className="h-1.5 rounded-full bg-card/60 overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all ${palette.dot}`}
                           style={{ width: `${progress}%` }}

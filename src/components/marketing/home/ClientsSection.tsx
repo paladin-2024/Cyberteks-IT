@@ -44,13 +44,13 @@ export default function ClientsSection() {
         <div className="absolute right-0 top-0 bottom-0 w-28 z-10 pointer-events-none"
           style={{ background: 'linear-gradient(to left, #023064, transparent)' }} />
 
-        <div className="flex gap-14 animate-scroll w-max">
+        <div className="flex gap-16 animate-scroll w-max">
           {[...clients, ...clients].map((client, i) => (
-            <div key={i} className="flex-shrink-0 flex items-center justify-center w-40 h-20 group">
+            <div key={i} className="flex-shrink-0 flex items-center justify-center w-52 h-28 group">
               <img
                 src={client.logo}
                 alt={client.name}
-                className="max-h-12 w-auto object-contain grayscale brightness-200 opacity-35 group-hover:opacity-80 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500"
+                className="max-h-20 w-auto object-contain grayscale brightness-200 opacity-50 group-hover:opacity-90 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500"
               />
             </div>
           ))}

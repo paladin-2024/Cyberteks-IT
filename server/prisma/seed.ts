@@ -130,19 +130,11 @@ async function main() {
     },
   });
 
-  const teacher2 = await prisma.user.upsert({
-    where:  { email: 'sarah@cyberteks-it.com' },
-    update: { name: 'Sarah Namukasa', password: teacherPassword, role: Role.TEACHER, isActive: true },
-    create: {
-      name: 'Sarah Namukasa', email: 'sarah@cyberteks-it.com', password: teacherPassword,
-      role: Role.TEACHER, isActive: true, emailVerified: new Date(),
-    },
-  });
 
   console.log('Users seeded');
 
   // ── Courses — all 11 from the CyberteksIT fees guide ──────────────────────
-  const teachers = [teacher1, teacher2];
+  const teachers = [teacher1];
   for (let i = 0; i < COURSE_CATALOGUE.length; i++) {
     const c = COURSE_CATALOGUE[i];
     await prisma.course.upsert({
@@ -150,7 +142,7 @@ async function main() {
       update: { price: c.price, duration: c.duration },
       create: {
         ...c,
-        teacherId: teachers[i % 2].id,
+        teacherId: teachers[i % teachers.length].id,
         status: CourseStatus.PUBLISHED,
         currency: 'UGX',
       },

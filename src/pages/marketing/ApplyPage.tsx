@@ -6,16 +6,7 @@ import {
 } from 'lucide-react';
 import PhoneInput, { type Country } from '@/components/ui/PhoneInput';
 import { cn } from '@/lib/utils';
-
-const STEPS = [
-  { id: 1, title: 'Personal Information',       icon: User },
-  { id: 2, title: 'Education & Background',     icon: GraduationCap },
-  { id: 3, title: 'Program Selection',          icon: BookOpen },
-  { id: 4, title: 'Motivation & Goals',         icon: Target },
-  { id: 5, title: 'Availability',               icon: Clock },
-  { id: 6, title: 'Computer & Internet Access', icon: Monitor },
-  { id: 7, title: 'Declaration',                icon: FileCheck },
-];
+import { useLanguage } from '@/context/LanguageContext';
 
 const PROGRAMS = [
   'Prompt Engineering',
@@ -128,12 +119,23 @@ function RadioGroup({
 }
 
 export default function ApplyPage() {
+  const { t } = useLanguage();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormData>(initial);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [stepError, setStepError] = useState('');
+
+  const STEPS = [
+    { id: 1, title: t.apply.steps[0], icon: User },
+    { id: 2, title: t.apply.steps[1], icon: GraduationCap },
+    { id: 3, title: t.apply.steps[2], icon: BookOpen },
+    { id: 4, title: t.apply.steps[3], icon: Target },
+    { id: 5, title: t.apply.steps[4], icon: Clock },
+    { id: 6, title: t.apply.steps[5], icon: Monitor },
+    { id: 7, title: t.apply.steps[6], icon: FileCheck },
+  ];
 
   const set = (field: keyof FormData, value: string | boolean | string[]) =>
     setForm((f) => ({ ...f, [field]: value }));
@@ -246,12 +248,12 @@ export default function ApplyPage() {
           <div className="w-20 h-20 rounded-full bg-green-50 border-2 border-green-200 flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-10 h-10 text-green-500" />
           </div>
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-3">Application Submitted!</h2>
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-3">{t.apply.success.title}</h2>
           <p className="text-gray-500 leading-relaxed mb-8">
-            Thank you, <span className="font-semibold text-gray-700">{form.fullName}</span>. We'll review your application and respond within <strong>2–3 business days</strong> to your email.
+            {t.apply.success.description}
           </p>
           <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-primary-blue text-white rounded-xl font-semibold text-sm hover:bg-blue-900 transition-all">
-            Back to Home <ArrowRight className="w-4 h-4" />
+            {t.apply.success.home} <ArrowRight className="w-4 h-4" />
           </a>
         </div>
       </div>
@@ -261,14 +263,14 @@ export default function ApplyPage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Hero */}
-      <div className="bg-primary-blue text-white py-14 px-4">
+      <div className="bg-primary-blue text-white py-10 sm:py-14 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <span className="inline-block text-xs font-bold uppercase tracking-[0.18em] text-blue-300 mb-3">Skills Development Program</span>
-          <h1 className="font-display text-4xl sm:text-5xl font-extrabold mb-4 leading-tight">
-            Apply for Training
+          <span className="inline-block text-xs font-bold uppercase tracking-[0.18em] text-blue-300 mb-3">{t.apply.hero.badge}</span>
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
+            {t.apply.hero.title1} <br />{t.apply.hero.title2}
           </h1>
           <p className="text-blue-200 text-lg max-w-xl mx-auto">
-            Join Uganda's leading ICT training programs. Applications reviewed within 2–3 business days.
+            {t.apply.hero.subtitle}
           </p>
         </div>
       </div>
@@ -319,7 +321,7 @@ export default function ApplyPage() {
         <form onSubmit={handleSubmit}>
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             {/* Section header */}
-            <div className="flex items-center gap-4 px-8 py-6 border-b border-gray-100 bg-gray-50/50">
+            <div className="flex items-center gap-4 px-4 sm:px-8 py-5 sm:py-6 border-b border-gray-100 bg-gray-50/50">
               <div className="w-12 h-12 rounded-2xl bg-primary-blue flex items-center justify-center shrink-0">
                 {(() => { const Icon = STEPS[step - 1].icon; return <Icon className="w-5 h-5 text-white" />; })()}
               </div>
@@ -329,25 +331,25 @@ export default function ApplyPage() {
               </div>
             </div>
 
-            <div className="px-8 py-8 space-y-5">
+            <div className="px-4 sm:px-8 py-6 sm:py-8 space-y-5">
 
               {/* STEP 1 — Personal Information */}
               {step === 1 && (
                 <>
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <FieldLabel required>Full Name</FieldLabel>
+                      <FieldLabel required>{t.apply.personal.fullName}</FieldLabel>
                       <Input placeholder="e.g. Amara Nakato" value={form.fullName} onChange={e => set('fullName', e.target.value)} required />
                     </div>
                     <div>
-                      <FieldLabel required>Date of Birth</FieldLabel>
+                      <FieldLabel required>{t.apply.personal.dob}</FieldLabel>
                       <Input type="date" value={form.dob} onChange={e => set('dob', e.target.value)} required />
                     </div>
                   </div>
-                  <RadioGroup label="Gender" name="gender" options={['Male', 'Female', 'Prefer not to say']} value={form.gender} onChange={v => set('gender', v)} />
+                  <RadioGroup label={t.apply.personal.gender} name="gender" options={t.apply.personal.genderOptions} value={form.gender} onChange={v => set('gender', v)} />
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <FieldLabel required>Phone Number</FieldLabel>
+                      <FieldLabel required>{t.apply.personal.phone}</FieldLabel>
                       <PhoneInput
                         value={form.phone}
                         onChange={(full: string, _n: string, _c: Country) => set('phone', full)}
@@ -356,12 +358,12 @@ export default function ApplyPage() {
                       />
                     </div>
                     <div>
-                      <FieldLabel required>Email Address</FieldLabel>
+                      <FieldLabel required>{t.apply.personal.email}</FieldLabel>
                       <Input type="email" placeholder="you@example.com" value={form.email} onChange={e => set('email', e.target.value)} required />
                     </div>
                   </div>
                   <div>
-                    <FieldLabel required>City / Country</FieldLabel>
+                    <FieldLabel required>{t.apply.personal.city}</FieldLabel>
                     <Input placeholder="Kampala, Uganda" value={form.city} onChange={e => set('city', e.target.value)} required />
                   </div>
                 </>
@@ -371,17 +373,17 @@ export default function ApplyPage() {
               {step === 2 && (
                 <>
                   <div>
-                    <FieldLabel required>Highest Level of Education Completed</FieldLabel>
+                    <FieldLabel required>{t.apply.education.level}</FieldLabel>
                     <Select value={form.education} onChange={e => set('education', e.target.value)} required>
                       <option value="">Select level…</option>
-                      {['High School', 'Diploma / Certificate', 'Undergraduate Degree', 'Graduate Degree', 'Other'].map(o => (
+                      {t.apply.education.educationOptions.map(o => (
                         <option key={o} value={o}>{o}</option>
                       ))}
                     </Select>
                   </div>
                   <div>
-                    <FieldLabel>Current Occupation (if any)</FieldLabel>
-                    <Input placeholder="e.g. Student, Freelancer, Employed…" value={form.occupation} onChange={e => set('occupation', e.target.value)} />
+                    <FieldLabel>{t.apply.education.occupation}</FieldLabel>
+                    <Input placeholder={t.apply.education.occupationPlaceholder} value={form.occupation} onChange={e => set('occupation', e.target.value)} />
                   </div>
                 </>
               )}
@@ -390,8 +392,8 @@ export default function ApplyPage() {
               {step === 3 && (
                 <>
                   <div>
-                    <FieldLabel required>Select the program(s) you wish to join</FieldLabel>
-                    <p className="text-xs text-gray-400 mb-4">You may select more than one.</p>
+                    <FieldLabel required>{t.apply.programs.title}</FieldLabel>
+                    <p className="text-xs text-gray-400 mb-4">{t.apply.programs.subtitle}</p>
                     <div className="grid sm:grid-cols-2 gap-3">
                       {PROGRAMS.map((p) => {
                         const checked = form.programs.includes(p);
@@ -414,7 +416,7 @@ export default function ApplyPage() {
                     </div>
                     {form.programs.includes('Other') && (
                       <div className="mt-4">
-                        <FieldLabel>Please specify</FieldLabel>
+                        <FieldLabel>{t.apply.programs.other}</FieldLabel>
                         <Input placeholder="Describe your program of interest…" value={form.programOther} onChange={e => set('programOther', e.target.value)} />
                       </div>
                     )}
@@ -426,12 +428,12 @@ export default function ApplyPage() {
               {step === 4 && (
                 <>
                   <div>
-                    <FieldLabel required>Why do you want to join this program?</FieldLabel>
-                    <Textarea rows={5} placeholder="Share your motivation, what drove you to apply…" value={form.whyJoin} onChange={e => set('whyJoin', e.target.value)} required />
+                    <FieldLabel required>{t.apply.motivation.whyJoin}</FieldLabel>
+                    <Textarea rows={5} placeholder={t.apply.motivation.whyJoinPlaceholder} value={form.whyJoin} onChange={e => set('whyJoin', e.target.value)} required />
                   </div>
                   <div>
-                    <FieldLabel required>What are your career goals or plans after completing this program?</FieldLabel>
-                    <Textarea rows={5} placeholder="Describe where you see yourself after training…" value={form.careerGoals} onChange={e => set('careerGoals', e.target.value)} required />
+                    <FieldLabel required>{t.apply.motivation.careerGoals}</FieldLabel>
+                    <Textarea rows={5} placeholder={t.apply.motivation.careerGoalsPlaceholder} value={form.careerGoals} onChange={e => set('careerGoals', e.target.value)} required />
                   </div>
                 </>
               )}
@@ -439,9 +441,9 @@ export default function ApplyPage() {
               {/* STEP 5 — Availability */}
               {step === 5 && (
                 <RadioGroup
-                  label="How many hours per week can you dedicate to the program?"
+                  label={t.apply.availability.hoursPerWeek}
                   name="hoursPerWeek"
-                  options={['2–4 Hours', '5–10 Hours', '10+ Hours']}
+                  options={t.apply.availability.hoursOptions}
                   value={form.hoursPerWeek}
                   onChange={v => set('hoursPerWeek', v)}
                 />
@@ -450,20 +452,11 @@ export default function ApplyPage() {
               {/* STEP 6 — Computer & Internet Access */}
               {step === 6 && (
                 <>
-                  <RadioGroup label="Do you have access to a computer?" name="hasComputer" options={['Yes', 'No']} value={form.hasComputer} onChange={v => set('hasComputer', v)} />
-                  {form.hasComputer === 'Yes' && (
-                    <RadioGroup label="Device Type" name="deviceType" options={['Laptop', 'Desktop', 'Tablet']} value={form.deviceType} onChange={v => set('deviceType', v)} />
+                  <RadioGroup label={t.apply.computer.hasComputer} name="hasComputer" options={[t.apply.computer.yes, t.apply.computer.no]} value={form.hasComputer} onChange={v => set('hasComputer', v)} />
+                  {form.hasComputer === t.apply.computer.yes && (
+                    <RadioGroup label={t.apply.computer.deviceType} name="deviceType" options={t.apply.computer.deviceOptions} value={form.deviceType} onChange={v => set('deviceType', v)} />
                   )}
-                  <RadioGroup label="Do you have reliable internet access?" name="hasInternet" options={['Yes', 'No']} value={form.hasInternet} onChange={v => set('hasInternet', v)} />
-                  <div>
-                    <FieldLabel>Referral Source (optional)</FieldLabel>
-                    <Select value={form.referralSource} onChange={e => set('referralSource', e.target.value)}>
-                      <option value="">How did you hear about us?</option>
-                      {['LinkedIn', 'Facebook', 'WhatsApp', 'Friend / Colleague', 'Google Search', 'Other Social Media'].map(o => (
-                        <option key={o} value={o}>{o}</option>
-                      ))}
-                    </Select>
-                  </div>
+                  <RadioGroup label={t.apply.computer.hasInternet} name="hasInternet" options={[t.apply.computer.yes, t.apply.computer.no]} value={form.hasInternet} onChange={v => set('hasInternet', v)} />
                 </>
               )}
 
@@ -479,24 +472,19 @@ export default function ApplyPage() {
               {step === 7 && (
                 <>
                   <div className="rounded-xl bg-blue-50 border border-blue-100 p-6">
-                    <h3 className="font-display font-bold text-gray-800 mb-2">Declaration</h3>
+                    <h3 className="font-display font-bold text-gray-800 mb-2">{t.apply.declaration.title}</h3>
                     <p className="text-sm text-gray-600 leading-relaxed">
-                      I confirm that the information provided above is true and accurate. I understand that submitting this application does not guarantee selection into the program. CyberteksIT reserves the right to verify all information provided.
+                      {t.apply.declaration.agree}
                     </p>
                   </div>
-                  {/* Summary */}
-                  <div className="rounded-xl border border-gray-200 p-5 space-y-2.5">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Application Summary</p>
-                    {[
-                      ['Name', form.fullName], ['Email', form.email], ['Phone', form.phone],
-                      ['Education', form.education], ['Program(s)', form.programs.join(', ') || '—'],
-                      ['Hours / Week', form.hoursPerWeek || '—'],
-                    ].map(([label, val]) => (
-                      <div key={label} className="flex justify-between text-sm">
-                        <span className="text-gray-400">{label}</span>
-                        <span className="font-medium text-gray-700 text-right max-w-[60%] truncate">{val}</span>
-                      </div>
-                    ))}
+                  <div>
+                    <FieldLabel>{t.apply.declaration.referral}</FieldLabel>
+                    <Select value={form.referralSource} onChange={e => set('referralSource', e.target.value)}>
+                      <option value="">—</option>
+                      {t.apply.declaration.referralOptions.map(o => (
+                        <option key={o} value={o}>{o}</option>
+                      ))}
+                    </Select>
                   </div>
                   <label className="flex items-start gap-3 cursor-pointer group">
                     <div
@@ -509,7 +497,7 @@ export default function ApplyPage() {
                       {form.declaration && <CheckCircle2 className="w-3 h-3 text-white" />}
                     </div>
                     <span className="text-sm text-gray-600">
-                      I have read the declaration above and confirm all information is true and accurate. <span className="text-primary-red">*</span>
+                      {t.apply.declaration.agree} <span className="text-primary-red">*</span>
                     </span>
                   </label>
                   {error && (
@@ -523,14 +511,14 @@ export default function ApplyPage() {
             </div>
 
             {/* Footer nav */}
-            <div className="flex items-center justify-between px-8 py-5 border-t border-gray-100 bg-gray-50/50">
+            <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 border-t border-gray-100 bg-gray-50/50">
               <button
                 type="button"
                 onClick={() => { setStepError(''); setStep(s => Math.max(1, s - 1)); }}
                 disabled={step === 1}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-all disabled:opacity-30 disabled:pointer-events-none"
               >
-                <ChevronLeft className="w-4 h-4" /> Previous
+                <ChevronLeft className="w-4 h-4" /> {t.apply.nav.back}
               </button>
 
               {step < STEPS.length ? (
@@ -539,7 +527,7 @@ export default function ApplyPage() {
                   onClick={goNext}
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary-blue text-white text-sm font-bold hover:bg-blue-900 transition-all shadow-sm shadow-blue-900/20"
                 >
-                  Next <ChevronRight className="w-4 h-4" />
+                  {t.apply.nav.next} <ChevronRight className="w-4 h-4" />
                 </button>
               ) : (
                 <button
@@ -548,7 +536,7 @@ export default function ApplyPage() {
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary-red text-white text-sm font-bold hover:bg-rose-700 transition-all shadow-sm shadow-red-900/20 disabled:opacity-70"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileCheck className="w-4 h-4" />}
-                  {loading ? 'Submitting…' : 'Submit Application'}
+                  {loading ? t.apply.nav.submitting : t.apply.nav.submit}
                 </button>
               )}
             </div>

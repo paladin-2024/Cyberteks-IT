@@ -71,7 +71,7 @@ export default function InvoicesPage() {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { label: d.collected, value: `UGX ${totalRevenue.toLocaleString()}`, color: 'text-green-600' },
           { label: d.pending,   value: `UGX ${totalPending.toLocaleString()}`, color: 'text-blue-600' },

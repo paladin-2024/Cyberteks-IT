@@ -28,7 +28,7 @@ export default function StatsSection() {
           {stats.map(({ value, label, sub }, i) => (
             <div
               key={label}
-              className="py-14 px-8 text-center group relative"
+              className="py-10 px-4 sm:py-14 sm:px-8 text-center group relative"
             >
               {/* Vertical divider (except last) */}
               {i < stats.length - 1 && (
@@ -39,7 +39,7 @@ export default function StatsSection() {
                 <div className="absolute bottom-0 left-1/4 right-1/4 h-px bg-white/10 lg:hidden" />
               )}
 
-              <p className="font-display text-5xl lg:text-[4rem] font-extrabold leading-none mb-1 text-white">
+              <p className="font-display text-3xl sm:text-5xl lg:text-[4rem] font-extrabold leading-none mb-1 text-white">
                 {value}
               </p>
               <div className="w-8 h-0.5 bg-[#E11D48] mx-auto my-3 rounded-full" />

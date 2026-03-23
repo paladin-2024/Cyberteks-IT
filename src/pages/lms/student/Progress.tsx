@@ -165,7 +165,7 @@ export default function ProgressPage() {
                   </div>
                 </div>
 
-                <div className="h-2 rounded-full bg-white/60 overflow-hidden">
+                <div className="h-2 rounded-full bg-card/60 overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all ${isCompleted ? 'bg-emerald-500' : palette.color}`}
                     style={{ width: `${progress}%` }}

@@ -20,7 +20,7 @@ interface Course {
 const STATUS_COLORS: Record<string, string> = {
   PUBLISHED: 'bg-emerald-100 text-emerald-700 border border-emerald-200',
   DRAFT:     'bg-amber-100 text-amber-700 border border-amber-200',
-  ARCHIVED:  'bg-slate-100 text-slate-500 border border-slate-200',
+  ARCHIVED:  'bg-slate-100 text-muted-foreground border border-border',
 };
 
 const categoryConfig: Record<string, { gradient: string; Icon: React.ElementType }> = {
@@ -103,7 +103,7 @@ export default function TeacherCoursesPage() {
                     : <Icon className="w-12 h-12 text-white/80" />
                   }
                   <div className="absolute top-3 right-3">
-                    <span className={`text-[11px] px-2.5 py-1 rounded-full font-semibold ${STATUS_COLORS[course.status] ?? 'bg-slate-100 text-slate-400'}`}>
+                    <span className={`text-[11px] px-2.5 py-1 rounded-full font-semibold ${STATUS_COLORS[course.status] ?? 'bg-slate-100 text-muted-foreground'}`}>
                       {course.status.charAt(0) + course.status.slice(1).toLowerCase()}
                     </span>
                   </div>
