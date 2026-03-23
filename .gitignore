@@ -22,6 +22,7 @@ npm-debug.log*
 
 # Prisma generated
 server/src/generated/
+  server/public/uploads/*
 
 # Next.js cache
 .next/
