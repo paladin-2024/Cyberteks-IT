@@ -45,7 +45,7 @@ const SECTIONS = [
     id: 'ip',
     title: '5. Intellectual Property',
     content: [
-      'All content on the Cyberteks-IT website and LMS — including text, images, course materials, videos, and software — is the property of Cyberteks-IT Limited and is protected by applicable copyright laws.',
+      'All content on the Cyberteks-IT website and LMS, including text, images, course materials, videos, and software, is the property of Cyberteks-IT Limited and is protected by applicable copyright laws.',
       'You may not reproduce, distribute, republish, or resell any course content without prior written permission from Cyberteks-IT.',
       'You retain ownership of any work or projects you create during training programmes, but grant Cyberteks-IT a non-exclusive licence to use them for educational and promotional purposes.',
     ],

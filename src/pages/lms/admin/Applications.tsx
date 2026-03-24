@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Search, X, ChevronDown, User, MapPin, GraduationCap, Clock, Laptop, Wifi, BookOpen } from 'lucide-react';
+import { Search, X, User, MapPin, GraduationCap, Clock, Laptop, Wifi, BookOpen, Copy, Check, KeyRound } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { api } from '@/lib/api';
 
@@ -24,6 +24,7 @@ interface Application {
   reviewedAt: string | null;
   createdAt: string;
   userId: string | null;
+  tempPassword: string | null;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -68,6 +69,7 @@ export default function ApplicationsPage() {
   const [selected, setSelected] = useState<Application | null>(null);
   const [reviewNotes, setReviewNotes] = useState('');
   const [updating, setUpdating] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const fetchApplications = useCallback(async () => {
     setLoading(true);
@@ -109,6 +111,13 @@ export default function ApplicationsPage() {
   const openReview = (app: Application) => {
     setSelected(app);
     setReviewNotes(app.reviewNotes ?? '');
+    setCopied(false);
+  };
+
+  const copyPassword = (pwd: string) => {
+    navigator.clipboard.writeText(pwd);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const totalCount = Object.values(statusCounts).reduce((a, b) => a + b, 0);
@@ -295,6 +304,39 @@ export default function ApplicationsPage() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Career Goals</p>
                 <p className="text-sm text-foreground leading-relaxed">{selected.careerGoals}</p>
               </div>
+
+              {/* Default password — shown to admin to send to student */}
+              {selected.tempPassword && (
+                <div className="rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-700 p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <KeyRound className="w-4 h-4 text-amber-600 shrink-0" />
+                    <p className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                      Default Password
+                    </p>
+                    {selected.userId && (
+                      <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold ml-auto">
+                        Account created
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 font-mono text-sm font-bold text-amber-900 dark:text-amber-200 bg-amber-100 dark:bg-amber-800/40 px-3 py-2 rounded-lg tracking-wider select-all">
+                      {selected.tempPassword}
+                    </code>
+                    <button
+                      type="button"
+                      onClick={() => copyPassword(selected.tempPassword!)}
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold transition-colors shrink-0"
+                    >
+                      {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copied ? 'Copied!' : 'Copy'}
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-amber-600 dark:text-amber-400 mt-2">
+                    Send this password to the student when accepting. They can change it after first login.
+                  </p>
+                </div>
+              )}
 
               {/* Review notes */}
               <div>

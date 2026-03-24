@@ -23,7 +23,7 @@ export default function LoginForm() {
     setLoading(true);
     try {
       await login(email, password);
-      // Redirect based on role — user is now set in context
+      // Redirect based on role, user is now set in context
       // Re-read from context after login
       const storedToken = localStorage.getItem('token');
       if (storedToken) {

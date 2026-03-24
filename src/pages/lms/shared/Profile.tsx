@@ -432,7 +432,7 @@ export default function ProfilePage() {
                     setImagePreviewError(false);
                   }}
                   label="Upload photo"
-                  hint="JPG, PNG, WebP — up to 3 MB"
+                  hint="JPG, PNG, WebP, up to 3 MB"
                 />
               </div>
 

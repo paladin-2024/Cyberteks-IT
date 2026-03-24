@@ -120,7 +120,7 @@ export default function AnalyticsPage() {
       icon: DollarSign,
       iconBg: 'bg-emerald-50',
       iconColor: 'text-emerald-600',
-      note: 'UGX — all time',
+      note: 'UGX, all time',
     },
     {
       label: 'Avg Completion',
@@ -166,7 +166,7 @@ export default function AnalyticsPage() {
         ))}
       </div>
 
-      {/* Row 1 — Enrollments + Program Distribution */}
+      {/* Row 1, Enrollments + Program Distribution */}
       <div className="grid lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 bg-card border border-border rounded-2xl p-6">
           <h2 className="font-display font-bold text-foreground text-base mb-1">Monthly Enrollments</h2>
@@ -194,11 +194,11 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Row 2 — Revenue + empty retention placeholder */}
+      {/* Row 2, Revenue + empty retention placeholder */}
       <div className="grid lg:grid-cols-2 gap-5">
         <div className="bg-card border border-border rounded-2xl p-6">
           <h2 className="font-display font-bold text-foreground text-base mb-1">Revenue (UGX)</h2>
-          <p className="text-xs text-muted-foreground mb-5">Monthly revenue — last 12 months</p>
+          <p className="text-xs text-muted-foreground mb-5">Monthly revenue, last 12 months</p>
           {revenueChart.some((d) => (d.revenue ?? 0) > 0) ? (
             <ChartBar data={revenueChart} dataKeys={['revenue']} xKey="month" ugxFormat height={230} />
           ) : (

@@ -17,7 +17,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T)
         setStoredValue(JSON.parse(item) as T);
       }
     } catch {
-      // localStorage unavailable or JSON parse error — use initial value
+      // localStorage unavailable or JSON parse error, use initial value
     }
   }, [key]);
 

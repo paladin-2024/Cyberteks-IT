@@ -232,7 +232,7 @@ export default function RightSidebar() {
       {!collapsed && (
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
 
-          {/* Stats — role-specific */}
+          {/* Stats, role-specific */}
           {(role === 'TEACHER' || role === 'STUDENT') && (
             <div>
               <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">

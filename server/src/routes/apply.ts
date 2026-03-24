@@ -61,6 +61,9 @@ router.post('/', async (req: Request, res: Response) => {
 
     const data = result.data;
 
+    // Generate default password at application time so admin can see it
+    const tempPassword = generateTempPassword();
+
     // Save application to DB
     const application = await prisma.application.create({
       data: {
@@ -83,6 +86,7 @@ router.post('/', async (req: Request, res: Response) => {
         hasInternet:       data.hasInternet,
         referralSource:    data.referralSource,
         socialHandle:      data.socialHandle,
+        tempPassword:      tempPassword,
         status:            'PENDING',
       },
     });
@@ -195,6 +199,7 @@ router.get('/', requireAuth, requireRole('ADMIN'), async (req: AuthRequest, res:
         reviewedAt: true,
         createdAt: true,
         userId: true,
+        tempPassword: true,
       },
     });
 
@@ -245,7 +250,8 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
         });
         userId = existing.id;
       } else {
-        const tempPassword = generateTempPassword();
+        // Use the password generated at application time (visible to admin in dashboard)
+        const tempPassword = (application as any).tempPassword ?? generateTempPassword();
         const hashedPassword = await bcrypt.hash(tempPassword, 12);
 
         const newUser = await prisma.user.create({

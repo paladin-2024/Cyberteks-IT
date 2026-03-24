@@ -125,7 +125,7 @@ export default function TopBar({ onMenuToggle }: TopBarProps) {
         {/* Divider */}
         <div className="w-px h-6 bg-border" />
 
-        {/* Avatar — click to go to profile */}
+        {/* Avatar, click to go to profile */}
         <Link
           to={profileHref}
           aria-label="My Profile"

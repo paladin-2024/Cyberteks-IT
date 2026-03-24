@@ -140,7 +140,7 @@ export default function AdminNewsletter() {
                   type="text"
                   value={subject}
                   onChange={e => setSubject(e.target.value)}
-                  placeholder="e.g. New Course Available — Web Design!"
+                  placeholder="e.g. New Course Available, Web Design!"
                   required
                   className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue"
                 />

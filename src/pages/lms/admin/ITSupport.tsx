@@ -488,7 +488,7 @@ export default function AdminITSupport() {
                       <input
                         value={replySubject}
                         onChange={(e) => setReplySubject(e.target.value)}
-                        placeholder={`Re: Your IT Support Request — Cyberteks-IT`}
+                        placeholder={`Re: Your IT Support Request, Cyberteks-IT`}
                         className="w-full text-sm rounded-xl border border-border bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#023064]/20"
                       />
                     </div>

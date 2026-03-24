@@ -9,7 +9,7 @@ const SERVICES = [
   {
     icon: Monitor,
     title: 'Remote IT Support',
-    desc: 'Instant remote assistance for computers, networks, software, and everything in between — available 24/7 across Uganda and East Africa.',
+    desc: 'Instant remote assistance for computers, networks, software, and everything in between, available 24/7 across Uganda and East Africa.',
     href: '/services/remote-it-support',
     image: '/assets/remote-it-support.jpg',
     tag: 'Most Popular',
@@ -39,7 +39,7 @@ const SERVICES = [
   {
     icon: Phone,
     title: 'VoIP Solutions',
-    desc: 'Cut your phone bill with scalable cloud-based VoIP telephony systems — perfect for call centres, offices, and multi-branch businesses.',
+    desc: 'Cut your phone bill with scalable cloud-based VoIP telephony systems, perfect for call centres, offices, and multi-branch businesses.',
     href: '/services/voip',
     image: '/assets/voip-solutions.jpg',
     tag: 'Communications',
@@ -49,7 +49,7 @@ const SERVICES = [
   {
     icon: Shield,
     title: 'Cybersecurity',
-    desc: 'End-to-end cybersecurity solutions — threat assessment, network hardening, endpoint protection, and staff awareness training to keep your business safe.',
+    desc: 'End-to-end cybersecurity solutions, threat assessment, network hardening, endpoint protection, and staff awareness training to keep your business safe.',
     href: '/services/remote-it-support',
     image: '/assets/cctv-surveillance-systems.jpg',
     tag: 'Security',
@@ -84,7 +84,7 @@ export default function ServicesPage() {
             Enterprise-Grade ICT Solutions for Africa
           </h1>
           <p className="text-blue-200 text-base sm:text-xl max-w-2xl mx-auto">
-            From remote IT support to cybersecurity and infrastructure — we deliver reliable technology solutions that keep your business running.
+            From remote IT support to cybersecurity and infrastructure, we deliver reliable technology solutions that keep your business running.
           </p>
         </div>
       </section>

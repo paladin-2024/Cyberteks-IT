@@ -24,7 +24,7 @@ export const translations = {
       title2: 'ICT Solutions',
       title3: 'for Every Business',
       description:
-        'From remote IT support to advanced security systems and ICT skills training — Cyberteks-IT delivers end-to-end technology solutions that power your growth.',
+        'From remote IT support to advanced security systems and ICT skills training, Cyberteks-IT delivers end-to-end technology solutions that power your growth.',
       exploreServices: 'Get Remote IT Support',
       applyTraining: 'Apply Now',
     },
@@ -86,13 +86,13 @@ export const translations = {
       support: {
         title: 'Need Remote IT Support?',
         description:
-          'Our certified technicians are available to diagnose and resolve your IT issues remotely — fast, secure, and reliable.',
+          'Our certified technicians are available to diagnose and resolve your IT issues remotely, fast, secure, and reliable.',
         button: 'Request IT Support',
       },
     },
     footer: {
       tagline:
-        'Future-ready ICT solutions delivered remotely and on-site — empowering businesses and individuals across Uganda and beyond.',
+        'Future-ready ICT solutions delivered remotely and on-site, empowering businesses and individuals across Uganda and beyond.',
       quickLinks: 'Quick Links',
       servicesTitle: 'Services',
       contactTitle: 'Contact Us',
@@ -110,7 +110,7 @@ export const translations = {
         badge: 'Our Story',
         title1: 'Built for the World.',
         title2: 'Rooted in Uganda.',
-        description: 'Cyberteks-IT is a dynamic ICT solutions provider delivering expert remote support to clients across the globe — anytime, anywhere.',
+        description: 'Cyberteks-IT is a dynamic ICT solutions provider delivering expert remote support to clients across the globe, anytime, anywhere.',
         stats: {
           clients: 'Clients Served',
           years: 'Years Experience',
@@ -123,18 +123,18 @@ export const translations = {
         title: 'What Drives Everything We Do',
         mission: {
           title: 'Our Mission',
-          text: 'To provide reliable, innovative, and secure ICT solutions that keep businesses running — anywhere, anytime. We combine cutting-edge technology, skilled professionals, and a customer-first approach to help businesses thrive in today\'s digital world.',
+          text: 'To provide reliable, innovative, and secure ICT solutions that keep businesses running, anywhere, anytime. We combine cutting-edge technology, skilled professionals, and a customer-first approach to help businesses thrive in today\'s digital world.',
         },
         vision: {
           title: 'Our Vision',
-          text: 'To be the world\'s leading Remote ICT Support Company, empowering businesses everywhere with technology that works — anytime and anywhere. Geography should never limit access to exceptional IT support.',
+          text: 'To be the world\'s leading Remote ICT Support Company, empowering businesses everywhere with technology that works, anytime and anywhere. Geography should never limit access to exceptional IT support.',
         },
       },
       whoWeAre: {
         badge: 'Who We Are',
         title: 'Your Trusted ICT Partner, Anytime. Anywhere.',
         desc1: 'Founded on the belief that geography should never limit access to exceptional IT support, Cyberteks-IT is a dynamic ICT solutions provider delivering expert remote support to clients across the globe.',
-        desc2: 'From remote IT troubleshooting to network infrastructure, cybersecurity, access control, CCTV surveillance, VOIP solutions, software development, AI integration, and ICT skilling — we deliver solutions that work seamlessly.',
+        desc2: 'From remote IT troubleshooting to network infrastructure, cybersecurity, access control, CCTV surveillance, VOIP solutions, software development, AI integration, and ICT skilling, we deliver solutions that work seamlessly.',
         bullets: [
           'Certified network engineers on staff',
           'Remote-first service delivery model',
@@ -147,11 +147,11 @@ export const translations = {
       journey: {
         badge: 'Our Journey',
         title: 'Key Milestones',
-        subtitle: 'From a small Kampala startup to a globally-capable ICT partner — here\'s how we got here.',
+        subtitle: 'From a small Kampala startup to a globally-capable ICT partner, here\'s how we got here.',
         milestones: [
           { year: '2019', event: 'Cyberteks-IT founded in Kampala with a mission to democratise ICT in Uganda.' },
           { year: '2020', event: 'Launched remote IT support services, helping SMEs navigate the pandemic with minimal disruption.' },
-          { year: '2021', event: 'Opened ICT skilling programme — first cohort of 30 students completed hands-on training.' },
+          { year: '2021', event: 'Opened ICT skilling programme, first cohort of 30 students completed hands-on training.' },
           { year: '2022', event: 'Expanded to CCTV, access control, and VoIP solutions serving clients across East Africa.' },
           { year: '2023', event: 'Crossed 100+ clients and launched our AI & Robotics training programme.' },
           { year: '2025', event: 'Launched the Cyberteks-IT LMS platform for online and hybrid training delivery.' },
@@ -162,12 +162,12 @@ export const translations = {
         title: 'Our Core Values',
         subtitle: 'These principles shape every decision, every service, and every relationship we build.',
         items: [
-          { title: 'Integrity', desc: 'We conduct every interaction with transparency and ethical standards — no shortcuts, no compromises.' },
+          { title: 'Integrity', desc: 'We conduct every interaction with transparency and ethical standards, no shortcuts, no compromises.' },
           { title: 'Customer-Centered', desc: 'Your needs are at the heart of everything we do. Every solution is built around your success.' },
           { title: 'Honesty', desc: 'Open communication and truthful advice guide every service we provide to our clients.' },
           { title: 'Innovation', desc: 'We embrace emerging technologies to provide smarter, faster, and more effective solutions.' },
           { title: 'Accessibility', desc: 'Geography should never be a barrier. We make world-class ICT support available everywhere.' },
-          { title: 'Excellence', desc: 'High standards in every project — from a single remote fix to a full enterprise infrastructure rollout.' },
+          { title: 'Excellence', desc: 'High standards in every project, from a single remote fix to a full enterprise infrastructure rollout.' },
         ],
       },
       team: {
@@ -181,12 +181,12 @@ export const translations = {
         subtitle: 'Cyberteks-IT operates across two core business segments, each delivering transformative impact in its own right.',
         industry: {
           title: 'Industry Solutions',
-          desc: 'Building secure, intelligent, and future-ready tech solutions for your organization — wherever you are in the world.',
+          desc: 'Building secure, intelligent, and future-ready tech solutions for your organization, wherever you are in the world.',
           link: 'Explore Services',
         },
         skilling: {
           title: 'Online Skilling',
-          desc: 'Transforming learners with practical, flexible, and future-ready digital skills — through our award-winning training programmes and LMS platform.',
+          desc: 'Transforming learners with practical, flexible, and future-ready digital skills, through our award-winning training programmes and LMS platform.',
           link: 'Apply to Train',
         },
       },
@@ -200,7 +200,7 @@ export const translations = {
       cta: {
         badge: "Let's Work Together",
         title: 'Ready to work with us?',
-        description: 'Get in touch today — whether you need IT support, a training programme, or a custom technology solution, we\'re here to help.',
+        description: 'Get in touch today, whether you need IT support, a training programme, or a custom technology solution, we\'re here to help.',
         contactBtn: 'Contact Us',
         servicesBtn: 'Our Services',
       },
@@ -210,7 +210,7 @@ export const translations = {
         badge: 'Contact Us',
         title1: "Let's Start a",
         title2: 'Conversation',
-        subtitle: 'Whether you need IT support, want to enrol in training, or have a business enquiry — our team in Kampala is ready to help.',
+        subtitle: 'Whether you need IT support, want to enrol in training, or have a business enquiry, our team in Kampala is ready to help.',
       },
       info: {
         title: "We're here to help you",
@@ -243,7 +243,7 @@ export const translations = {
         send: 'Send Message',
         sending: 'Sending…',
         successTitle: 'Message Sent!',
-        successDesc: "Thanks {name} — we'll reply to {email} within 2 business hours.",
+        successDesc: "Thanks {name}, we'll reply to {email} within 2 business hours.",
         sendAnother: 'Send Another Message',
         topics: [
           'Remote IT Support',
@@ -258,7 +258,7 @@ export const translations = {
       },
     },
     footer: {
-      tagline: 'Future-ready ICT solutions delivered remotely and on-site — empowering businesses and individuals across Uganda and beyond.',
+      tagline: 'Future-ready ICT solutions delivered remotely and on-site, empowering businesses and individuals across Uganda and beyond.',
       quickLinks: 'Quick Links',
       servicesTitle: 'Services',
       contactTitle: 'Contact Us',
@@ -273,9 +273,9 @@ export const translations = {
     whyChoose: {
       badge: 'Why Choose Us',
       title: 'Why Choose Cyberteks-IT?',
-      description: 'At Cyberteks-IT, great technology support should be accessible to every business — regardless of size or location. Our remote-first approach means we diagnose, troubleshoot, and resolve your IT challenges quickly and securely.',
+      description: 'At Cyberteks-IT, great technology support should be accessible to every business, regardless of size or location. Our remote-first approach means we diagnose, troubleshoot, and resolve your IT challenges quickly and securely.',
       reasons: [
-        'Remote-first approach — resolve issues without physical presence',
+        'Remote-first approach, resolve issues without physical presence',
         'Certified technicians available around the clock, every day',
         'Transparent pricing with no hidden charges',
         'Tailored solutions built for your specific needs',
@@ -283,7 +283,7 @@ export const translations = {
         'Integrity, customer focus, and honesty at our core',
       ],
       pillars: [
-        { title: 'Remote-First', desc: 'Resolve IT issues without costly on-site visits — faster and more affordable.' },
+        { title: 'Remote-First', desc: 'Resolve IT issues without costly on-site visits, faster and more affordable.' },
         { title: '24/7 Availability', desc: 'Certified technicians on call every hour, every day of the year.' },
         { title: 'Integrity First', desc: 'Transparent pricing, no hidden charges, and honest advice every time.' },
         { title: 'Tailored Solutions', desc: 'Every plan is built specifically around your business needs.' },
@@ -300,7 +300,7 @@ export const translations = {
     newsletter: {
       badge: 'Newsletter',
       title: 'Stay ahead in ICT & cybersecurity',
-      description: 'Get the latest tips, course updates, security alerts, and company news delivered straight to your inbox. No spam — unsubscribe any time.',
+      description: 'Get the latest tips, course updates, security alerts, and company news delivered straight to your inbox. No spam, unsubscribe any time.',
       placeholder: 'Enter your email address',
       subscribe: 'Subscribe',
       subscribed: "You're subscribed! Thanks for joining.",
@@ -313,7 +313,7 @@ export const translations = {
         badge: 'Join Our Team',
         title1: 'Build the Future',
         title2: 'of ICT in Africa',
-        description: 'Cyberteks-IT is growing — and we\'re looking for passionate, driven people who want to make a real difference in Uganda\'s digital landscape.',
+        description: 'Cyberteks-IT is growing, and we\'re looking for passionate, driven people who want to make a real difference in Uganda\'s digital landscape.',
         openRoles: 'Open Roles',
         stats: {
           openings: 'Open Positions',
@@ -324,20 +324,20 @@ export const translations = {
       perks: {
         badge: 'Life at Cyberteks-IT',
         title: 'Why Work With Us?',
-        subtitle: 'We build more than solutions — we build careers.',
+        subtitle: 'We build more than solutions, we build careers.',
         items: [
           { title: 'Career Growth', desc: 'Clear progression paths and mentorship from senior engineers with real-world enterprise experience.' },
-          { title: 'Free Training', desc: 'Full access to all Cyberteks-IT courses and professional certifications — completely on us.' },
+          { title: 'Free Training', desc: 'Full access to all Cyberteks-IT courses and professional certifications, completely on us.' },
           { title: 'Meaningful Work', desc: "Help shape Uganda's digital future with work that genuinely improves businesses and communities." },
-          { title: 'Great Team', desc: 'A small, driven team where your ideas get heard and implemented — not buried in bureaucracy.' },
-          { title: 'Cutting-Edge Tech', desc: 'Work with modern tools — cloud platforms, AI systems, enterprise networking, and security infrastructure.' },
-          { title: 'Remote-First', desc: 'Results-focused environment with genuine flexibility for remote and hybrid work — anywhere in the world.' },
+          { title: 'Great Team', desc: 'A small, driven team where your ideas get heard and implemented, not buried in bureaucracy.' },
+          { title: 'Cutting-Edge Tech', desc: 'Work with modern tools, cloud platforms, AI systems, enterprise networking, and security infrastructure.' },
+          { title: 'Remote-First', desc: 'Results-focused environment with genuine flexibility for remote and hybrid work, anywhere in the world.' },
         ],
       },
       openings: {
         badge: 'Open Positions',
         title: 'Current Openings',
-        subtitle: 'We hire for skills, mindset, and passion — not just credentials.',
+        subtitle: 'We hire for skills, mindset, and passion, not just credentials.',
         type: 'Full-time',
         apply: 'Apply Now',
         location: 'Location',
@@ -346,7 +346,7 @@ export const translations = {
       cta: {
         badge: "Don't see your role?",
         title: 'Send Us Your CV Anyway',
-        description: "We're always open to exceptional talent. If you believe you'd be a great fit for Cyberteks-IT, reach out — we'd love to hear from you.",
+        description: "We're always open to exceptional talent. If you believe you'd be a great fit for Cyberteks-IT, reach out, we'd love to hear from you.",
         email: 'Email Your CV',
         whatsapp: 'WhatsApp Us',
       },
@@ -355,12 +355,12 @@ export const translations = {
       hero: {
         badge: 'Our Services',
         title: 'ICT Solutions Built for Uganda and Beyond',
-        subtitle: 'From remote support to security systems and digital skills training — everything your business needs.',
+        subtitle: 'From remote support to security systems and digital skills training, everything your business needs.',
       },
       trust: {
         badge: 'Why Cyberteks-IT?',
         title: 'Trusted Across East Africa',
-        description: 'From small offices in Kampala to businesses in Kenya, Rwanda, and across the region — we deliver ICT solutions that work.',
+        description: 'From small offices in Kampala to businesses in Kenya, Rwanda, and across the region, we deliver ICT solutions that work.',
         stats: [
           { value: '5+', label: 'Years Experience' },
           { value: '100+', label: 'Clients Served' },
@@ -368,7 +368,7 @@ export const translations = {
           { value: '6', label: 'Core Services' },
         ],
         qualities: [
-          'Fast response — most IT issues resolved same day',
+          'Fast response, most IT issues resolved same day',
           'Certified engineers across all service areas',
           'Flexible on-site and remote delivery',
           'Transparent pricing with no hidden fees',
@@ -377,7 +377,7 @@ export const translations = {
       },
       cta: {
         title: "Not sure what you need?",
-        description: "Our team will assess your setup and recommend the right solution — free of charge.",
+        description: "Our team will assess your setup and recommend the right solution, free of charge.",
         button: 'Talk to an Expert',
       },
       features: ['Same-day response', 'No travel costs', 'Covers all devices', 'HD & 4K cameras', 'Night vision', 'Remote monitoring', 'Biometric readers', 'Attendance tracking', 'Multi-door control', 'Up to 80% savings', 'Multi-branch support', 'Call recording', '11 programmes', 'Certificate awarded', 'Flexible schedule', 'Custom-built apps', 'AI integration', 'Dedicated support'],
@@ -386,7 +386,7 @@ export const translations = {
       hero: {
         badge: 'Products',
         title: 'ICT Hardware & Equipment',
-        subtitle: 'Genuine products, competitive prices, and expert installation — all in one place.',
+        subtitle: 'Genuine products, competitive prices, and expert installation, all in one place.',
       },
       cta: {
         title: 'Need a Quote or Custom Order?',
@@ -403,7 +403,7 @@ export const translations = {
         badge: 'Security Tips',
         title1: 'Stay Safe',
         title2: 'Online',
-        subtitle: 'Practical cybersecurity advice for individuals and businesses in Uganda — protect yourself before it\'s too late.',
+        subtitle: 'Practical cybersecurity advice for individuals and businesses in Uganda, protect yourself before it\'s too late.',
       },
       cta: {
         title: 'Need Professional Cybersecurity Help?',
@@ -419,7 +419,7 @@ export const translations = {
         {
           title: 'Phishing Emails',
           description: 'Phishing is when criminals send fake emails pretending to be banks, MTN, Airtel, or trusted companies to steal your password or money.',
-          checklist: ["Never click links in unexpected emails asking for your password", "Check the sender's actual email address carefully", 'Go directly to the website — never through email links', 'Enable 2-factor authentication on all accounts'],
+          checklist: ["Never click links in unexpected emails asking for your password", "Check the sender's actual email address carefully", 'Go directly to the website, never through email links', 'Enable 2-factor authentication on all accounts'],
         },
         {
           title: 'Weak Passwords',
@@ -443,7 +443,7 @@ export const translations = {
         },
         {
           title: 'Device Security',
-          description: 'Physical device access is often overlooked — a lost or stolen laptop can expose everything.',
+          description: 'Physical device access is often overlooked, a lost or stolen laptop can expose everything.',
           checklist: ['Always lock your screen when stepping away', 'Enable full disk encryption (BitLocker on Windows)', 'Use a strong PIN or biometric login', 'Never leave devices unattended in public'],
         },
         {
@@ -568,9 +568,9 @@ export const translations = {
         errorsPlaceholder: 'Copy/paste any error messages here...',
         urgency: 'Urgency Level',
         urgencyOptions: [
-          { value: 'low', label: 'Low — Not urgent, can wait' },
-          { value: 'medium', label: 'Medium — Affecting my work' },
-          { value: 'high', label: 'High — Critical, I need help now' },
+          { value: 'low', label: 'Low, Not urgent, can wait' },
+          { value: 'medium', label: 'Medium, Affecting my work' },
+          { value: 'high', label: 'High, Critical, I need help now' },
         ],
       },
       remoteAccess: {
@@ -610,8 +610,8 @@ export const translations = {
           badge: 'What We Install',
           title: 'Complete CCTV Solutions',
           items: [
-            { title: 'HD & 4K Camera Installation', desc: 'High-definition cameras for crystal-clear footage, day or night — capturing every detail with precision.' },
-            { title: 'Indoor & Outdoor Systems', desc: 'Weatherproof cameras built for any environment — offices, warehouses, parking lots, and open compounds.' },
+            { title: 'HD & 4K Camera Installation', desc: 'High-definition cameras for crystal-clear footage, day or night, capturing every detail with precision.' },
+            { title: 'Indoor & Outdoor Systems', desc: 'Weatherproof cameras built for any environment, offices, warehouses, parking lots, and open compounds.' },
             { title: 'Remote Viewing & Mobile Access', desc: 'Monitor your property from anywhere using your smartphone or laptop via a secure mobile app.' },
             { title: 'Motion Detection & Smart Alerts', desc: 'AI-powered motion detection with real-time alerts sent directly to your phone the moment activity is detected.' },
             { title: 'DVR/NVR Storage Systems', desc: 'Secure local and cloud-based recording systems for reliable footage retention and easy playback.' },
@@ -639,7 +639,7 @@ export const translations = {
           badge: 'Remote IT Support',
           title1: 'Fast, Reliable',
           title2: 'Remote IT Support',
-          subtitle: 'Expert technicians ready to diagnose and fix your IT problems — no travel required, no waiting.',
+          subtitle: 'Expert technicians ready to diagnose and fix your IT problems, no travel required, no waiting.',
         },
         services: {
           badge: 'What We Fix',
@@ -656,7 +656,7 @@ export const translations = {
           badge: 'Access Control',
           title1: 'Smart Access',
           title2: 'Control Systems',
-          subtitle: 'Biometric, card, and face recognition systems to secure your premises and manage staff access — installed and configured by experts.',
+          subtitle: 'Biometric, card, and face recognition systems to secure your premises and manage staff access, installed and configured by experts.',
         },
         cta: {
           title: 'Secure Your Premises Today',
@@ -669,7 +669,7 @@ export const translations = {
           badge: 'VoIP Solutions',
           title1: 'Modern Business',
           title2: 'Communication',
-          subtitle: 'Cloud-based VoIP telephone systems that reduce costs and improve collaboration — perfect for offices, call centres, and multi-branch businesses.',
+          subtitle: 'Cloud-based VoIP telephone systems that reduce costs and improve collaboration, perfect for offices, call centres, and multi-branch businesses.',
         },
         cta: {
           title: 'Cut Your Phone Bills Today',
@@ -682,7 +682,7 @@ export const translations = {
           badge: 'ICT Skills Training',
           title1: 'Launch Your',
           title2: 'Digital Career',
-          subtitle: 'Industry-aligned ICT training programmes — online and in-person — designed to equip you with skills that employers demand.',
+          subtitle: 'Industry-aligned ICT training programmes, online and in-person, designed to equip you with skills that employers demand.',
         },
         sessions: {
           badge: 'Real Training Sessions',
@@ -700,7 +700,7 @@ export const translations = {
           badge: 'Software-Driven Digitization',
           title1: 'Custom Software',
           title2: '& AI Solutions',
-          subtitle: 'Bespoke software development and AI-powered tools built for your business — from web apps to intelligent automation.',
+          subtitle: 'Bespoke software development and AI-powered tools built for your business, from web apps to intelligent automation.',
         },
         cta: {
           title: 'Have a Project in Mind?',
@@ -974,7 +974,7 @@ export const translations = {
       title2: 'Prêtes pour',
       title3: "l'Avenir",
       description:
-        "Du support IT à distance aux systèmes de sécurité avancés et à la formation TIC — Cyberteks-IT offre des solutions technologiques complètes pour propulser votre croissance.",
+        "Du support IT à distance aux systèmes de sécurité avancés et à la formation TIC, Cyberteks-IT offre des solutions technologiques complètes pour propulser votre croissance.",
       exploreServices: 'Support IT à Distance',
       applyTraining: 'Postuler Maintenant',
     },
@@ -1042,7 +1042,7 @@ export const translations = {
     },
     footer: {
       tagline:
-        "Solutions TIC prêtes pour l'avenir livrées à distance et sur site — autonomisant les entreprises et les particuliers en Ouganda.",
+        "Solutions TIC prêtes pour l'avenir livrées à distance et sur site, autonomisant les entreprises et les particuliers en Ouganda.",
       quickLinks: 'Liens Rapides',
       servicesTitle: 'Services',
       contactTitle: 'Nous Contacter',
@@ -1060,7 +1060,7 @@ export const translations = {
         badge: 'Notre Histoire',
         title1: 'Construit pour le Monde.',
         title2: "Enraciné en Ouganda.",
-        description: "Cyberteks-IT est un fournisseur dynamique de solutions TIC offrant une assistance à distance experte à des clients du monde entier — partout, à tout moment.",
+        description: "Cyberteks-IT est un fournisseur dynamique de solutions TIC offrant une assistance à distance experte à des clients du monde entier, partout, à tout moment.",
         stats: {
           clients: 'Clients Servis',
           years: "Années d'Expérience",
@@ -1073,11 +1073,11 @@ export const translations = {
         title: 'Ce Qui Motive Tout Ce Que Nous Faisons',
         mission: {
           title: 'Notre Mission',
-          text: "Fournir des solutions TIC fiables, innovantes et sécurisées qui maintiennent les entreprises opérationnelles — partout, à tout moment. Nous combinons une technologie de pointe, des professionnels qualifiés et une approche orientée client.",
+          text: "Fournir des solutions TIC fiables, innovantes et sécurisées qui maintiennent les entreprises opérationnelles, partout, à tout moment. Nous combinons une technologie de pointe, des professionnels qualifiés et une approche orientée client.",
         },
         vision: {
           title: 'Notre Vision',
-          text: "Être la première entreprise mondiale de support TIC à distance, dotant les entreprises de technologies efficaces — partout et à tout moment. La géographie ne devrait jamais limiter l'accès à un support informatique exceptionnel.",
+          text: "Être la première entreprise mondiale de support TIC à distance, dotant les entreprises de technologies efficaces, partout et à tout moment. La géographie ne devrait jamais limiter l'accès à un support informatique exceptionnel.",
         },
       },
       whoWeAre: {
@@ -1097,11 +1097,11 @@ export const translations = {
       journey: {
         badge: 'Notre Parcours',
         title: 'Jalons Clés',
-        subtitle: "D'une petite startup à Kampala à un partenaire TIC de portée mondiale — voici notre histoire.",
+        subtitle: "D'une petite startup à Kampala à un partenaire TIC de portée mondiale, voici notre histoire.",
         milestones: [
           { year: '2019', event: "Cyberteks-IT fondé à Kampala avec la mission de démocratiser les TIC en Ouganda." },
           { year: '2020', event: "Lancement des services de support IT à distance, aidant les PME à traverser la pandémie." },
-          { year: '2021', event: "Ouverture du programme de formation TIC — première promotion de 30 étudiants formés." },
+          { year: '2021', event: "Ouverture du programme de formation TIC, première promotion de 30 étudiants formés." },
           { year: '2022', event: "Expansion vers les solutions CCTV, contrôle d'accès et VoIP pour des clients en Afrique de l'Est." },
           { year: '2023', event: "Dépassement de 100+ clients et lancement du programme de formation en IA & Robotique." },
           { year: '2025', event: "Lancement de la plateforme Cyberteks-IT LMS pour la formation en ligne et hybride." },
@@ -1112,31 +1112,31 @@ export const translations = {
         title: 'Nos Valeurs Fondamentales',
         subtitle: 'Ces principes guident chaque décision, chaque service et chaque relation que nous construisons.',
         items: [
-          { title: 'Intégrité', desc: "Nous menons chaque interaction avec transparence et éthique — sans raccourcis, sans compromis." },
+          { title: 'Intégrité', desc: "Nous menons chaque interaction avec transparence et éthique, sans raccourcis, sans compromis." },
           { title: 'Centré sur le Client', desc: "Vos besoins sont au cœur de tout ce que nous faisons. Chaque solution est construite autour de votre succès." },
           { title: 'Honnêteté', desc: "Une communication ouverte et des conseils sincères guident chaque service que nous fournissons." },
           { title: 'Innovation', desc: "Nous adoptons les technologies émergentes pour fournir des solutions plus intelligentes et efficaces." },
           { title: 'Accessibilité', desc: "La géographie ne devrait jamais être un obstacle. Nous rendons le support TIC mondial accessible partout." },
-          { title: 'Excellence', desc: "Des normes élevées dans chaque projet — d'une simple correction à distance à un déploiement d'infrastructure complet." },
+          { title: 'Excellence', desc: "Des normes élevées dans chaque projet, d'une simple correction à distance à un déploiement d'infrastructure complet." },
         ],
       },
       team: {
         badge: 'Direction',
         title: "Rencontrez l'Équipe",
-        subtitle: "Les personnes derrière Cyberteks-IT — des professionnels passionnés engagés à transformer l'Afrique par la technologie.",
+        subtitle: "Les personnes derrière Cyberteks-IT, des professionnels passionnés engagés à transformer l'Afrique par la technologie.",
       },
       business: {
         badge: 'Ce Que Nous Faisons',
         title: 'Deux Piliers. Une Mission.',
-        subtitle: "Cyberteks-IT opère dans deux segments d'activité principaux — chacun ayant un impact transformateur.",
+        subtitle: "Cyberteks-IT opère dans deux segments d'activité principaux, chacun ayant un impact transformateur.",
         industry: {
           title: 'Solutions Industrielles',
-          desc: "Construire des solutions technologiques sécurisées, intelligentes et prêtes pour l'avenir pour votre organisation — où que vous soyez dans le monde.",
+          desc: "Construire des solutions technologiques sécurisées, intelligentes et prêtes pour l'avenir pour votre organisation, où que vous soyez dans le monde.",
           link: 'Explorer les Services',
         },
         skilling: {
           title: 'Formation en Ligne',
-          desc: "Transformer les apprenants avec des compétences numériques pratiques, flexibles et prêtes pour l'avenir — grâce à nos programmes de formation primés.",
+          desc: "Transformer les apprenants avec des compétences numériques pratiques, flexibles et prêtes pour l'avenir, grâce à nos programmes de formation primés.",
           link: 'Postuler à la Formation',
         },
       },
@@ -1150,7 +1150,7 @@ export const translations = {
       cta: {
         badge: 'Travaillons Ensemble',
         title: 'Prêt à travailler avec nous ?',
-        description: "Contactez-nous aujourd'hui — que vous ayez besoin d'un support IT, d'un programme de formation ou d'une solution technologique sur mesure.",
+        description: "Contactez-nous aujourd'hui, que vous ayez besoin d'un support IT, d'un programme de formation ou d'une solution technologique sur mesure.",
         contactBtn: 'Nous Contacter',
         servicesBtn: 'Nos Services',
       },
@@ -1160,7 +1160,7 @@ export const translations = {
         badge: 'Nous Contacter',
         title1: 'Commençons une',
         title2: 'Conversation',
-        subtitle: "Que vous ayez besoin d'un support IT, souhaitiez vous inscrire à une formation ou ayez une demande commerciale — notre équipe à Kampala est prête à vous aider.",
+        subtitle: "Que vous ayez besoin d'un support IT, souhaitiez vous inscrire à une formation ou ayez une demande commerciale, notre équipe à Kampala est prête à vous aider.",
       },
       info: {
         title: 'Nous sommes là pour vous aider',
@@ -1193,7 +1193,7 @@ export const translations = {
         send: 'Envoyer le Message',
         sending: 'Envoi…',
         successTitle: 'Message Envoyé !',
-        successDesc: "Merci {name} — nous répondrons à {email} dans les 2 heures ouvrables.",
+        successDesc: "Merci {name}, nous répondrons à {email} dans les 2 heures ouvrables.",
         sendAnother: 'Envoyer un Autre Message',
         topics: [
           'Support IT à Distance',
@@ -1208,7 +1208,7 @@ export const translations = {
       },
     },
     footer: {
-      tagline: "Solutions TIC prêtes pour l'avenir livrées à distance et sur site — autonomisant les entreprises et les particuliers en Ouganda.",
+      tagline: "Solutions TIC prêtes pour l'avenir livrées à distance et sur site, autonomisant les entreprises et les particuliers en Ouganda.",
       quickLinks: 'Liens Rapides',
       servicesTitle: 'Services',
       contactTitle: 'Nous Contacter',
@@ -1223,9 +1223,9 @@ export const translations = {
     whyChoose: {
       badge: 'Pourquoi Nous Choisir',
       title: 'Pourquoi Choisir Cyberteks-IT ?',
-      description: "Chez Cyberteks-IT, un excellent support technologique doit être accessible à toutes les entreprises — quelle que soit leur taille ou leur localisation. Notre approche axée sur le télétravail signifie que nous diagnostiquons, dépannons et résolvons vos défis IT rapidement et en toute sécurité.",
+      description: "Chez Cyberteks-IT, un excellent support technologique doit être accessible à toutes les entreprises, quelle que soit leur taille ou leur localisation. Notre approche axée sur le télétravail signifie que nous diagnostiquons, dépannons et résolvons vos défis IT rapidement et en toute sécurité.",
       reasons: [
-        "Approche à distance — résoudre les problèmes sans présence physique",
+        "Approche à distance, résoudre les problèmes sans présence physique",
         "Techniciens certifiés disponibles 24h/24, 7j/7",
         "Tarification transparente sans frais cachés",
         "Solutions sur mesure construites pour vos besoins spécifiques",
@@ -1233,7 +1233,7 @@ export const translations = {
         "Intégrité, orientation client et honnêteté au cœur de notre métier",
       ],
       pillars: [
-        { title: 'Télétravail Avant Tout', desc: "Résolvez les problèmes IT sans visites coûteuses sur site — plus rapide et plus abordable." },
+        { title: 'Télétravail Avant Tout', desc: "Résolvez les problèmes IT sans visites coûteuses sur site, plus rapide et plus abordable." },
         { title: 'Disponibilité 24h/24', desc: "Techniciens certifiés disponibles chaque heure, chaque jour de l'année." },
         { title: "L'Intégrité d'Abord", desc: "Tarification transparente, pas de frais cachés, et conseils honnêtes à chaque fois." },
         { title: 'Solutions Sur Mesure', desc: "Chaque plan est construit spécifiquement autour des besoins de votre entreprise." },
@@ -1250,7 +1250,7 @@ export const translations = {
     newsletter: {
       badge: 'Newsletter',
       title: 'Restez à la pointe des TIC et de la cybersécurité',
-      description: "Recevez les derniers conseils, mises à jour de cours, alertes de sécurité et actualités de l'entreprise directement dans votre boîte mail. Pas de spam — désabonnez-vous à tout moment.",
+      description: "Recevez les derniers conseils, mises à jour de cours, alertes de sécurité et actualités de l'entreprise directement dans votre boîte mail. Pas de spam, désabonnez-vous à tout moment.",
       placeholder: 'Entrez votre adresse email',
       subscribe: "S'abonner",
       subscribed: 'Vous êtes abonné(e) ! Merci de nous avoir rejoints.',
@@ -1263,7 +1263,7 @@ export const translations = {
         badge: 'Rejoignez Notre Équipe',
         title1: "Construire l'Avenir",
         title2: "des TIC en Afrique",
-        description: "Cyberteks-IT est en pleine croissance — et nous recherchons des personnes passionnées et motivées qui souhaitent faire une réelle différence dans le paysage numérique ougandais.",
+        description: "Cyberteks-IT est en pleine croissance, et nous recherchons des personnes passionnées et motivées qui souhaitent faire une réelle différence dans le paysage numérique ougandais.",
         openRoles: 'Postes Ouverts',
         stats: {
           openings: 'Postes Disponibles',
@@ -1274,20 +1274,20 @@ export const translations = {
       perks: {
         badge: 'La Vie chez Cyberteks-IT',
         title: 'Pourquoi Travailler Avec Nous ?',
-        subtitle: 'Nous construisons plus que des solutions — nous construisons des carrières.',
+        subtitle: 'Nous construisons plus que des solutions, nous construisons des carrières.',
         items: [
           { title: 'Évolution de Carrière', desc: "Des voies de progression claires et du mentorat d'ingénieurs seniors avec une expérience en entreprise." },
-          { title: 'Formation Gratuite', desc: "Accès complet à tous les cours Cyberteks-IT et certifications professionnelles — entièrement à notre charge." },
+          { title: 'Formation Gratuite', desc: "Accès complet à tous les cours Cyberteks-IT et certifications professionnelles, entièrement à notre charge." },
           { title: 'Travail Significatif', desc: "Contribuez à l'avenir numérique de l'Ouganda avec un travail qui améliore réellement les entreprises et les communautés." },
-          { title: 'Grande Équipe', desc: "Une petite équipe dynamique où vos idées sont entendues et mises en œuvre — sans bureaucratie excessive." },
-          { title: 'Technologie de Pointe', desc: "Travaillez avec des outils modernes — plateformes cloud, systèmes IA, réseaux d'entreprise et infrastructure de sécurité." },
-          { title: 'Télétravail Avant Tout', desc: "Environnement axé sur les résultats avec une flexibilité réelle pour le télétravail et le travail hybride — partout dans le monde." },
+          { title: 'Grande Équipe', desc: "Une petite équipe dynamique où vos idées sont entendues et mises en œuvre, sans bureaucratie excessive." },
+          { title: 'Technologie de Pointe', desc: "Travaillez avec des outils modernes, plateformes cloud, systèmes IA, réseaux d'entreprise et infrastructure de sécurité." },
+          { title: 'Télétravail Avant Tout', desc: "Environnement axé sur les résultats avec une flexibilité réelle pour le télétravail et le travail hybride, partout dans le monde." },
         ],
       },
       openings: {
         badge: 'Postes Ouverts',
         title: 'Postes Actuels',
-        subtitle: "Nous recrutons pour les compétences, l'état d'esprit et la passion — pas seulement les diplômes.",
+        subtitle: "Nous recrutons pour les compétences, l'état d'esprit et la passion, pas seulement les diplômes.",
         type: 'Temps Plein',
         apply: 'Postuler Maintenant',
         location: 'Lieu',
@@ -1296,7 +1296,7 @@ export const translations = {
       cta: {
         badge: 'Vous ne voyez pas votre poste ?',
         title: 'Envoyez-Nous Votre CV Quand Même',
-        description: "Nous sommes toujours ouverts aux talents exceptionnels. Si vous pensez correspondre à Cyberteks-IT, contactez-nous — nous serions ravis de vous entendre.",
+        description: "Nous sommes toujours ouverts aux talents exceptionnels. Si vous pensez correspondre à Cyberteks-IT, contactez-nous, nous serions ravis de vous entendre.",
         email: 'Envoyer Votre CV par Email',
         whatsapp: 'Nous Contacter via WhatsApp',
       },
@@ -1305,12 +1305,12 @@ export const translations = {
       hero: {
         badge: 'Nos Services',
         title: "Solutions TIC Construites pour l'Ouganda et Au-delà",
-        subtitle: "Du support à distance aux systèmes de sécurité et à la formation numérique — tout ce dont votre entreprise a besoin.",
+        subtitle: "Du support à distance aux systèmes de sécurité et à la formation numérique, tout ce dont votre entreprise a besoin.",
       },
       trust: {
         badge: 'Pourquoi Cyberteks-IT ?',
         title: "Approuvé dans toute l'Afrique de l'Est",
-        description: "Des petits bureaux à Kampala aux entreprises au Kenya, au Rwanda et dans toute la région — nous livrons des solutions TIC qui fonctionnent.",
+        description: "Des petits bureaux à Kampala aux entreprises au Kenya, au Rwanda et dans toute la région, nous livrons des solutions TIC qui fonctionnent.",
         stats: [
           { value: '5+', label: "Années d'Expérience" },
           { value: '100+', label: 'Clients Servis' },
@@ -1318,7 +1318,7 @@ export const translations = {
           { value: '6', label: 'Services Principaux' },
         ],
         qualities: [
-          "Réponse rapide — la plupart des problèmes IT résolus le jour même",
+          "Réponse rapide, la plupart des problèmes IT résolus le jour même",
           "Ingénieurs certifiés dans tous les domaines de service",
           "Prestation flexible sur site et à distance",
           "Tarification transparente sans frais cachés",
@@ -1327,7 +1327,7 @@ export const translations = {
       },
       cta: {
         title: "Vous ne savez pas ce dont vous avez besoin ?",
-        description: "Notre équipe évaluera votre configuration et recommandera la bonne solution — gratuitement.",
+        description: "Notre équipe évaluera votre configuration et recommandera la bonne solution, gratuitement.",
         button: 'Parler à un Expert',
       },
       features: ['Réponse le jour même', 'Pas de frais de déplacement', 'Couvre tous les appareils', 'Caméras HD & 4K', 'Vision nocturne', 'Surveillance à distance', 'Lecteurs biométriques', 'Suivi des présences', 'Contrôle multi-portes', "Jusqu'à 80% d'économies", 'Support multi-sites', 'Enregistrement des appels', '11 programmes', 'Certificat délivré', 'Horaires flexibles', 'Applications sur mesure', 'Intégration IA', 'Support dédié'],
@@ -1336,7 +1336,7 @@ export const translations = {
       hero: {
         badge: 'Produits',
         title: 'Matériel & Équipements TIC',
-        subtitle: 'Produits authentiques, prix compétitifs et installation experte — tout en un seul endroit.',
+        subtitle: 'Produits authentiques, prix compétitifs et installation experte, tout en un seul endroit.',
       },
       cta: {
         title: 'Besoin d\'un Devis ou d\'une Commande Personnalisée ?',
@@ -1353,7 +1353,7 @@ export const translations = {
         badge: 'Conseils de Sécurité',
         title1: 'Restez en Sécurité',
         title2: 'en Ligne',
-        subtitle: "Conseils pratiques en cybersécurité pour les particuliers et les entreprises en Ouganda — protégez-vous avant qu'il ne soit trop tard.",
+        subtitle: "Conseils pratiques en cybersécurité pour les particuliers et les entreprises en Ouganda, protégez-vous avant qu'il ne soit trop tard.",
       },
       cta: {
         title: 'Besoin d\'Aide Professionnelle en Cybersécurité ?',
@@ -1369,7 +1369,7 @@ export const translations = {
         {
           title: 'Emails de Phishing',
           description: "Le phishing consiste à envoyer de faux emails prétendant être des banques ou des entreprises de confiance pour voler votre mot de passe ou votre argent.",
-          checklist: ["Ne cliquez jamais sur des liens dans des emails inattendus demandant votre mot de passe", "Vérifiez attentivement l'adresse email réelle de l'expéditeur", "Accédez directement au site — jamais via des liens d'email", "Activez l'authentification à deux facteurs sur tous les comptes"],
+          checklist: ["Ne cliquez jamais sur des liens dans des emails inattendus demandant votre mot de passe", "Vérifiez attentivement l'adresse email réelle de l'expéditeur", "Accédez directement au site, jamais via des liens d'email", "Activez l'authentification à deux facteurs sur tous les comptes"],
         },
         {
           title: 'Mots de Passe Faibles',
@@ -1393,7 +1393,7 @@ export const translations = {
         },
         {
           title: 'Sécurité des Appareils',
-          description: "L'accès physique aux appareils est souvent négligé — un ordinateur portable perdu ou volé peut tout exposer.",
+          description: "L'accès physique aux appareils est souvent négligé, un ordinateur portable perdu ou volé peut tout exposer.",
           checklist: ["Verrouillez toujours votre écran quand vous vous éloignez", "Activez le chiffrement complet du disque (BitLocker sur Windows)", "Utilisez un PIN fort ou une connexion biométrique", "Ne laissez jamais vos appareils sans surveillance en public"],
         },
         {
@@ -1518,9 +1518,9 @@ export const translations = {
         errorsPlaceholder: "Copiez/collez les messages d'erreur ici...",
         urgency: "Niveau d'Urgence",
         urgencyOptions: [
-          { value: 'low', label: 'Faible — Pas urgent, peut attendre' },
-          { value: 'medium', label: 'Moyen — Cela affecte mon travail' },
-          { value: 'high', label: "Élevé — Critique, j'ai besoin d'aide maintenant" },
+          { value: 'low', label: 'Faible, Pas urgent, peut attendre' },
+          { value: 'medium', label: 'Moyen, Cela affecte mon travail' },
+          { value: 'high', label: "Élevé, Critique, j'ai besoin d'aide maintenant" },
         ],
       },
       remoteAccess: {
@@ -1560,8 +1560,8 @@ export const translations = {
           badge: 'Ce Que Nous Installons',
           title: 'Solutions CCTV Complètes',
           items: [
-            { title: 'Installation Caméras HD & 4K', desc: "Caméras haute définition pour des images cristallines, jour et nuit — capturant chaque détail avec précision." },
-            { title: 'Systèmes Intérieurs & Extérieurs', desc: "Caméras résistantes aux intempéries pour tout environnement — bureaux, entrepôts, parkings et cours." },
+            { title: 'Installation Caméras HD & 4K', desc: "Caméras haute définition pour des images cristallines, jour et nuit, capturant chaque détail avec précision." },
+            { title: 'Systèmes Intérieurs & Extérieurs', desc: "Caméras résistantes aux intempéries pour tout environnement, bureaux, entrepôts, parkings et cours." },
             { title: 'Visualisation à Distance & Accès Mobile', desc: "Surveillez votre propriété depuis n'importe où via votre smartphone ou laptop grâce à une application mobile sécurisée." },
             { title: 'Détection de Mouvement & Alertes Intelligentes', desc: "Détection de mouvement alimentée par IA avec alertes en temps réel envoyées directement sur votre téléphone." },
             { title: 'Systèmes de Stockage DVR/NVR', desc: "Systèmes d'enregistrement locaux et cloud sécurisés pour une conservation fiable des images et une lecture facile." },
@@ -1589,7 +1589,7 @@ export const translations = {
           badge: 'Support IT à Distance',
           title1: 'Support IT à Distance',
           title2: 'Rapide et Fiable',
-          subtitle: "Des techniciens experts prêts à diagnostiquer et résoudre vos problèmes IT — sans déplacement, sans attente.",
+          subtitle: "Des techniciens experts prêts à diagnostiquer et résoudre vos problèmes IT, sans déplacement, sans attente.",
         },
         services: {
           badge: 'Ce Que Nous Réparons',
@@ -1606,7 +1606,7 @@ export const translations = {
           badge: "Contrôle d'Accès",
           title1: "Systèmes de Contrôle",
           title2: "d'Accès Intelligents",
-          subtitle: "Systèmes biométriques, à carte et à reconnaissance faciale pour sécuriser vos locaux et gérer l'accès du personnel — installés et configurés par des experts.",
+          subtitle: "Systèmes biométriques, à carte et à reconnaissance faciale pour sécuriser vos locaux et gérer l'accès du personnel, installés et configurés par des experts.",
         },
         cta: {
           title: 'Sécurisez Vos Locaux Aujourd\'hui',
@@ -1619,7 +1619,7 @@ export const translations = {
           badge: 'Solutions VoIP',
           title1: 'Communication',
           title2: "d'Entreprise Moderne",
-          subtitle: "Systèmes téléphoniques VoIP basés sur le cloud qui réduisent les coûts et améliorent la collaboration — parfaits pour les bureaux, centres d'appels et entreprises multi-sites.",
+          subtitle: "Systèmes téléphoniques VoIP basés sur le cloud qui réduisent les coûts et améliorent la collaboration, parfaits pour les bureaux, centres d'appels et entreprises multi-sites.",
         },
         cta: {
           title: 'Réduisez Vos Factures Téléphoniques Aujourd\'hui',
@@ -1632,7 +1632,7 @@ export const translations = {
           badge: 'Formation en TIC',
           title1: 'Lancez Votre',
           title2: 'Carrière Numérique',
-          subtitle: "Programmes de formation TIC alignés sur l'industrie — en ligne et en présentiel — conçus pour vous équiper de compétences que les employeurs demandent.",
+          subtitle: "Programmes de formation TIC alignés sur l'industrie, en ligne et en présentiel, conçus pour vous équiper de compétences que les employeurs demandent.",
         },
         sessions: {
           badge: 'Vraies Sessions de Formation',
@@ -1650,7 +1650,7 @@ export const translations = {
           badge: 'Logiciels & IA',
           title1: 'Logiciels Sur Mesure',
           title2: '& Solutions IA',
-          subtitle: "Développement logiciel sur mesure et outils alimentés par l'IA construits pour votre entreprise — des applications web à l'automatisation intelligente.",
+          subtitle: "Développement logiciel sur mesure et outils alimentés par l'IA construits pour votre entreprise, des applications web à l'automatisation intelligente.",
         },
         cta: {
           title: 'Vous Avez un Projet en Tête ?',

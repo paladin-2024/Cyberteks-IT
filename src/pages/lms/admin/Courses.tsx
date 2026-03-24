@@ -459,7 +459,7 @@ export default function AdminCoursesPage() {
       {/* ── Edit Modal ────────────────────────────────────────────────────────── */}
       {editCourse && (
         <CourseModal
-          title={`Edit — ${editCourse.title}`}
+          title={`Edit, ${editCourse.title}`}
           form={editForm}
           setField={(k, v) => setEditForm((p) => ({ ...p, [k]: v }))}
           teachers={teachers}

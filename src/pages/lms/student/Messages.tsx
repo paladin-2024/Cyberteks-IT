@@ -184,7 +184,7 @@ export default function StudentMessagesPage() {
 
       <div className="bg-card border border-border rounded-2xl overflow-hidden flex h-[calc(100vh-10rem)] sm:h-[calc(100vh-12rem)]">
 
-        {/* Sidebar — full width on mobile (when mobileView==='list'), fixed width on desktop */}
+        {/* Sidebar, full width on mobile (when mobileView==='list'), fixed width on desktop */}
         <div className={`
           flex flex-col border-r border-border
           w-full md:w-72 lg:w-80 md:flex shrink-0
@@ -253,7 +253,7 @@ export default function StudentMessagesPage() {
           </div>
         </div>
 
-        {/* Chat area — full width on mobile (when mobileView==='chat') */}
+        {/* Chat area, full width on mobile (when mobileView==='chat') */}
         <div className={`
           flex-1 flex flex-col min-w-0
           ${mobileView === 'list' ? 'hidden md:flex' : 'flex'}

@@ -170,7 +170,7 @@ export default function App() {
           <Route path="profile" element={<Profile />} />
         </Route>
 
-        {/* Help Center — shared across all roles */}
+        {/* Help Center, shared across all roles */}
         <Route path="/help" element={<ProtectedRoute><LMSLayout /></ProtectedRoute>}>
           <Route index element={<HelpCenter />} />
         </Route>

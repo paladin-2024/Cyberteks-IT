@@ -186,7 +186,7 @@ export default function AdminNotificationsPage() {
                   <option value="">Select a user…</option>
                   {users.map(u => (
                     <option key={u.id} value={u.id}>
-                      {u.name} ({u.role.toLowerCase()}) — {u.email}
+                      {u.name} ({u.role.toLowerCase()}), {u.email}
                     </option>
                   ))}
                 </select>

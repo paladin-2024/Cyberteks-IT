@@ -22,7 +22,7 @@ const SERVICES = [
   {
     icon: Brain,
     title: 'AI & Machine Learning Solutions',
-    desc: 'Intelligent algorithms that learn from your data to predict outcomes, surface insights, and automate complex decisions — without constant human intervention.',
+    desc: 'Intelligent algorithms that learn from your data to predict outcomes, surface insights, and automate complex decisions, without constant human intervention.',
     tags: ['TensorFlow', 'PyTorch'],
   },
   {
@@ -60,7 +60,7 @@ const WHY = [
   {
     icon: Headphones,
     title: 'Post-Launch Support',
-    desc: '12 months of maintenance and support included in every engagement — we don\'t disappear at launch.',
+    desc: '12 months of maintenance and support included in every engagement, we don\'t disappear at launch.',
   },
   {
     icon: Cloud,
@@ -70,7 +70,7 @@ const WHY = [
   {
     icon: ShieldCheck,
     title: 'AI-First Mindset',
-    desc: 'We bake intelligence into every solution — from smart search to predictive analytics.',
+    desc: 'We bake intelligence into every solution, from smart search to predictive analytics.',
   },
 ];
 
@@ -174,7 +174,7 @@ export default function SoftwareAIPage() {
               Our Software &amp; AI Services
             </h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto leading-relaxed">
-              End-to-end digital solutions across the full technology stack — designed to solve
+              End-to-end digital solutions across the full technology stack, designed to solve
               real business problems with measurable impact.
             </p>
           </div>
@@ -219,7 +219,7 @@ export default function SoftwareAIPage() {
             </h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto leading-relaxed">
               We combine technical excellence with a deep understanding of how businesses
-              operate — so every solution we build actually gets used.
+              operate, so every solution we build actually gets used.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -239,9 +239,9 @@ export default function SoftwareAIPage() {
           <div className="mt-12 bg-white border border-gray-100 rounded-2xl shadow-sm p-8">
             <div className="grid md:grid-cols-2 gap-4">
               {[
-                'Agile development — delivered in sprints, not years',
+                'Agile development, delivered in sprints, not years',
                 'Post-launch support & maintenance included for 12 months',
-                'Built for scale — cloud-native architectures from day one',
+                'Built for scale, cloud-native architectures from day one',
                 'AI-first mindset baked into every solution we deliver',
               ].map((point) => (
                 <div key={point} className="flex items-start gap-3">
@@ -297,7 +297,7 @@ export default function SoftwareAIPage() {
           </h2>
           <p className="text-gray-500 mb-10 max-w-xl mx-auto leading-relaxed">
             We've built intelligent software and AI solutions for organisations across a
-            wide range of industries — each with their own unique challenges and opportunities.
+            wide range of industries, each with their own unique challenges and opportunities.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             {INDUSTRIES.map((ind) => (

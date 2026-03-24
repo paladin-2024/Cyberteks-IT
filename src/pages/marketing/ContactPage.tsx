@@ -220,7 +220,7 @@ export default function ContactPage() {
                   </div>
                   <h3 className="font-display text-2xl font-extrabold text-gray-900 mb-3">{t.contact.form.successTitle}</h3>
                   <p className="text-gray-500 max-w-sm mx-auto mb-8">
-                    Thanks <span className="font-semibold text-gray-700">{fd.name}</span> — we'll reply to{' '}
+                    Thanks <span className="font-semibold text-gray-700">{fd.name}</span>, we'll reply to{' '}
                     <span className="font-semibold text-gray-700">{fd.email}</span> within 2 business hours.
                   </p>
                   <button

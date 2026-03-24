@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default function AuthLayout() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
-      {/* Left — decorative panel */}
+      {/* Left, decorative panel */}
       <div className="hidden lg:flex relative flex-col justify-between bg-[#023064] p-12 overflow-hidden">
         <div className="absolute inset-0 bg-grid" />
         <div className="absolute inset-0 dot-pattern opacity-10" />
@@ -23,7 +23,7 @@ export default function AuthLayout() {
         <div className="relative">
           <div className="text-6xl text-white/10 font-display font-bold leading-none mb-4">&ldquo;</div>
           <p className="text-white/80 text-lg leading-relaxed font-medium max-w-sm">
-            Empowering Uganda&apos;s next generation of ICT professionals — one lesson at a time.
+            Empowering Uganda&apos;s next generation of ICT professionals, one lesson at a time.
           </p>
           <div className="mt-6 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
@@ -51,7 +51,7 @@ export default function AuthLayout() {
         </div>
       </div>
 
-      {/* Right — auth form */}
+      {/* Right, auth form */}
       <div className="flex items-center justify-center px-6 py-12 bg-background">
         <div className="w-full max-w-md">
           {/* Mobile logo */}

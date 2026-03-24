@@ -15,7 +15,7 @@ const CORE_SERVICES = [
   {
     icon: Wrench,
     title: 'System & Software Troubleshooting',
-    desc: 'Diagnosing and resolving operating system errors, crashes, and performance issues — all done remotely.',
+    desc: 'Diagnosing and resolving operating system errors, crashes, and performance issues, all done remotely.',
   },
   {
     icon: Download,
@@ -43,7 +43,7 @@ const WHY_CHOOSE = [
   {
     icon: Zap,
     title: 'No Travel Costs',
-    desc: 'Skip the waiting and travel fees — our technicians connect to your device instantly from anywhere.',
+    desc: 'Skip the waiting and travel fees, our technicians connect to your device instantly from anywhere.',
   },
   {
     icon: Clock,
@@ -149,7 +149,7 @@ export default function RemoteITSupportPage() {
               {t.servicePages.remoteIt.services.title}
             </h2>
             <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-              From helpdesk to cybersecurity, we cover every layer of your IT environment — delivered
+              From helpdesk to cybersecurity, we cover every layer of your IT environment, delivered
               remotely, securely, and on demand.
             </p>
           </div>
@@ -181,7 +181,7 @@ export default function RemoteITSupportPage() {
               The smarter way to get IT support
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              No travel costs, no waiting rooms — just expert technicians resolving your issues fast,
+              No travel costs, no waiting rooms, just expert technicians resolving your issues fast,
               from wherever they are.
             </p>
             <div className="grid sm:grid-cols-2 gap-5">

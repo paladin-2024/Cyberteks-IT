@@ -34,13 +34,13 @@ const SERVICES = [
   {
     icon: Wifi,
     title: 'Remote Work Voice Solutions',
-    desc: 'Enable distributed teams to communicate seamlessly from anywhere. Staff carry their office extension on any device — desk phone, laptop, or mobile.',
+    desc: 'Enable distributed teams to communicate seamlessly from anywhere. Staff carry their office extension on any device, desk phone, laptop, or mobile.',
     color: 'bg-amber-500',
   },
   {
     icon: TrendingUp,
     title: 'Scalable & Flexible Plans',
-    desc: 'Pay only for what you use — add or remove lines instantly as your team grows. No long-term contracts, no hardware refresh cycles, no hidden fees.',
+    desc: 'Pay only for what you use, add or remove lines instantly as your team grows. No long-term contracts, no hardware refresh cycles, no hidden fees.',
     color: 'bg-sky-600',
   },
 ];
@@ -48,8 +48,8 @@ const SERVICES = [
 const WHY_CHOOSE = [
   'Up to 80% savings compared to traditional phone systems',
   'Crystal-clear HD voice quality on every call',
-  'Works on any device — desk phone, laptop, or mobile',
-  'No hardware maintenance required — we handle it all',
+  'Works on any device, desk phone, laptop, or mobile',
+  'No hardware maintenance required, we handle it all',
 ];
 
 const IDEAL_FOR = [
@@ -66,12 +66,12 @@ const IDEAL_FOR = [
   {
     icon: GraduationCap,
     label: 'Schools & Universities',
-    desc: 'Campus-wide intercom, staff extensions, and admin lines — all managed from a single cloud dashboard.',
+    desc: 'Campus-wide intercom, staff extensions, and admin lines, all managed from a single cloud dashboard.',
   },
   {
     icon: Heart,
     label: 'Healthcare Facilities',
-    desc: 'Reliable, clear voice communications between wards, reception, and on-call staff — 24/7 uptime.',
+    desc: 'Reliable, clear voice communications between wards, reception, and on-call staff, 24/7 uptime.',
   },
   {
     icon: Landmark,
@@ -81,7 +81,7 @@ const IDEAL_FOR = [
   {
     icon: Rocket,
     label: 'Growing Startups',
-    desc: 'Start with 5 lines and scale to 500 — your phone system grows as fast as your business does.',
+    desc: 'Start with 5 lines and scale to 500, your phone system grows as fast as your business does.',
   },
 ];
 
@@ -161,7 +161,7 @@ export default function VoIPPage() {
               Everything Your Business Needs to Communicate
             </h2>
             <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-base">
-              From a simple 5-extension office to a 300-seat call centre — we design, install,
+              From a simple 5-extension office to a 300-seat call centre, we design, install,
               and support VoIP systems built for your exact needs.
             </p>
           </div>
@@ -192,7 +192,7 @@ export default function VoIPPage() {
             </h2>
             <p className="text-gray-600 mb-7 leading-relaxed">
               Traditional PBX systems are expensive to buy, maintain, and upgrade. Our VoIP solutions
-              give you enterprise-grade telephony that costs a fraction of legacy systems — with no
+              give you enterprise-grade telephony that costs a fraction of legacy systems, with no
               compromise on quality, reliability, or features.
             </p>
             <ul className="space-y-4">
@@ -235,7 +235,7 @@ export default function VoIPPage() {
               Built for Every Kind of Business
             </h2>
             <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-base">
-              Whether you run a hotel, a hospital, or a startup — our VoIP systems are tailored
+              Whether you run a hotel, a hospital, or a startup, our VoIP systems are tailored
               to the communication demands of your industry.
             </p>
           </div>

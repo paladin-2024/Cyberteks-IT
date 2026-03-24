@@ -10,7 +10,7 @@ const SERVICES = [
   {
     icon: Fingerprint,
     title: 'Fingerprint & Facial Recognition',
-    desc: 'Deploy biometric authentication systems that eliminate the risk of lost keys or shared PINs. Each identity is unique — impossible to duplicate or share.',
+    desc: 'Deploy biometric authentication systems that eliminate the risk of lost keys or shared PINs. Each identity is unique, impossible to duplicate or share.',
     color: 'bg-[#023064]',
   },
   {
@@ -22,7 +22,7 @@ const SERVICES = [
   {
     icon: Layers,
     title: 'Multi-Level Access Zones',
-    desc: 'Define access levels for different areas — restrict server rooms, labs, or executive offices. Grant the right people access to the right doors, at the right times.',
+    desc: 'Define access levels for different areas, restrict server rooms, labs, or executive offices. Grant the right people access to the right doors, at the right times.',
     color: 'bg-emerald-600',
   },
   {
@@ -40,14 +40,14 @@ const SERVICES = [
   {
     icon: Globe,
     title: 'Remote Access Management',
-    desc: 'Control and monitor access remotely from any device, anywhere. Add, suspend, or revoke user credentials without being on-site — ideal for multi-location businesses.',
+    desc: 'Control and monitor access remotely from any device, anywhere. Add, suspend, or revoke user credentials without being on-site, ideal for multi-location businesses.',
     color: 'bg-sky-600',
   },
 ];
 
 const WHY_BIOMETRIC = [
-  'No PINs to forget or cards to lose — identity is always with you',
-  'Accurate time & attendance — eliminate buddy punching entirely',
+  'No PINs to forget or cards to lose, identity is always with you',
+  'Accurate time & attendance, eliminate buddy punching entirely',
   'Full audit trail for compliance, HR, and security reviews',
   'Scalable from 1 door to 100+ locations without changing platforms',
 ];
@@ -161,7 +161,7 @@ export default function AccessControlPage() {
               Comprehensive Access Control Services
             </h2>
             <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-base">
-              From biometric readers to centralized management dashboards — we deliver end-to-end
+              From biometric readers to centralized management dashboards, we deliver end-to-end
               access control tailored to your facility.
             </p>
           </div>
@@ -193,17 +193,17 @@ export default function AccessControlPage() {
             />
             <div className="absolute -bottom-5 -left-5 bg-[#023064] text-white rounded-2xl px-5 py-3 shadow-lg">
               <p className="font-heading text-lg font-bold">Time & Attendance</p>
-              <p className="text-xs text-blue-200">Automatic payroll reports — zero effort</p>
+              <p className="text-xs text-blue-200">Automatic payroll reports, zero effort</p>
             </div>
           </div>
           <div>
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Why Biometric</span>
             <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2 mb-4">
-              Beyond Locks & Keys — Why Biometrics Win
+              Beyond Locks & Keys, Why Biometrics Win
             </h2>
             <p className="text-gray-600 mb-7 leading-relaxed">
               Traditional access methods rely on items that can be lost, stolen, or shared. Biometric
-              systems tie access to who you are — not what you carry — delivering security you can
+              systems tie access to who you are, not what you carry, delivering security you can
               actually rely on.
             </p>
             <ul className="space-y-4">
@@ -235,7 +235,7 @@ export default function AccessControlPage() {
               Where We Deploy Access Control
             </h2>
             <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-base">
-              From a single door to a multi-floor enterprise campus — our solutions adapt to the
+              From a single door to a multi-floor enterprise campus, our solutions adapt to the
               unique security requirements of every environment.
             </p>
           </div>

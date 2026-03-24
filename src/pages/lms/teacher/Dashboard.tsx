@@ -194,7 +194,7 @@ export default function TeacherDashboard() {
         <p className="text-sm text-muted-foreground mt-0.5">Here's an overview of your teaching activity.</p>
       </div>
 
-      {/* Row 1 — Stat cards */}
+      {/* Row 1, Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((s) => (
           <StatCard key={s.label} {...s} />
@@ -227,10 +227,10 @@ export default function TeacherDashboard() {
         </div>
       </div>
 
-      {/* Row 2 — Activity chart + Active Courses */}
+      {/* Row 2, Activity chart + Active Courses */}
       <div className="grid lg:grid-cols-5 gap-5">
 
-        {/* Student Activity chart — 60% */}
+        {/* Student Activity chart, 60% */}
         <div className="lg:col-span-3 bg-card rounded-2xl shadow-sm p-6 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div>
@@ -275,7 +275,7 @@ export default function TeacherDashboard() {
           </ResponsiveContainer>
         </div>
 
-        {/* Active Courses + completion breakdown — 40% */}
+        {/* Active Courses + completion breakdown, 40% */}
         <div className="lg:col-span-2 bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h2 className="font-display font-bold text-foreground text-sm">Active Courses</h2>
@@ -352,7 +352,7 @@ export default function TeacherDashboard() {
         </div>
       </div>
 
-      {/* Row 3 — Recent Students table */}
+      {/* Row 3, Recent Students table */}
       <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
           <h2 className="font-display font-bold text-foreground text-base">Recent Students</h2>

@@ -313,7 +313,7 @@ export default function ApplyPage() {
             })}
           </div>
           <p className="text-center text-xs text-gray-400 mt-3">
-            Step <span className="font-bold text-gray-700">{step}</span> of {STEPS.length} — <span className="font-semibold text-gray-600">{STEPS[step - 1].title}</span>
+            Step <span className="font-bold text-gray-700">{step}</span> of {STEPS.length}, <span className="font-semibold text-gray-600">{STEPS[step - 1].title}</span>
           </p>
         </div>
 
@@ -333,7 +333,7 @@ export default function ApplyPage() {
 
             <div className="px-4 sm:px-8 py-6 sm:py-8 space-y-5">
 
-              {/* STEP 1 — Personal Information */}
+              {/* STEP 1, Personal Information */}
               {step === 1 && (
                 <>
                   <div className="grid sm:grid-cols-2 gap-5">
@@ -369,7 +369,7 @@ export default function ApplyPage() {
                 </>
               )}
 
-              {/* STEP 2 — Education & Background */}
+              {/* STEP 2, Education & Background */}
               {step === 2 && (
                 <>
                   <div>
@@ -388,7 +388,7 @@ export default function ApplyPage() {
                 </>
               )}
 
-              {/* STEP 3 — Program Selection */}
+              {/* STEP 3, Program Selection */}
               {step === 3 && (
                 <>
                   <div>
@@ -424,7 +424,7 @@ export default function ApplyPage() {
                 </>
               )}
 
-              {/* STEP 4 — Motivation & Goals */}
+              {/* STEP 4, Motivation & Goals */}
               {step === 4 && (
                 <>
                   <div>
@@ -438,7 +438,7 @@ export default function ApplyPage() {
                 </>
               )}
 
-              {/* STEP 5 — Availability */}
+              {/* STEP 5, Availability */}
               {step === 5 && (
                 <RadioGroup
                   label={t.apply.availability.hoursPerWeek}
@@ -449,7 +449,7 @@ export default function ApplyPage() {
                 />
               )}
 
-              {/* STEP 6 — Computer & Internet Access */}
+              {/* STEP 6, Computer & Internet Access */}
               {step === 6 && (
                 <>
                   <RadioGroup label={t.apply.computer.hasComputer} name="hasComputer" options={[t.apply.computer.yes, t.apply.computer.no]} value={form.hasComputer} onChange={v => set('hasComputer', v)} />
@@ -460,7 +460,7 @@ export default function ApplyPage() {
                 </>
               )}
 
-              {/* STEP 7 — Declaration */}
+              {/* STEP 7, Declaration */}
               {/* Step-level error (shown on steps 1-6) */}
               {stepError && step < 7 && (
                 <div className="flex items-center gap-2 text-sm text-primary-red bg-red-50 border border-red-100 rounded-xl px-4 py-3">

@@ -25,7 +25,7 @@ export default function WhyChooseSection() {
         {/* Two column: text + image */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-12 lg:mb-20">
 
-          {/* Left — checklist */}
+          {/* Left, checklist */}
           <div>
             <p className="text-gray-500 text-base leading-relaxed mb-6">
               {t.whyChoose.description}
@@ -40,7 +40,7 @@ export default function WhyChooseSection() {
             </ul>
           </div>
 
-          {/* Right — logo / image */}
+          {/* Right, logo / image */}
           <div className="flex items-center justify-center">
             <div className="relative">
               <div className="w-72 h-72 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-center">

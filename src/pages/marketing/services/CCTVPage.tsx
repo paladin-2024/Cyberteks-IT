@@ -132,7 +132,7 @@ export default function CCTVPage() {
               {t.servicePages.cctv.services.title}
             </h2>
             <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-              End-to-end surveillance solutions — from camera supply and installation to remote
+              End-to-end surveillance solutions, from camera supply and installation to remote
               monitoring and smart system integrations.
             </p>
           </div>
@@ -178,7 +178,7 @@ export default function CCTVPage() {
               {t.servicePages.cctv.why.title}
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              We don't just install cameras — we design complete, future-proof surveillance ecosystems
+              We don't just install cameras, we design complete, future-proof surveillance ecosystems
               tailored to your premises and budget.
             </p>
             <div className="grid sm:grid-cols-2 gap-5">
@@ -233,7 +233,7 @@ export default function CCTVPage() {
             <ol className="space-y-5">
               {[
                 { n: '01', t: 'Site Survey', d: 'Our engineer visits and maps optimal camera positions and cable routes.' },
-                { n: '02', t: 'Custom Design', d: 'We design a tailored system — camera count, resolution, storage, and NVR spec.' },
+                { n: '02', t: 'Custom Design', d: 'We design a tailored system, camera count, resolution, storage, and NVR spec.' },
                 { n: '03', t: 'Professional Install', d: 'Neat cable management, camera mounting, NVR setup, and mobile app config.' },
                 { n: '04', t: 'Training & Handover', d: 'We train your team on live view, playback, and alert management.' },
               ].map((step) => (

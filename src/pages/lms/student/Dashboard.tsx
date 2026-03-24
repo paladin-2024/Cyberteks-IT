@@ -199,7 +199,7 @@ export default function StudentDashboard() {
         <p className="text-sm text-muted-foreground mt-0.5">Here's what's happening with your learning today.</p>
       </div>
 
-      {/* Row 1 — Stat cards */}
+      {/* Row 1, Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((s) => (
           <StatCard key={s.label} {...s} />
@@ -233,10 +233,10 @@ export default function StudentDashboard() {
         </div>
       </div>
 
-      {/* Row 2 — Study chart + No upcoming sessions */}
+      {/* Row 2, Study chart + No upcoming sessions */}
       <div className="grid lg:grid-cols-5 gap-5">
 
-        {/* Study Analytics — 60% */}
+        {/* Study Analytics, 60% */}
         <div className="lg:col-span-3 bg-card rounded-2xl shadow-sm p-6 flex flex-col gap-4">
           <div>
             <h2 className="font-display font-bold text-foreground text-base">Study Analytics</h2>
@@ -279,10 +279,10 @@ export default function StudentDashboard() {
           </ResponsiveContainer>
         </div>
 
-        {/* Right panel — 40%: no live sessions, no assignment breakdown */}
+        {/* Right panel, 40%: no live sessions, no assignment breakdown */}
         <div className="lg:col-span-2 flex flex-col gap-4">
 
-          {/* Upcoming Sessions — empty state */}
+          {/* Upcoming Sessions, empty state */}
           <div className="bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-3 flex-1">
             <h2 className="font-display font-bold text-foreground text-sm">Upcoming Sessions</h2>
             <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground gap-2 py-6">
@@ -317,7 +317,7 @@ export default function StudentDashboard() {
         </div>
       </div>
 
-      {/* Row 3 — Continue Watching table */}
+      {/* Row 3, Continue Watching table */}
       <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
           <h2 className="font-display font-bold text-foreground text-base">Continue Watching</h2>

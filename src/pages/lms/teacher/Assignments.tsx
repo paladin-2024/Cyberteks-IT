@@ -707,7 +707,7 @@ function AssignmentDrawer({
                 <span className="text-xs font-medium">
                   {uploading ? 'Uploading…' : 'Drop file or click to upload'}
                 </span>
-                <span className="text-[11px]">PDF, Word, Excel, images, ZIP — up to 20 MB</span>
+                <span className="text-[11px]">PDF, Word, Excel, images, ZIP, up to 20 MB</span>
               </button>
             )}
             <input
@@ -770,7 +770,7 @@ function EmptyState({ filter, onCreateClick }: { filter: FilterTab; onCreateClic
   const messages: Record<FilterTab, { title: string; desc: string }> = {
     all:      { title: 'No assignments yet', desc: 'Create your first assignment to get started.' },
     active:   { title: 'No active assignments', desc: 'Publish a draft to make it visible to students.' },
-    past_due: { title: 'No past due assignments', desc: 'Great — everything is on track!' },
+    past_due: { title: 'No past due assignments', desc: 'Great, everything is on track!' },
     draft:    { title: 'No drafts', desc: 'Save an assignment as draft to work on it later.' },
   };
   const { title, desc } = messages[filter];

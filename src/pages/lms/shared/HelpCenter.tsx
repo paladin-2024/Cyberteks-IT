@@ -126,7 +126,7 @@ const teacherFaq: FaqSection[] = [
       },
       {
         question: 'How do I attach a question paper?',
-        answer: 'In the Create/Edit Assignment drawer, find the "Attachment" section. Click the upload area or drag and drop a file (PDF, Word, Excel, images, ZIP — up to 20 MB). Students will see a download link when viewing the assignment.',
+        answer: 'In the Create/Edit Assignment drawer, find the "Attachment" section. Click the upload area or drag and drop a file (PDF, Word, Excel, images, ZIP, up to 20 MB). Students will see a download link when viewing the assignment.',
       },
       {
         question: 'How do I grade student submissions?',
@@ -185,7 +185,7 @@ const studentFaq: FaqSection[] = [
     items: [
       {
         question: 'How do I submit an assignment?',
-        answer: 'Go to Assignments → find the assignment → click "Submit". You can type your answer in the text area and/or upload a file (PDF, Word, images, ZIP — up to 20 MB). Click "Submit Assignment" when ready.',
+        answer: 'Go to Assignments → find the assignment → click "Submit". You can type your answer in the text area and/or upload a file (PDF, Word, images, ZIP, up to 20 MB). Click "Submit Assignment" when ready.',
       },
       {
         question: 'Can I see the question paper?',
@@ -193,11 +193,11 @@ const studentFaq: FaqSection[] = [
       },
       {
         question: 'Can I resubmit after submitting?',
-        answer: 'Yes — if the due date has not passed, you can submit again. Your latest submission replaces the previous one.',
+        answer: 'Yes, if the due date has not passed, you can submit again. Your latest submission replaces the previous one.',
       },
       {
         question: 'How do I know if my assignment was graded?',
-        answer: 'Check Assignments — graded assignments show your score and any feedback from the teacher. You\'ll also receive a notification when graded.',
+        answer: 'Check Assignments, graded assignments show your score and any feedback from the teacher. You\'ll also receive a notification when graded.',
       },
     ],
   },

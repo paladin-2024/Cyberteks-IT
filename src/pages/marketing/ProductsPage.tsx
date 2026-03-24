@@ -6,7 +6,7 @@ const PRODUCTS = [
   {
     category: 'Computers & Laptops',
     image: '/assets/laptops-d7d8c876-add9-4f6f-b38f-4b65a259cd24.png',
-    desc: 'Business laptops and desktop computers from leading brands — Dell, HP, Lenovo, and more. Pre-configured and ready to deploy.',
+    desc: 'Business laptops and desktop computers from leading brands, Dell, HP, Lenovo, and more. Pre-configured and ready to deploy.',
     items: ['Dell Latitude Business Series', 'HP ProBook & EliteBook', 'Lenovo ThinkPad L & E Series', 'Desktop All-in-One Systems', 'Refurbished & Budget Options'],
     badge: 'Best Seller',
     badgeColor: 'bg-[#E11D48] text-white',
@@ -119,7 +119,7 @@ export default function ProductsPage() {
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Easy Ordering</span>
           <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2 mb-4">How to Get Products</h2>
-          <p className="text-gray-600 mb-12 max-w-xl mx-auto">We make it simple to get the products you need — with delivery and installation across Uganda.</p>
+          <p className="text-gray-600 mb-12 max-w-xl mx-auto">We make it simple to get the products you need, with delivery and installation across Uganda.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               { step: '01', title: 'Contact Us', desc: 'Call, email, or WhatsApp us with your requirements and quantity.' },

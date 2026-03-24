@@ -44,7 +44,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-12">
             {/* LEFT: socials (always) + address+email (desktop only) */}
             <div className="flex items-center gap-3">
-              {/* Social icons — always visible */}
+              {/* Social icons, always visible */}
               <div className="flex items-center gap-1.5">
                 {[
                   { icon: Facebook,  href: 'https://facebook.com/cyberteksit',          label: 'Facebook' },
@@ -59,7 +59,7 @@ export default function Navbar() {
                   </a>
                 ))}
               </div>
-              {/* Address + email — desktop only */}
+              {/* Address + email, desktop only */}
               <div className="hidden md:flex items-center gap-6">
                 <div className="w-px h-4 bg-white/15" />
                 <div className="flex items-center gap-2 text-white/60 text-sm font-medium">
@@ -74,7 +74,7 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* RIGHT: phone number — always visible */}
+            {/* RIGHT: phone number, always visible */}
             <a
               href="tel:+256779367005"
               className="flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-primary-red/20 border border-primary-red/30 hover:bg-primary-red/30 transition-colors"
@@ -102,7 +102,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-7">
+          <nav className="hidden lg:flex items-center gap-9">
             {navLinks.map((link) => (
               <Link
                 key={link.to}

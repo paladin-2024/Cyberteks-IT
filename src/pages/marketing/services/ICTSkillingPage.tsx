@@ -13,11 +13,11 @@ const ONLINE_COURSES = [
   { id: 2,  title: 'Augmented Reality',         price: 750000,  duration: '2 Months',   category: 'Technology',  level: 'Intermediate', icon: Globe,     desc: 'Design and develop AR experiences for mobile and enterprise apps. Learn to overlay digital content on the real world.' },
   { id: 3,  title: 'Virtual Reality',           price: 750000,  duration: '2 Months',   category: 'Technology',  level: 'Intermediate', icon: Monitor,   desc: 'Build immersive VR environments for training, real estate, entertainment, and education using modern VR platforms.' },
   { id: 4,  title: 'AI & Robotics',            price: 1500000, duration: '3 Months',   category: 'AI',          level: 'Intermediate', icon: Brain,     desc: 'Learn machine learning, neural networks, and robotics programming to build intelligent automated systems from scratch.' },
-  { id: 5,  title: 'Modern Networking',         price: 1000000, duration: '2.5 Months', category: 'Networking',  level: 'Intermediate', icon: Wifi,      desc: 'Configure and manage enterprise networks — routing, switching, VLANs, SD-WAN, and cloud networking fundamentals.' },
+  { id: 5,  title: 'Modern Networking',         price: 1000000, duration: '2.5 Months', category: 'Networking',  level: 'Intermediate', icon: Wifi,      desc: 'Configure and manage enterprise networks, routing, switching, VLANs, SD-WAN, and cloud networking fundamentals.' },
   { id: 6,  title: 'Graphic Design',            price: 650000,  duration: '2 Months',   category: 'Design',      level: 'Beginner',     icon: Palette,   desc: 'Create compelling visual content using Adobe Suite and Canva for brands, social media, print, and digital marketing.' },
   { id: 7,  title: 'Microsoft Office',          price: 650000,  duration: '1.5 Months', category: 'Productivity', level: 'Beginner',    icon: Monitor,   desc: 'Master Word, Excel, PowerPoint, and Outlook for professional productivity, data management, and business communication.' },
   { id: 8,  title: 'Website Design',            price: 650000,  duration: '2 Months',   category: 'Development', level: 'Beginner',     icon: Globe,     desc: 'Build modern, responsive websites using HTML, CSS, and JavaScript. Create a real portfolio site by the end of the course.' },
-  { id: 9,  title: 'Programming',              price: 1500000, duration: '3 Months',   category: 'Development', level: 'Beginner',     icon: Code2,     desc: 'Learn programming fundamentals in Python, JavaScript, or your chosen language — from basics to real-world projects.' },
+  { id: 9,  title: 'Programming',              price: 1500000, duration: '3 Months',   category: 'Development', level: 'Beginner',     icon: Code2,     desc: 'Learn programming fundamentals in Python, JavaScript, or your chosen language, from basics to real-world projects.' },
   { id: 10, title: 'Cyber Security',            price: 1500000, duration: '3 Months',   category: 'Security',    level: 'Advanced',     icon: Shield,    desc: 'Defend digital assets with hands-on training in ethical hacking, network security, penetration testing, and incident response.' },
   { id: 11, title: 'Data Analytics',            price: 1500000, duration: '3 Months',   category: 'Data',        level: 'Intermediate', icon: BarChart2, desc: 'Transform raw data into actionable business insights using Excel, SQL, Power BI, and Python. Build dashboards that drive decisions.' },
 ];
@@ -26,7 +26,7 @@ const CORPORATE_PROGRAMS = [
   { title: 'Cyber Security',        price: 2000000, icon: Shield,    desc: 'Equip your team with the skills to identify, prevent, and respond to cyber threats in your organization environment.', duration: '2–5 Days' },
   { title: 'Fraud Awareness',       price: 2000000, icon: Bot,       desc: 'Build a fraud-aware culture with comprehensive training on detection, prevention, and reporting of fraudulent activities.', duration: '1–3 Days' },
   { title: 'Risk Management',       price: 2000000, icon: Zap,       desc: 'Identify and mitigate IT and operational risks with structured frameworks and real-world scenario-based training.', duration: '2–3 Days' },
-  { title: 'Data Analytics',        price: 2000000, icon: BarChart2, desc: 'Transform your team\'s ability to work with data — from collection to dashboards and strategic business decisions.', duration: '2–5 Days' },
+  { title: 'Data Analytics',        price: 2000000, icon: BarChart2, desc: 'Transform your team\'s ability to work with data, from collection to dashboards and strategic business decisions.', duration: '2–5 Days' },
   { title: 'Artificial Intelligence', price: 2000000, icon: Brain,   desc: 'Understand AI capabilities, real-world use cases, and how to integrate AI tools into your business processes effectively.', duration: '2–3 Days' },
 ];
 
@@ -66,7 +66,7 @@ const WHO_WE_TRAIN = [
 const WHY_CHOOSE = [
   { icon: Star,      title: 'Experienced & Certified Trainers', desc: 'Learn from passionate, skilled, industry-certified instructors with real-world experience across all disciplines.' },
   { icon: Globe,     title: 'Flexible Learning Modes',          desc: 'On-site training, virtual classes, or blended options. We meet you exactly where you are.' },
-  { icon: Zap,       title: 'Practical, Job-Ready Skills',      desc: 'Every course is designed with the job market and real-world application in mind — no fluff.' },
+  { icon: Zap,       title: 'Practical, Job-Ready Skills',      desc: 'Every course is designed with the job market and real-world application in mind, no fluff.' },
   { icon: Award,     title: 'Certificates of Completion',       desc: 'Recognized training certificates to boost your career, academic profile, and professional credibility.' },
 ];
 
@@ -447,11 +447,11 @@ export default function ICTSkillingPage() {
               <h3 className="font-heading text-xl font-bold text-gray-900 mb-2">Free Learning Community</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-5">
                 Connect with fellow learners, get study tips, hear about upcoming courses, and stay updated
-                with the latest in tech. Join our free WhatsApp group today — no commitment required.
+                with the latest in tech. Join our free WhatsApp group today, no commitment required.
               </p>
               <ul className="space-y-2.5 mb-6">
                 {[
-                  'Free to join — no fees',
+                  'Free to join, no fees',
                   'Course announcements & schedules',
                   'Peer support & study groups',
                   'Job opportunities shared weekly',
@@ -588,7 +588,7 @@ export default function ICTSkillingPage() {
           <p className="text-gray-600 text-sm mb-8">We accept payment online and offline for your convenience.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             {[
-              { label: 'Mobile Money', desc: 'MTN MoMo / Airtel Money — instant & easy', emoji: '📱' },
+              { label: 'Mobile Money', desc: 'MTN MoMo / Airtel Money, instant & easy', emoji: '📱' },
               { label: 'Bank Transfer', desc: 'Direct deposit to our bank account', emoji: '🏦' },
               { label: 'Online Payment', desc: 'Secure card payments via our portal', emoji: '💳' },
             ].map(p => (

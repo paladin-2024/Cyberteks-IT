@@ -29,7 +29,7 @@ const testimonials = [
   {
     name: 'Namutebi Sandra',
     program: 'Graphic Design (2 months)',
-    quote: 'From Canva basics to professional Adobe Suite — the course covered everything. I now have a full portfolio and two regular clients.',
+    quote: 'From Canva basics to professional Adobe Suite, the course covered everything. I now have a full portfolio and two regular clients.',
     initials: 'NS',
   },
   {

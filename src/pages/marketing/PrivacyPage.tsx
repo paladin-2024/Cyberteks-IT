@@ -6,7 +6,7 @@ const SECTIONS = [
     id: 'info-collect',
     title: '1. Information We Collect',
     content: [
-      'We collect information you provide directly — such as your name, email address, phone number, company name, and any other details you submit via our contact forms, application forms, or support request forms.',
+      'We collect information you provide directly, such as your name, email address, phone number, company name, and any other details you submit via our contact forms, application forms, or support request forms.',
       'We may also collect technical data automatically when you visit our website, including your IP address, browser type, pages visited, and the time and date of your visit. This data is used solely for analytics and website improvement.',
       'We do not collect sensitive personal data such as financial details, national identity numbers, or health information unless you explicitly provide them in the context of a service engagement.',
     ],
@@ -17,7 +17,7 @@ const SECTIONS = [
     content: [
       'To respond to your enquiries and provide the IT support, training, or services you have requested.',
       'To send you important updates about your support tickets, course enrolment, or ongoing projects.',
-      'To send you relevant communications about new services, promotions, or events — only where you have given us permission to do so.',
+      'To send you relevant communications about new services, promotions, or events, only where you have given us permission to do so.',
       'To improve our website and services through anonymised usage analytics.',
       'To comply with legal obligations and enforce our terms of service.',
     ],

@@ -20,7 +20,7 @@ const WHY_US = [
   },
   {
     title: 'Professional growth',
-    desc: 'Gain access to continuous training, certifications, and skill development — at no cost to you.',
+    desc: 'Gain access to continuous training, certifications, and skill development, at no cost to you.',
   },
   {
     title: 'Impactful work',
@@ -45,7 +45,7 @@ const OPENINGS = [
     type: 'Full-time',
     location: 'Remote',
     icon: Code2,
-    desc: 'Design and build intelligent software solutions for our clients — from web apps and APIs to AI-powered tools and automation pipelines. You\'ll work across the full stack and contribute to innovative projects that solve real-world problems.',
+    desc: 'Design and build intelligent software solutions for our clients, from web apps and APIs to AI-powered tools and automation pipelines. You\'ll work across the full stack and contribute to innovative projects that solve real-world problems.',
   },
   {
     title: 'Remote IT Support Specialist',
@@ -54,7 +54,7 @@ const OPENINGS = [
     type: 'Full-time',
     location: 'Remote',
     icon: Headphones,
-    desc: 'Provide world-class remote IT support to businesses across Africa and globally — diagnosing issues, configuring systems, supporting networks, and ensuring clients\' technology never lets them down.',
+    desc: 'Provide world-class remote IT support to businesses across Africa and globally, diagnosing issues, configuring systems, supporting networks, and ensuring clients\' technology never lets them down.',
   },
   {
     title: 'Remote Sales Executive',
@@ -78,7 +78,7 @@ const STEPS = [
     step: '02',
     icon: Users,
     title: 'Interview',
-    desc: 'We\'ll invite shortlisted candidates for a technical and culture interview with our team — conducted remotely or in Kampala.',
+    desc: 'We\'ll invite shortlisted candidates for a technical and culture interview with our team, conducted remotely or in Kampala.',
   },
   {
     step: '03',
@@ -202,7 +202,7 @@ export default function CareersPage() {
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Reasons to Join</span>
             <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">Why Work With Us</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
-              We've built the kind of workplace we always wished existed — here's what that means in practice.
+              We've built the kind of workplace we always wished existed, here's what that means in practice.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 gap-6">
@@ -235,11 +235,11 @@ export default function CareersPage() {
             <p className="text-gray-600 leading-relaxed mb-5">
               We're building a team of innovators, problem-solvers, and lifelong learners. Whether
               you're a network engineer, software developer, cybersecurity specialist, trainer, or
-              creative thinker — we want you.
+              creative thinker, we want you.
             </p>
             <p className="text-gray-600 leading-relaxed">
               We hire people, not just credentials. If you're driven, curious, and care about using
-              technology for good — we want to hear from you.
+              technology for good, we want to hear from you.
             </p>
           </div>
           <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100">
@@ -250,7 +250,7 @@ export default function CareersPage() {
                 'Communicate well in both remote and in-person settings.',
                 'Embrace technology as a tool for progress and impact.',
                 'Take ownership and deliver without needing micromanagement.',
-                'Are curious — always learning, always improving.',
+                'Are curious, always learning, always improving.',
                 'Value honesty, integrity, and working as a team.',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3 text-sm text-gray-700">
@@ -354,7 +354,7 @@ export default function CareersPage() {
             >
               Send us your CV anyway
             </a>{' '}
-            — we're always interested in exceptional talent.
+           , we're always interested in exceptional talent.
           </p>
         </div>
       </section>

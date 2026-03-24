@@ -169,7 +169,7 @@ export default function AdminDashboard() {
         </span>
       </div>
 
-      {/* ── Row 1 — Stat cards ─────────────────────────────────────── */}
+      {/* ── Row 1, Stat cards ─────────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
 
         {/* Total Students */}
@@ -234,7 +234,7 @@ export default function AdminDashboard() {
 
       </div>
 
-      {/* ── Row 2 — Enrollment chart + Recent Applications ─────────── */}
+      {/* ── Row 2, Enrollment chart + Recent Applications ─────────── */}
       <div className="grid lg:grid-cols-5 gap-5">
 
         {/* Enrollment Analytics (60%) */}
@@ -313,10 +313,10 @@ export default function AdminDashboard() {
 
       </div>
 
-      {/* ── Row 3 — Recent Activity (from applications) + Platform Overview ── */}
+      {/* ── Row 3, Recent Activity (from applications) + Platform Overview ── */}
       <div className="grid lg:grid-cols-5 gap-5">
 
-        {/* Recent Activity — applications feed (60%) */}
+        {/* Recent Activity, applications feed (60%) */}
         <div className="lg:col-span-3 bg-card rounded-2xl shadow-sm p-6">
           <div className="flex items-center gap-2 mb-5">
             <Activity className="w-4 h-4 text-[#023064]" />
@@ -342,7 +342,7 @@ export default function AdminDashboard() {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-foreground leading-snug">
                         New application from <span className="font-semibold">{app.fullName}</span>
-                        {app.programs[0] ? ` — ${app.programs[0]}` : ''}
+                        {app.programs[0] ? `, ${app.programs[0]}` : ''}
                       </p>
                       <p className="text-xs text-muted-foreground mt-0.5">{relativeTime(app.createdAt)}</p>
                     </div>

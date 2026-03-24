@@ -25,7 +25,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         setLangState(saved);
       }
     } catch {
-      // localStorage unavailable — ignore
+      // localStorage unavailable, ignore
     }
   }, []);
 

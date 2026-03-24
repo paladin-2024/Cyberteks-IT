@@ -243,7 +243,7 @@ function SubmitModal({
                     value={attachedFile}
                     onChange={setAttachedFile}
                     label="Upload file"
-                    hint="PDF, Word, Excel, image, ZIP — up to 20 MB"
+                    hint="PDF, Word, Excel, image, ZIP, up to 20 MB"
                   />
                 </div>
 
@@ -252,7 +252,7 @@ function SubmitModal({
                 {isPastDue && !existing && (
                   <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                    This assignment is past due — your submission will be marked as late.
+                    This assignment is past due, your submission will be marked as late.
                   </div>
                 )}
               </>
@@ -466,7 +466,7 @@ export default function StudentAssignments() {
              filter === 'active'   ? 'No active assignments' : 'No assignments yet'}
           </p>
           <p className="text-sm text-muted-foreground/70">
-            {filter === 'past_due' ? 'Great job — all assignments are on track!' : 'Your teachers will post assignments here.'}
+            {filter === 'past_due' ? 'Great job, all assignments are on track!' : 'Your teachers will post assignments here.'}
           </p>
         </div>
       ) : (

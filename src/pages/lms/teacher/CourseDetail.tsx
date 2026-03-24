@@ -154,7 +154,7 @@ function LessonEditorPanel({
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch {
-      // silently fail — user can retry
+      // silently fail, user can retry
     } finally {
       setSaving(false);
     }
@@ -458,7 +458,7 @@ export default function TeacherCourseDetailPage() {
         </div>
       </div>
 
-      {/* Body — split: sidebar + editor */}
+      {/* Body, split: sidebar + editor */}
       <div className="grid lg:grid-cols-[340px_1fr] gap-5 items-start">
 
         {/* Left: Sections & Lessons sidebar */}

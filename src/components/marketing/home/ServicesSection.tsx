@@ -35,7 +35,7 @@ export default function ServicesSection() {
           </h2>
         </div>
 
-        {/* Grid — first card is featured (spans 2 rows on lg) */}
+        {/* Grid, first card is featured (spans 2 rows on lg) */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-auto">
           {serviceData.map(({ key, to, icon: Icon, img, featured }, i) => {
             const item = t.services.items[key as keyof typeof t.services.items];

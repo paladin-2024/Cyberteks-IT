@@ -62,7 +62,7 @@ export default function HeroSection() {
             <div className="inline-flex items-center gap-2 mb-7 px-4 py-2 rounded-full bg-[#023064]/6 border border-[#023064]/12">
               <Sparkles className="w-3.5 h-3.5 text-[#E11D48]" />
               <span className="text-xs font-bold text-[#023064] uppercase tracking-[0.14em]">
-                Africa's Premier ICT Solutions Partner — Global Reach
+                Africa's Premier ICT Solutions Partner, Global Reach
               </span>
             </div>
 
@@ -93,7 +93,7 @@ export default function HeroSection() {
               {t.hero.description}
             </p>
 
-            {/* CTAs — Apply primary, Explore Services secondary */}
+            {/* CTAs, Apply primary, Explore Services secondary */}
             <div className="flex flex-wrap gap-3 mb-10 sm:mb-14">
               <Link
                 to="/apply"
@@ -130,7 +130,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* ── RIGHT — carousel ── */}
+          {/* ── RIGHT, carousel ── */}
           <div className="hidden lg:block relative">
             {/* Decorative blobs */}
             <div className="absolute -top-10 -right-10 w-72 h-72 rounded-full bg-[#023064]/5 blur-3xl pointer-events-none" />
@@ -182,7 +182,7 @@ export default function HeroSection() {
               ))}
             </div>
 
-            {/* Floating badge — support */}
+            {/* Floating badge, support */}
             <div className="absolute -bottom-5 -left-6 bg-white border border-gray-200/80 rounded-2xl px-5 py-3.5 shadow-lg shadow-gray-200/60">
               <div className="flex items-center gap-2.5">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/60 animate-pulse" />
@@ -193,7 +193,7 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* Floating badge — experience */}
+            {/* Floating badge, experience */}
             <div className="absolute -top-4 -right-5 bg-[#023064] rounded-2xl px-4 py-3 shadow-lg">
               <p className="text-xs font-extrabold text-white leading-none">5+ Years</p>
               <p className="text-[11px] text-white/50 mt-0.5">ICT Excellence</p>

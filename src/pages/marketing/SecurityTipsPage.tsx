@@ -245,7 +245,7 @@ export default function SecurityTipsPage() {
           <div className="bg-white/10 border border-white/20 rounded-2xl p-6 text-center">
             <p className="text-blue-100 text-base mb-4">
               <span className="text-white font-semibold">How did you score?</span>{' '}
-              If less than 7 — contact us for a free security assessment.
+              If less than 7, contact us for a free security assessment.
             </p>
             <Link
               to="/contact"

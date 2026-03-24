@@ -192,7 +192,7 @@ export default function PlanPage() {
             </div>
           </div>
 
-          {/* Right col — Overall progress */}
+          {/* Right col, Overall progress */}
           <div className="space-y-6">
             <div className="bg-card border border-border rounded-2xl p-4">
               <h2 className="font-heading font-semibold text-foreground mb-4 flex items-center gap-2">

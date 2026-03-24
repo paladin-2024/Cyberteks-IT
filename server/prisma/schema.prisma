@@ -188,6 +188,8 @@ model Application {
   referralSource  String?
   socialHandle    String?
 
+  tempPassword    String?
+
   reviewNotes     String?
   reviewedById    String?
   reviewedAt      DateTime?
