@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Menu, X, ChevronDown, Monitor, GraduationCap, Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
-import LanguageSwitcher from './LanguageSwitcher';
 
 const DROPDOWN_ITEMS = [
   { key: 'ictSkilling',          icon: GraduationCap, href: '/services/ict-skilling',  label: 'ICT Skilling' },
@@ -26,7 +25,6 @@ export default function Navbar() {
     { label: t.nav.home, to: '/' },
     { label: t.nav.about, to: '/about' },
     { label: t.nav.products, to: '/products' },
-    { label: 'ICT Skilling', to: '/services/ict-skilling' },
     { label: t.nav.careers, to: '/careers' },
     { label: t.nav.contact, to: '/contact' },
   ];
@@ -102,7 +100,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-9">
+          <nav className="hidden lg:flex items-center gap-5">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
@@ -154,6 +152,14 @@ export default function Navbar() {
               </div>
             </div>
 
+            {/* ICT Skilling link */}
+            <Link
+              to="/services/ict-skilling"
+              className="text-base font-semibold text-gray-700 hover:text-[#023064] transition-colors"
+            >
+              ICT Skilling
+            </Link>
+
             {/* Security link */}
             <Link
               to="/security-tips"
@@ -165,16 +171,15 @@ export default function Navbar() {
 
           {/* Right side */}
           <div className="hidden lg:flex items-center gap-3">
-            <LanguageSwitcher />
             <Link
               to="/login"
-              className="text-base font-semibold px-5 py-2.5 rounded-xl border-2 border-gray-200 text-gray-700 hover:border-[#023064] hover:text-[#023064] transition-all"
+              className="text-base font-semibold px-6 py-2.5 rounded-xl border-2 border-gray-200 text-gray-700 hover:border-[#023064] hover:text-[#023064] transition-all"
             >
               {t.nav.login}
             </Link>
             <Link
               to="/apply"
-              className="text-base font-bold px-6 py-2.5 rounded-xl bg-primary-red text-white hover:bg-red-700 transition-all shadow-sm shadow-primary-red/30"
+              className="text-base font-bold px-7 py-2.5 rounded-xl bg-primary-red text-white hover:bg-red-700 transition-all shadow-sm shadow-primary-red/30"
             >
               {t.nav.applyNow}
             </Link>
@@ -228,6 +233,14 @@ export default function Navbar() {
           </div>
 
           <Link
+            to="/services/ict-skilling"
+            onClick={() => setMobileOpen(false)}
+            className="block py-2.5 text-[15px] font-medium text-gray-600 hover:text-[#023064] transition-colors"
+          >
+            ICT Skilling
+          </Link>
+
+          <Link
             to="/security-tips"
             onClick={() => setMobileOpen(false)}
             className="block py-2.5 text-[15px] font-medium text-gray-600 hover:text-[#023064] transition-colors"
@@ -235,8 +248,7 @@ export default function Navbar() {
             Security
           </Link>
 
-          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-            <LanguageSwitcher />
+          <div className="flex items-center justify-end pt-4 border-t border-gray-100">
             <div className="flex gap-2">
               <Link
                 to="/login"

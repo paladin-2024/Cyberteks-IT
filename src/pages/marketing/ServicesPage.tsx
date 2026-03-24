@@ -92,6 +92,12 @@ export default function ServicesPage() {
       {/* Services Grid */}
       <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-7xl mx-auto">
+          <div className="mb-12 text-center">
+            <p className="text-xs font-bold text-[#E11D48] uppercase tracking-[0.15em] mb-3">Comprehensive ICT Services</p>
+            <p className="text-gray-500 text-base sm:text-lg max-w-2xl mx-auto">
+              From infrastructure to training, we provide the full spectrum of ICT solutions your business needs to thrive in the digital age.
+            </p>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {SERVICES.map((s) => (
               <Link key={s.title} to={s.href}
