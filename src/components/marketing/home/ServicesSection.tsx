@@ -23,21 +23,16 @@ export default function ServicesSection() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
-          <div>
-            <div className="inline-flex items-center gap-2 mb-4">
-              <span className="w-8 h-0.5 bg-[#E11D48]" />
-              <p className="text-sm font-bold text-[#E11D48] uppercase tracking-[0.15em]">
-                {t.services.badge}
-              </p>
-            </div>
-            <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight max-w-sm">
-              {t.services.title}
-            </h2>
+        <div className="mb-16">
+          <div className="inline-flex items-center gap-2 mb-4">
+            <span className="w-8 h-0.5 bg-[#E11D48]" />
+            <p className="text-sm font-bold text-[#E11D48] uppercase tracking-[0.15em]">
+              {t.services.badge}
+            </p>
           </div>
-          <p className="text-base text-gray-400 max-w-xs sm:text-right leading-relaxed">
-            {t.services.subtitle}
-          </p>
+          <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">
+            {t.services.title}
+          </h2>
         </div>
 
         {/* Grid — first card is featured (spans 2 rows on lg) */}

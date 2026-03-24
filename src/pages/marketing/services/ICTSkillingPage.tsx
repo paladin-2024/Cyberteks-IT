@@ -119,7 +119,7 @@ function VideoCard({ src, title, tag }: { src: string; title: string; tag: strin
       </div>
       <div className="p-4">
         <p className="font-heading font-bold text-gray-900 text-sm">{title}</p>
-        <p className="text-xs text-gray-400 mt-1">CyberteksIT Training Session</p>
+        <p className="text-xs text-gray-400 mt-1">Cyberteks-IT Training Session</p>
       </div>
     </div>
   );
@@ -549,7 +549,7 @@ export default function ICTSkillingPage() {
             </ul>
           </div>
           <div className="relative">
-            <img src="/assets/ict-skilling-capacity-building.jpg" alt="CyberteksIT Training"
+            <img src="/assets/ict-skilling-capacity-building.jpg" alt="Cyberteks-IT Training"
               className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/3]" />
             <div className="absolute -bottom-5 -right-5 bg-[#E11D48] text-white rounded-2xl p-4 shadow-xl">
               <p className="font-heading text-2xl font-bold">200+</p>
@@ -563,7 +563,7 @@ export default function ICTSkillingPage() {
       <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Why CyberteksIT</span>
+            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Why Cyberteks-IT</span>
             <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">What Makes Us Different</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">

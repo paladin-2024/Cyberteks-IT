@@ -36,7 +36,7 @@ export default function CTASection() {
         <div className="grid md:grid-cols-2 gap-6">
 
           {/* Training CTA */}
-          <div className="bg-[#E11D48] rounded-3xl p-6 sm:p-10 relative overflow-hidden group">
+          <div className="bg-[#023064] rounded-3xl p-6 sm:p-10 relative overflow-hidden group">
             {/* Decorative circles */}
             <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/8 pointer-events-none transition-transform duration-700 group-hover:scale-110" />
             <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-black/10 pointer-events-none" />

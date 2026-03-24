@@ -46,7 +46,7 @@ const SECTIONS = [
     content: [
       'We retain your personal data for as long as necessary to fulfil the purpose for which it was collected, or as required by applicable law.',
       'Support request data is retained for 2 years after the ticket is closed.',
-      'Application and enrolment records are retained for the duration of your relationship with CyberteksIT and for 5 years thereafter.',
+      'Application and enrolment records are retained for the duration of your relationship with Cyberteks-IT and for 5 years thereafter.',
       'You may request deletion of your data at any time by contacting us (see Section 7).',
     ],
   },
@@ -55,7 +55,7 @@ const SECTIONS = [
     title: '6. Security',
     content: [
       'We implement appropriate technical and organisational measures to protect your personal data against unauthorised access, loss, or misuse.',
-      'Access to personal data within CyberteksIT is restricted to staff who need it to perform their job duties.',
+      'Access to personal data within Cyberteks-IT is restricted to staff who need it to perform their job duties.',
       'While we strive to protect your information, no internet transmission is 100% secure. We cannot guarantee absolute security.',
     ],
   },
@@ -104,7 +104,7 @@ export default function PrivacyPage() {
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold text-white mb-4">Privacy Policy</h1>
           <p className="text-blue-200 text-lg max-w-2xl">
-            CyberteksIT is committed to protecting your personal data. This policy explains what we
+            Cyberteks-IT is committed to protecting your personal data. This policy explains what we
             collect, how we use it, and the rights you have over your information.
           </p>
           <p className="text-blue-300 text-sm mt-4">Last updated: March 2026</p>
@@ -118,7 +118,7 @@ export default function PrivacyPage() {
           {/* Intro */}
           <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 mb-10">
             <p className="text-gray-700 leading-relaxed">
-              This Privacy Policy applies to CyberteksIT Limited ("CyberteksIT", "we", "us", or "our"),
+              This Privacy Policy applies to Cyberteks-IT Limited ("Cyberteks-IT", "we", "us", or "our"),
               operating at <strong>cyberteks-it.com</strong> and all related subdomains. By using our website
               or services, you agree to the collection and use of information described in this policy.
             </p>
@@ -163,7 +163,7 @@ export default function PrivacyPage() {
           </div>
 
           <p className="text-gray-400 text-xs mt-8 text-center">
-            CyberteksIT Limited · Kampala, Uganda ·{' '}
+            Cyberteks-IT Limited · Kampala, Uganda ·{' '}
             <Link to="/terms-of-use" className="hover:text-[#023064] transition-colors">Terms of Use</Link>
           </p>
         </div>

@@ -6,7 +6,7 @@ export default function SettingsPage() {
   const d = t.lms.admin.settings;
 
   const fields = [
-    { label: d.platformName,  value: 'CyberteksIT LMS' },
+    { label: d.platformName,  value: 'Cyberteks-IT LMS' },
     { label: d.supportEmail,  value: 'support@cyberteks-it.com' },
     { label: d.timezone,      value: 'Africa/Kampala (UTC+3)' },
     { label: d.language,      value: 'English' },

@@ -46,7 +46,7 @@ export default function WhyChooseSection() {
               <div className="w-72 h-72 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-center">
                 <img
                   src="/assets/logo-round.png"
-                  alt="CyberteksIT"
+                  alt="Cyberteks-IT"
                   className="w-32 h-32 object-contain"
                 />
               </div>

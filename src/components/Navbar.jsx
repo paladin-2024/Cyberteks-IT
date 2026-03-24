@@ -26,7 +26,7 @@ const Navbar = () => {
       <header ref={navRef} className="fixed inset-x-0 top-0 z-40 flex justify-center pt-4">
         <div className="mx-4 flex w-full max-w-6xl items-center justify-between rounded-2xl border border-slate-200/70 bg-white/65 px-4 py-3 shadow-lg backdrop-blur-md md:px-6 lg:px-7">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="CyberteksIT" className="h-10 w-auto" />
+            <img src={logo} alt="Cyberteks-IT" className="h-10 w-auto" />
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex">
@@ -92,7 +92,7 @@ const Navbar = () => {
                   <div className="rounded-2xl border border-slate-200 bg-white shadow-xl">
                     <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
                       <Link to="/" className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
-                        <img src={logo} alt="CyberteksIT" className="h-9 w-auto" />
+                        <img src={logo} alt="Cyberteks-IT" className="h-9 w-auto" />
                       </Link>
                       <button
                           type="button"

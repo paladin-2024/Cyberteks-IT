@@ -1,27 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ChevronDown, Shield, Monitor, Wifi, GraduationCap, Code2, Camera, Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { Menu, X, ChevronDown, Monitor, GraduationCap, Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
 
-const serviceIcons = {
-  remoteIt: Monitor,
-  cctv: Camera,
-  accessControl: Shield,
-  voip: Wifi,
-  ictSkilling: GraduationCap,
-  softwareAi: Code2,
-};
-
-const serviceHrefs = {
-  remoteIt: '/services/remote-it-support',
-  cctv: '/services/cctv',
-  accessControl: '/services/access-control',
-  voip: '/services/voip',
-  ictSkilling: '/services/ict-skilling',
-  softwareAi: '/services/software-ai',
-};
+const DROPDOWN_ITEMS = [
+  { key: 'ictSkilling',          icon: GraduationCap, href: '/services/ict-skilling',  label: 'ICT Skilling' },
+  { key: 'industrialSolutions',  icon: Monitor,       href: '/services',               label: 'Industrial Solutions' },
+];
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -39,11 +26,10 @@ export default function Navbar() {
     { label: t.nav.home, to: '/' },
     { label: t.nav.about, to: '/about' },
     { label: t.nav.products, to: '/products' },
+    { label: 'ICT Skilling', to: '/services/ict-skilling' },
     { label: t.nav.careers, to: '/careers' },
     { label: t.nav.contact, to: '/contact' },
   ];
-
-  const serviceKeys = Object.keys(serviceIcons) as (keyof typeof serviceIcons)[];
 
   return (
     <header className={cn(
@@ -109,8 +95,8 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0">
             <img
-              src="/assets/cyberteks-it-logo-33783fbc-fb2c-484a-b670-9f269d8493cf.png"
-              alt="CyberteksIT"
+              src="/assets/cyberteks-it-logo.png"
+              alt="Cyberteks-IT"
               className="h-14 w-auto object-contain"
             />
           </Link>
@@ -147,30 +133,21 @@ export default function Navbar() {
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.12em] px-2 mb-3">
                       Our Services
                     </p>
-                    <div className="grid grid-cols-2 gap-1">
-                      {serviceKeys.map((key) => {
-                        const Icon = serviceIcons[key];
-                        return (
-                          <Link
-                            key={key}
-                            to={serviceHrefs[key]}
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors group"
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-[#023064]/8 flex items-center justify-center shrink-0 group-hover:bg-[#023064]/15 transition-colors">
-                              <Icon className="w-4 h-4 text-[#023064]/60 group-hover:text-[#023064] transition-colors" />
-                            </div>
-                            <span className="text-[15px] font-medium text-gray-600 group-hover:text-gray-900 transition-colors">
-                              {t.nav.servicesMenu[key as keyof typeof t.nav.servicesMenu]}
-                            </span>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                    <div className="border-t border-gray-100 mt-3 pt-3 px-2 flex items-center justify-between">
-                      <Link to="/services" className="text-sm font-semibold text-[#023064] hover:underline">
-                        View all services →
-                      </Link>
-                      <span className="text-xs text-gray-400">6 services available</span>
+                    <div className="flex flex-col gap-1">
+                      {DROPDOWN_ITEMS.map(({ key, icon: Icon, href, label }) => (
+                        <Link
+                          key={key}
+                          to={href}
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors group"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-[#023064]/8 flex items-center justify-center shrink-0 group-hover:bg-[#023064]/15 transition-colors">
+                            <Icon className="w-4 h-4 text-[#023064]/60 group-hover:text-[#023064] transition-colors" />
+                          </div>
+                          <span className="text-[15px] font-medium text-gray-600 group-hover:text-gray-900 transition-colors">
+                            {label}
+                          </span>
+                        </Link>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -238,14 +215,14 @@ export default function Navbar() {
             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.12em] mb-3">
               {t.nav.services}
             </p>
-            {serviceKeys.map((key) => (
+            {DROPDOWN_ITEMS.map(({ key, href, label }) => (
               <Link
                 key={key}
-                to={serviceHrefs[key]}
+                to={href}
                 onClick={() => setMobileOpen(false)}
                 className="block py-2 pl-1 text-[15px] text-gray-500 hover:text-[#023064] transition-colors"
               >
-                {t.nav.servicesMenu[key as keyof typeof t.nav.servicesMenu]}
+                {label}
               </Link>
             ))}
           </div>

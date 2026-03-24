@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import {
-  Monitor, Camera, Lock, Phone, GraduationCap, Code2,
+  Monitor, Camera, Lock, Phone, Shield, Code2,
   ArrowRight, CheckCircle2,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
@@ -47,18 +47,18 @@ const SERVICES = [
     features: ['Up to 80% savings', 'Multi-branch support', 'Call recording'],
   },
   {
-    icon: GraduationCap,
-    title: 'ICT Skills Training',
-    desc: 'Industry-aligned training programmes in AI, cloud, cybersecurity, web design, data analytics, and 7 more disciplines — online and hybrid.',
-    href: '/services/ict-skilling',
-    image: '/assets/ict-skilling-capacity-building.jpg',
-    tag: 'Education',
-    tagColor: 'bg-violet-100 text-violet-700',
-    features: ['11 programmes', 'Certificate awarded', 'Flexible schedule'],
+    icon: Shield,
+    title: 'Cybersecurity',
+    desc: 'End-to-end cybersecurity solutions — threat assessment, network hardening, endpoint protection, and staff awareness training to keep your business safe.',
+    href: '/services/remote-it-support',
+    image: '/assets/cctv-surveillance-systems.jpg',
+    tag: 'Security',
+    tagColor: 'bg-rose-100 text-rose-700',
+    features: ['Threat assessment', 'Network hardening', 'Staff training'],
   },
   {
     icon: Code2,
-    title: 'Software & AI Dev',
+    title: 'Software-Driven Digitization',
     desc: 'Custom web apps, mobile applications, AI integrations, and process automation solutions tailored for African businesses.',
     href: '/services/software-ai',
     image: '/assets/remote-it-support.jpg',
@@ -79,12 +79,12 @@ export default function ServicesPage() {
         <div className="absolute inset-0 opacity-10"
           style={{ backgroundImage: 'radial-gradient(ellipse at 80% 50%, #E11D48 0%, transparent 50%)' }} />
         <div className="max-w-5xl mx-auto relative text-center">
-          <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">{t.servicesPage.hero.badge}</span>
+          <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">Industrial Solutions</span>
           <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-5 leading-tight">
-            {t.servicesPage.hero.title}
+            Enterprise-Grade ICT Solutions for Africa
           </h1>
           <p className="text-blue-200 text-base sm:text-xl max-w-2xl mx-auto">
-            {t.servicesPage.hero.subtitle}
+            From remote IT support to cybersecurity and infrastructure — we deliver reliable technology solutions that keep your business running.
           </p>
         </div>
       </section>

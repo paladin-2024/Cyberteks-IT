@@ -226,7 +226,7 @@ export default function ApplyPage() {
         declarationAccepted: true as const,
       };
 
-      const res = await fetch('/api/apply', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/apply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -536,7 +536,7 @@ export default function ApplyPage() {
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary-red text-white text-sm font-bold hover:bg-rose-700 transition-all shadow-sm shadow-red-900/20 disabled:opacity-70"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileCheck className="w-4 h-4" />}
-                  {loading ? t.apply.nav.submitting : t.apply.nav.submit}
+                  {loading ? 'Submitting…' : 'Submit Application'}
                 </button>
               )}
             </div>

@@ -41,8 +41,8 @@ export default function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Link to="/" className="inline-block mb-6">
               <img
-                src="/assets/cyberteks-it-footer-logo.png"
-                alt="CyberteksIT"
+                src="/assets/cyberteks-it-white-logo.png"
+                alt="Cyberteks-IT"
                 className="h-14 w-auto object-contain"
               />
             </Link>
@@ -143,7 +143,7 @@ export default function Footer() {
       <div className="border-t border-white/8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <p className="text-sm text-white/30">
-            &copy; {new Date().getFullYear()} CyberteksIT. {t.footer.rights} Kampala, Uganda.
+            &copy; {new Date().getFullYear()} Cyberteks-IT. {t.footer.rights} Kampala, Uganda.
           </p>
           <div className="flex items-center gap-5 text-sm text-white/30">
             <Link to="/privacy-policy" className="hover:text-white/60 transition-colors">{t.footer.privacyPolicy}</Link>

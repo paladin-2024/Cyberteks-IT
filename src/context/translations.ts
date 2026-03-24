@@ -24,7 +24,7 @@ export const translations = {
       title2: 'ICT Solutions',
       title3: 'for Every Business',
       description:
-        'From remote IT support to advanced security systems and ICT skills training — CyberteksIT delivers end-to-end technology solutions that power your growth.',
+        'From remote IT support to advanced security systems and ICT skills training — Cyberteks-IT delivers end-to-end technology solutions that power your growth.',
       exploreServices: 'Get Remote IT Support',
       applyTraining: 'Apply Now',
     },
@@ -80,7 +80,7 @@ export const translations = {
       training: {
         title: 'Launch Your ICT Career',
         description:
-          "Join thousands of professionals who have transformed their careers through CyberteksIT's industry-aligned training programs.",
+          "Join thousands of professionals who have transformed their careers through Cyberteks-IT's industry-aligned training programs.",
         button: 'Apply for Training',
       },
       support: {
@@ -110,7 +110,7 @@ export const translations = {
         badge: 'Our Story',
         title1: 'Built for the World.',
         title2: 'Rooted in Uganda.',
-        description: 'CyberteksIT is a dynamic ICT solutions provider delivering expert remote support to clients across the globe — anytime, anywhere.',
+        description: 'Cyberteks-IT is a dynamic ICT solutions provider delivering expert remote support to clients across the globe — anytime, anywhere.',
         stats: {
           clients: 'Clients Served',
           years: 'Years Experience',
@@ -149,12 +149,12 @@ export const translations = {
         title: 'Key Milestones',
         subtitle: 'From a small Kampala startup to a globally-capable ICT partner — here\'s how we got here.',
         milestones: [
-          { year: '2019', event: 'CyberteksIT founded in Kampala with a mission to democratise ICT in Uganda.' },
+          { year: '2019', event: 'Cyberteks-IT founded in Kampala with a mission to democratise ICT in Uganda.' },
           { year: '2020', event: 'Launched remote IT support services, helping SMEs navigate the pandemic with minimal disruption.' },
           { year: '2021', event: 'Opened ICT skilling programme — first cohort of 30 students completed hands-on training.' },
           { year: '2022', event: 'Expanded to CCTV, access control, and VoIP solutions serving clients across East Africa.' },
           { year: '2023', event: 'Crossed 100+ clients and launched our AI & Robotics training programme.' },
-          { year: '2025', event: 'Launched the CyberteksIT LMS platform for online and hybrid training delivery.' },
+          { year: '2025', event: 'Launched the Cyberteks-IT LMS platform for online and hybrid training delivery.' },
         ],
       },
       values: {
@@ -173,12 +173,12 @@ export const translations = {
       team: {
         badge: 'Leadership',
         title: 'Meet the Team',
-        subtitle: 'The people behind CyberteksIT — passionate professionals committed to transforming Africa through technology.',
+        subtitle: 'The people behind Cyberteks-IT, passionate professionals committed to transforming Africa through technology.',
       },
       business: {
         badge: 'What We Do',
-        title: 'Two Pillars. One Mission.',
-        subtitle: 'CyberteksIT operates across two core business segments — each delivering transformative impact in its own right.',
+        title: 'Business Segments',
+        subtitle: 'Cyberteks-IT operates across two core business segments, each delivering transformative impact in its own right.',
         industry: {
           title: 'Industry Solutions',
           desc: 'Building secure, intelligent, and future-ready tech solutions for your organization — wherever you are in the world.',
@@ -313,7 +313,7 @@ export const translations = {
         badge: 'Join Our Team',
         title1: 'Build the Future',
         title2: 'of ICT in Africa',
-        description: 'CyberteksIT is growing — and we\'re looking for passionate, driven people who want to make a real difference in Uganda\'s digital landscape.',
+        description: 'Cyberteks-IT is growing — and we\'re looking for passionate, driven people who want to make a real difference in Uganda\'s digital landscape.',
         openRoles: 'Open Roles',
         stats: {
           openings: 'Open Positions',
@@ -322,12 +322,12 @@ export const translations = {
         },
       },
       perks: {
-        badge: 'Life at CyberteksIT',
+        badge: 'Life at Cyberteks-IT',
         title: 'Why Work With Us?',
         subtitle: 'We build more than solutions — we build careers.',
         items: [
           { title: 'Career Growth', desc: 'Clear progression paths and mentorship from senior engineers with real-world enterprise experience.' },
-          { title: 'Free Training', desc: 'Full access to all CyberteksIT courses and professional certifications — completely on us.' },
+          { title: 'Free Training', desc: 'Full access to all Cyberteks-IT courses and professional certifications — completely on us.' },
           { title: 'Meaningful Work', desc: "Help shape Uganda's digital future with work that genuinely improves businesses and communities." },
           { title: 'Great Team', desc: 'A small, driven team where your ideas get heard and implemented — not buried in bureaucracy.' },
           { title: 'Cutting-Edge Tech', desc: 'Work with modern tools — cloud platforms, AI systems, enterprise networking, and security infrastructure.' },
@@ -346,7 +346,7 @@ export const translations = {
       cta: {
         badge: "Don't see your role?",
         title: 'Send Us Your CV Anyway',
-        description: "We're always open to exceptional talent. If you believe you'd be a great fit for CyberteksIT, reach out — we'd love to hear from you.",
+        description: "We're always open to exceptional talent. If you believe you'd be a great fit for Cyberteks-IT, reach out — we'd love to hear from you.",
         email: 'Email Your CV',
         whatsapp: 'WhatsApp Us',
       },
@@ -358,7 +358,7 @@ export const translations = {
         subtitle: 'From remote support to security systems and digital skills training — everything your business needs.',
       },
       trust: {
-        badge: 'Why CyberteksIT?',
+        badge: 'Why Cyberteks-IT?',
         title: 'Trusted Across East Africa',
         description: 'From small offices in Kampala to businesses in Kenya, Rwanda, and across the region — we deliver ICT solutions that work.',
         stats: [
@@ -516,7 +516,7 @@ export const translations = {
         title: 'Declaration',
         referral: 'How did you hear about us?',
         referralOptions: ['Social Media (Facebook, Twitter, Instagram)', 'Friend / Family referral', 'Google Search', 'WhatsApp / Telegram', 'School / University', 'Career Fair / Event', 'Other'],
-        agree: 'I confirm that all information provided is accurate and I agree to the Terms & Conditions of CyberteksIT.',
+        agree: 'I confirm that all information provided is accurate and I agree to the Terms & Conditions of Cyberteks-IT.',
       },
       nav: {
         next: 'Next',
@@ -577,13 +577,13 @@ export const translations = {
         title: 'Remote Access Setup',
         tool: 'Preferred Remote Tool',
         permission: 'Remote Access Permission',
-        permissionText: 'I give CyberteksIT permission to remotely access my device to diagnose and fix the reported issue. I understand the technician will request my permission before taking any action.',
+        permissionText: 'I give Cyberteks-IT permission to remotely access my device to diagnose and fix the reported issue. I understand the technician will request my permission before taking any action.',
         agree: 'Yes, I agree to grant remote access',
         disagree: 'No, I prefer phone/chat support only',
       },
       consent: {
         title: 'Consent & Submit',
-        confirm: 'I confirm all information is accurate and consent to CyberteksIT contacting me regarding this support request.',
+        confirm: 'I confirm all information is accurate and consent to Cyberteks-IT contacting me regarding this support request.',
       },
       nav: {
         next: 'Next',
@@ -620,7 +620,7 @@ export const translations = {
         },
         why: {
           badge: 'Why Choose Us',
-          title: 'The CyberteksIT Advantage',
+          title: 'The Cyberteks-IT Advantage',
           items: [
             { title: '12-Month Warranty', desc: 'Professional installation backed by a full 12-month warranty on parts and workmanship.' },
             { title: 'Mobile App Viewing', desc: 'Live and recorded footage accessible from iOS and Android devices, anywhere in the world.' },
@@ -697,7 +697,7 @@ export const translations = {
       },
       softwareAi: {
         hero: {
-          badge: 'Software & AI',
+          badge: 'Software-Driven Digitization',
           title1: 'Custom Software',
           title2: '& AI Solutions',
           subtitle: 'Bespoke software development and AI-powered tools built for your business — from web apps to intelligent automation.',
@@ -894,7 +894,7 @@ export const translations = {
           title: 'My Certificates',
           earned: 'certificate earned',
           earnedPlural: 'certificates earned',
-          issuedBy: 'Issued by CyberteksIT LMS',
+          issuedBy: 'Issued by Cyberteks-IT LMS',
           credentialId: 'Credential ID',
           instructor: 'Instructor',
           courseHours: 'Course Hours',
@@ -974,7 +974,7 @@ export const translations = {
       title2: 'Prêtes pour',
       title3: "l'Avenir",
       description:
-        "Du support IT à distance aux systèmes de sécurité avancés et à la formation TIC — CyberteksIT offre des solutions technologiques complètes pour propulser votre croissance.",
+        "Du support IT à distance aux systèmes de sécurité avancés et à la formation TIC — Cyberteks-IT offre des solutions technologiques complètes pour propulser votre croissance.",
       exploreServices: 'Support IT à Distance',
       applyTraining: 'Postuler Maintenant',
     },
@@ -1030,7 +1030,7 @@ export const translations = {
       training: {
         title: 'Lancez Votre Carrière TIC',
         description:
-          "Rejoignez des milliers de professionnels qui ont transformé leur carrière grâce aux programmes de formation de CyberteksIT.",
+          "Rejoignez des milliers de professionnels qui ont transformé leur carrière grâce aux programmes de formation de Cyberteks-IT.",
         button: 'Postuler à la Formation',
       },
       support: {
@@ -1060,7 +1060,7 @@ export const translations = {
         badge: 'Notre Histoire',
         title1: 'Construit pour le Monde.',
         title2: "Enraciné en Ouganda.",
-        description: "CyberteksIT est un fournisseur dynamique de solutions TIC offrant une assistance à distance experte à des clients du monde entier — partout, à tout moment.",
+        description: "Cyberteks-IT est un fournisseur dynamique de solutions TIC offrant une assistance à distance experte à des clients du monde entier — partout, à tout moment.",
         stats: {
           clients: 'Clients Servis',
           years: "Années d'Expérience",
@@ -1099,12 +1099,12 @@ export const translations = {
         title: 'Jalons Clés',
         subtitle: "D'une petite startup à Kampala à un partenaire TIC de portée mondiale — voici notre histoire.",
         milestones: [
-          { year: '2019', event: "CyberteksIT fondé à Kampala avec la mission de démocratiser les TIC en Ouganda." },
+          { year: '2019', event: "Cyberteks-IT fondé à Kampala avec la mission de démocratiser les TIC en Ouganda." },
           { year: '2020', event: "Lancement des services de support IT à distance, aidant les PME à traverser la pandémie." },
           { year: '2021', event: "Ouverture du programme de formation TIC — première promotion de 30 étudiants formés." },
           { year: '2022', event: "Expansion vers les solutions CCTV, contrôle d'accès et VoIP pour des clients en Afrique de l'Est." },
           { year: '2023', event: "Dépassement de 100+ clients et lancement du programme de formation en IA & Robotique." },
-          { year: '2025', event: "Lancement de la plateforme CyberteksIT LMS pour la formation en ligne et hybride." },
+          { year: '2025', event: "Lancement de la plateforme Cyberteks-IT LMS pour la formation en ligne et hybride." },
         ],
       },
       values: {
@@ -1123,12 +1123,12 @@ export const translations = {
       team: {
         badge: 'Direction',
         title: "Rencontrez l'Équipe",
-        subtitle: "Les personnes derrière CyberteksIT — des professionnels passionnés engagés à transformer l'Afrique par la technologie.",
+        subtitle: "Les personnes derrière Cyberteks-IT — des professionnels passionnés engagés à transformer l'Afrique par la technologie.",
       },
       business: {
         badge: 'Ce Que Nous Faisons',
         title: 'Deux Piliers. Une Mission.',
-        subtitle: "CyberteksIT opère dans deux segments d'activité principaux — chacun ayant un impact transformateur.",
+        subtitle: "Cyberteks-IT opère dans deux segments d'activité principaux — chacun ayant un impact transformateur.",
         industry: {
           title: 'Solutions Industrielles',
           desc: "Construire des solutions technologiques sécurisées, intelligentes et prêtes pour l'avenir pour votre organisation — où que vous soyez dans le monde.",
@@ -1263,7 +1263,7 @@ export const translations = {
         badge: 'Rejoignez Notre Équipe',
         title1: "Construire l'Avenir",
         title2: "des TIC en Afrique",
-        description: "CyberteksIT est en pleine croissance — et nous recherchons des personnes passionnées et motivées qui souhaitent faire une réelle différence dans le paysage numérique ougandais.",
+        description: "Cyberteks-IT est en pleine croissance — et nous recherchons des personnes passionnées et motivées qui souhaitent faire une réelle différence dans le paysage numérique ougandais.",
         openRoles: 'Postes Ouverts',
         stats: {
           openings: 'Postes Disponibles',
@@ -1272,12 +1272,12 @@ export const translations = {
         },
       },
       perks: {
-        badge: 'La Vie chez CyberteksIT',
+        badge: 'La Vie chez Cyberteks-IT',
         title: 'Pourquoi Travailler Avec Nous ?',
         subtitle: 'Nous construisons plus que des solutions — nous construisons des carrières.',
         items: [
           { title: 'Évolution de Carrière', desc: "Des voies de progression claires et du mentorat d'ingénieurs seniors avec une expérience en entreprise." },
-          { title: 'Formation Gratuite', desc: "Accès complet à tous les cours CyberteksIT et certifications professionnelles — entièrement à notre charge." },
+          { title: 'Formation Gratuite', desc: "Accès complet à tous les cours Cyberteks-IT et certifications professionnelles — entièrement à notre charge." },
           { title: 'Travail Significatif', desc: "Contribuez à l'avenir numérique de l'Ouganda avec un travail qui améliore réellement les entreprises et les communautés." },
           { title: 'Grande Équipe', desc: "Une petite équipe dynamique où vos idées sont entendues et mises en œuvre — sans bureaucratie excessive." },
           { title: 'Technologie de Pointe', desc: "Travaillez avec des outils modernes — plateformes cloud, systèmes IA, réseaux d'entreprise et infrastructure de sécurité." },
@@ -1296,7 +1296,7 @@ export const translations = {
       cta: {
         badge: 'Vous ne voyez pas votre poste ?',
         title: 'Envoyez-Nous Votre CV Quand Même',
-        description: "Nous sommes toujours ouverts aux talents exceptionnels. Si vous pensez correspondre à CyberteksIT, contactez-nous — nous serions ravis de vous entendre.",
+        description: "Nous sommes toujours ouverts aux talents exceptionnels. Si vous pensez correspondre à Cyberteks-IT, contactez-nous — nous serions ravis de vous entendre.",
         email: 'Envoyer Votre CV par Email',
         whatsapp: 'Nous Contacter via WhatsApp',
       },
@@ -1308,7 +1308,7 @@ export const translations = {
         subtitle: "Du support à distance aux systèmes de sécurité et à la formation numérique — tout ce dont votre entreprise a besoin.",
       },
       trust: {
-        badge: 'Pourquoi CyberteksIT ?',
+        badge: 'Pourquoi Cyberteks-IT ?',
         title: "Approuvé dans toute l'Afrique de l'Est",
         description: "Des petits bureaux à Kampala aux entreprises au Kenya, au Rwanda et dans toute la région — nous livrons des solutions TIC qui fonctionnent.",
         stats: [
@@ -1466,7 +1466,7 @@ export const translations = {
         title: 'Déclaration',
         referral: 'Comment avez-vous entendu parler de nous ?',
         referralOptions: ['Réseaux Sociaux (Facebook, Twitter, Instagram)', 'Recommandation d\'un ami / de la famille', 'Recherche Google', 'WhatsApp / Telegram', 'École / Université', 'Salon de l\'emploi / Événement', 'Autre'],
-        agree: "Je confirme que toutes les informations fournies sont exactes et j'accepte les Termes & Conditions de CyberteksIT.",
+        agree: "Je confirme que toutes les informations fournies sont exactes et j'accepte les Termes & Conditions de Cyberteks-IT.",
       },
       nav: {
         next: 'Suivant',
@@ -1527,13 +1527,13 @@ export const translations = {
         title: 'Configuration Accès à Distance',
         tool: 'Outil à Distance Préféré',
         permission: 'Permission Accès à Distance',
-        permissionText: "Je donne à CyberteksIT la permission d'accéder à distance à mon appareil pour diagnostiquer et résoudre le problème signalé.",
+        permissionText: "Je donne à Cyberteks-IT la permission d'accéder à distance à mon appareil pour diagnostiquer et résoudre le problème signalé.",
         agree: "Oui, j'accepte d'accorder l'accès à distance",
         disagree: 'Non, je préfère le support par téléphone/chat uniquement',
       },
       consent: {
         title: 'Consentement & Soumission',
-        confirm: "Je confirme que toutes les informations sont exactes et je consens à être contacté par CyberteksIT concernant cette demande de support.",
+        confirm: "Je confirme que toutes les informations sont exactes et je consens à être contacté par Cyberteks-IT concernant cette demande de support.",
       },
       nav: {
         next: 'Suivant',
@@ -1570,7 +1570,7 @@ export const translations = {
         },
         why: {
           badge: 'Pourquoi Nous Choisir',
-          title: "L'Avantage CyberteksIT",
+          title: "L'Avantage Cyberteks-IT",
           items: [
             { title: 'Garantie 12 Mois', desc: "Installation professionnelle garantie 12 mois complets sur les pièces et la main-d'œuvre." },
             { title: 'Visualisation sur Application Mobile', desc: "Images en direct et enregistrées accessibles depuis les appareils iOS et Android, partout dans le monde." },
@@ -1844,7 +1844,7 @@ export const translations = {
           title: 'Mes Certificats',
           earned: 'certificat obtenu',
           earnedPlural: 'certificats obtenus',
-          issuedBy: 'Délivré par CyberteksIT LMS',
+          issuedBy: 'Délivré par Cyberteks-IT LMS',
           credentialId: 'ID de Certification',
           instructor: 'Instructeur',
           courseHours: 'Heures de Cours',

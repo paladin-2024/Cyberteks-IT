@@ -63,7 +63,7 @@ const OPENINGS = [
     type: 'Full-time / Contract',
     location: 'Remote',
     icon: TrendingUp,
-    desc: 'Drive business growth by identifying opportunities, pitching CyberteksIT\'s solutions to prospective clients, and building lasting commercial relationships. You\'ll be rewarded competitively with a mix of base pay and performance bonuses.',
+    desc: 'Drive business growth by identifying opportunities, pitching Cyberteks-IT\'s solutions to prospective clients, and building lasting commercial relationships. You\'ll be rewarded competitively with a mix of base pay and performance bonuses.',
   },
 ];
 
@@ -130,7 +130,7 @@ export default function CareersPage() {
               {t.careers.cta.email}
             </a>
             <a
-              href="https://wa.me/256779367005?text=Hi%20CyberteksIT%2C%20I%20am%20interested%20in%20joining%20your%20team"
+              href="https://wa.me/256779367005?text=Hi%20Cyberteks-IT%2C%20I%20am%20interested%20in%20joining%20your%20team"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 text-white font-semibold px-7 py-3.5 rounded-xl transition-colors duration-200"
@@ -155,7 +155,7 @@ export default function CareersPage() {
             <div className="absolute -inset-4 bg-gradient-to-br from-[#023064]/10 to-[#E11D48]/5 rounded-3xl" />
             <img
               src="/assets/ict-skilling-capacity-building.jpg"
-              alt="CyberteksIT team at work"
+              alt="Cyberteks-IT team at work"
               className="relative rounded-3xl shadow-xl w-full object-cover aspect-[4/3]"
             />
             <div className="absolute -bottom-5 -right-5 bg-[#023064] text-white rounded-2xl px-5 py-3 shadow-xl">
@@ -415,7 +415,7 @@ export default function CareersPage() {
               {t.careers.cta.email}
             </a>
             <a
-              href="https://wa.me/256779367005?text=Hi%20CyberteksIT%2C%20I%20am%20interested%20in%20a%20career%20opportunity"
+              href="https://wa.me/256779367005?text=Hi%20Cyberteks-IT%2C%20I%20am%20interested%20in%20a%20career%20opportunity"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors duration-200"

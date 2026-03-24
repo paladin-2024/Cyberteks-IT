@@ -11,7 +11,7 @@ const testimonials = [
   {
     name: 'Ssemwanga Brian',
     program: 'Web Development & Programming',
-    quote: "CyberteksIT's hands-on approach and small class sizes made all the difference. I built three real projects and now freelance confidently.",
+    quote: "Cyberteks-IT's hands-on approach and small class sizes made all the difference. I built three real projects and now freelance confidently.",
     initials: 'SB',
   },
   {

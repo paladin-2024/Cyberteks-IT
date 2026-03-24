@@ -13,8 +13,8 @@ export default function AuthLayout() {
         {/* Logo */}
         <Link to="/" className="relative flex items-center gap-3">
           <img
-            src="/assets/cyberteks-it-logo-33783fbc-fb2c-484a-b670-9f269d8493cf.png"
-            alt="CyberteksIT"
+            src="/assets/cyberteks-it-white-logo.png"
+            alt="Cyberteks-IT"
             className="h-14 w-auto object-contain"
           />
         </Link>
@@ -30,7 +30,7 @@ export default function AuthLayout() {
               <span className="text-white text-sm font-bold">C</span>
             </div>
             <div>
-              <p className="text-white font-semibold text-sm">CyberteksIT LMS</p>
+              <p className="text-white font-semibold text-sm">Cyberteks-IT LMS</p>
               <p className="text-white/50 text-xs">Learning Management System</p>
             </div>
           </div>
@@ -57,9 +57,9 @@ export default function AuthLayout() {
           {/* Mobile logo */}
           <Link to="/" className="flex lg:hidden items-center gap-2 mb-10">
             <img
-              src="/assets/logo-round.png"
-              alt="CyberteksIT"
-              className="w-9 h-9 object-contain"
+              src="/assets/cyberteks-it-logo.png"
+              alt="Cyberteks-IT"
+              className="h-10 w-auto object-contain"
             />
           </Link>
           <Outlet />

@@ -269,13 +269,13 @@ function SidebarContent({
         {collapsed ? (
           <img
             src="/assets/logo-round.png"
-            alt="CyberteksIT"
+            alt="Cyberteks-IT"
             className="w-10 h-10 object-contain"
           />
         ) : (
           <img
-            src="/assets/cyberteks-it-logo-33783fbc-fb2c-484a-b670-9f269d8493cf.png"
-            alt="CyberteksIT"
+            src="/assets/cyberteks-it-logo.png"
+            alt="Cyberteks-IT"
             className="h-10 w-auto object-contain"
           />
         )}

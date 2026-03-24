@@ -13,7 +13,7 @@ const VALUE_ICONS = [Shield, Heart, Star, Zap, Globe, Award];
 
 const TEAM = [
   {
-    name: 'Kenneth Sansa',
+    name: 'Keneth Sansa',
     role: 'Founder & CEO',
     bio: 'Cybersecurity specialist and ICT entrepreneur with a passion for bridging Uganda\'s digital divide and delivering world-class technology solutions to African businesses.',
     initials: 'KS',
@@ -110,6 +110,80 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── Business Segments ── */}
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-[#023064] relative overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              'radial-gradient(ellipse at 10% 80%, #E11D48 0%, transparent 50%), radial-gradient(ellipse at 90% 20%, #3b82f6 0%, transparent 45%)',
+          }}
+        />
+        <div className="max-w-6xl mx-auto relative">
+          <div className="text-center mb-14">
+            <span className="inline-block bg-white/10 text-blue-200 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">
+              {t.about.business.badge}
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-white mt-2">
+              {t.about.business.title}
+            </h2>
+            <p className="text-blue-300 mt-3 max-w-xl mx-auto">
+              {t.about.business.subtitle}
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Industry Solutions */}
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 hover:bg-white/15 transition-colors duration-200 group">
+              <div className="w-12 h-12 rounded-2xl bg-[#E11D48] flex items-center justify-center mb-5 shadow-lg">
+                <Monitor className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-heading text-2xl font-bold text-white mb-2">{t.about.business.industry.title}</h3>
+              <p className="text-blue-200 mb-6 leading-relaxed">
+                {t.about.business.industry.desc}
+              </p>
+              <ul className="space-y-2.5">
+                {INDUSTRY_SOLUTIONS.map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-sm text-blue-100">
+                    <ChevronRight className="w-4 h-4 text-[#E11D48] shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/services"
+                className="inline-flex items-center gap-2 mt-7 text-white font-semibold text-sm hover:text-[#E11D48] transition-colors"
+              >
+                {t.about.business.industry.link} <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+            {/* Online Skilling */}
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 hover:bg-white/15 transition-colors duration-200 group">
+              <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-5 shadow-lg">
+                <GraduationCap className="w-6 h-6 text-[#023064]" />
+              </div>
+              <h3 className="font-heading text-2xl font-bold text-white mb-2">{t.about.business.skilling.title}</h3>
+              <p className="text-blue-200 mb-6 leading-relaxed">
+                {t.about.business.skilling.desc}
+              </p>
+              <ul className="space-y-2.5">
+                {ONLINE_SKILLING.map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-sm text-blue-100">
+                    <ChevronRight className="w-4 h-4 text-[#E11D48] shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/apply"
+                className="inline-flex items-center gap-2 mt-7 text-white font-semibold text-sm hover:text-[#E11D48] transition-colors"
+              >
+                {t.about.business.skilling.link} <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Mission & Vision ── */}
       <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-5xl mx-auto">
@@ -179,7 +253,7 @@ export default function AboutPage() {
             <div className="absolute -inset-4 bg-gradient-to-br from-[#023064]/10 to-[#E11D48]/5 rounded-3xl" />
             <img
               src="/assets/ict-skilling-capacity-building.jpg"
-              alt="CyberteksIT team at work"
+              alt="Cyberteks-IT team at work"
               className="relative rounded-3xl shadow-xl w-full object-cover aspect-[4/3]"
             />
             <div className="absolute -bottom-5 -left-5 bg-[#E11D48] text-white rounded-2xl px-5 py-3 shadow-xl">
@@ -207,7 +281,7 @@ export default function AboutPage() {
           <div className="relative">
             <div className="absolute left-[19px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#023064] via-[#E11D48] to-[#023064]" />
             <div className="space-y-8">
-              {t.about.journey.milestones.map((m, i) => (
+              {t.about.journey.milestones.map((m) => (
                 <div key={m.year} className="flex gap-6 group">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#023064] flex items-center justify-center ring-4 ring-white z-10 group-hover:bg-[#E11D48] transition-colors duration-200 shadow-md">
                     <span className="text-white text-[10px] font-bold">{m.year.slice(2)}</span>
@@ -309,80 +383,6 @@ export default function AboutPage() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Business Segments ── */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-[#023064] relative overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage:
-              'radial-gradient(ellipse at 10% 80%, #E11D48 0%, transparent 50%), radial-gradient(ellipse at 90% 20%, #3b82f6 0%, transparent 45%)',
-          }}
-        />
-        <div className="max-w-6xl mx-auto relative">
-          <div className="text-center mb-14">
-            <span className="inline-block bg-white/10 text-blue-200 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">
-              {t.about.business.badge}
-            </span>
-            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-white mt-2">
-              {t.about.business.title}
-            </h2>
-            <p className="text-blue-300 mt-3 max-w-xl mx-auto">
-              {t.about.business.subtitle}
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Industry Solutions */}
-            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 hover:bg-white/15 transition-colors duration-200 group">
-              <div className="w-12 h-12 rounded-2xl bg-[#E11D48] flex items-center justify-center mb-5 shadow-lg">
-                <Monitor className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="font-heading text-2xl font-bold text-white mb-2">{t.about.business.industry.title}</h3>
-              <p className="text-blue-200 mb-6 leading-relaxed">
-                {t.about.business.industry.desc}
-              </p>
-              <ul className="space-y-2.5">
-                {INDUSTRY_SOLUTIONS.map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-sm text-blue-100">
-                    <ChevronRight className="w-4 h-4 text-[#E11D48] shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to="/services"
-                className="inline-flex items-center gap-2 mt-7 text-white font-semibold text-sm hover:text-[#E11D48] transition-colors"
-              >
-                {t.about.business.industry.link} <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-            {/* Online Skilling */}
-            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 hover:bg-white/15 transition-colors duration-200 group">
-              <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-5 shadow-lg">
-                <GraduationCap className="w-6 h-6 text-[#023064]" />
-              </div>
-              <h3 className="font-heading text-2xl font-bold text-white mb-2">{t.about.business.skilling.title}</h3>
-              <p className="text-blue-200 mb-6 leading-relaxed">
-                {t.about.business.skilling.desc}
-              </p>
-              <ul className="space-y-2.5">
-                {ONLINE_SKILLING.map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-sm text-blue-100">
-                    <ChevronRight className="w-4 h-4 text-[#E11D48] shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to="/apply"
-                className="inline-flex items-center gap-2 mt-7 text-white font-semibold text-sm hover:text-[#E11D48] transition-colors"
-              >
-                {t.about.business.skilling.link} <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
           </div>
         </div>
       </section>

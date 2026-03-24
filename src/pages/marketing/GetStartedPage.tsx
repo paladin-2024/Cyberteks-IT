@@ -413,7 +413,7 @@ export default function GetStartedPage() {
     if (!canProceed()) return;
     setLoading(true); setError('');
     try {
-      const res = await fetch('/api/get-started', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/get-started`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(fd),
