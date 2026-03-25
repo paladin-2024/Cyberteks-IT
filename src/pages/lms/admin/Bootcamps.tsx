@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Rocket, Plus, Pencil, Trash2, ExternalLink, X, Loader2,
-  Calendar, CheckCircle2, XCircle, ImagePlus, Link2,
+  Calendar, CheckCircle2, XCircle, ImagePlus, Link2, UserCheck,
 } from 'lucide-react';
 import { api } from '@/lib/api';
 
@@ -250,10 +250,12 @@ function DeleteConfirm({ title, onConfirm, onCancel }: { title: string; onConfir
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function AdminBootcamps() {
-  const [bootcamps, setBootcamps] = useState<Bootcamp[]>([]);
-  const [loading, setLoading]     = useState(true);
-  const [modal, setModal]         = useState<'create' | Bootcamp | null>(null);
-  const [deleting, setDeleting]   = useState<Bootcamp | null>(null);
+  const [bootcamps, setBootcamps]   = useState<Bootcamp[]>([]);
+  const [loading, setLoading]       = useState(true);
+  const [modal, setModal]           = useState<'create' | Bootcamp | null>(null);
+  const [deleting, setDeleting]     = useState<Bootcamp | null>(null);
+  const [backfilling, setBackfilling] = useState(false);
+  const [backfillMsg, setBackfillMsg] = useState('');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -278,6 +280,19 @@ export default function AdminBootcamps() {
     load();
   };
 
+  const handleBackfill = async () => {
+    setBackfilling(true);
+    setBackfillMsg('');
+    try {
+      const data = await api.post<{ enrolled: number; message: string }>('/apply/backfill-bootcamp', {});
+      setBackfillMsg(data.message);
+    } catch (e: any) {
+      setBackfillMsg(e.message ?? 'Backfill failed');
+    } finally {
+      setBackfilling(false);
+    }
+  };
+
   const active  = bootcamps.filter(b => b.isActive && daysLeft(b.expiresAt) > 0);
   const expired = bootcamps.filter(b => !b.isActive || daysLeft(b.expiresAt) <= 0);
 
@@ -291,11 +306,26 @@ export default function AdminBootcamps() {
           </h1>
           <p className="text-sm text-muted-foreground mt-0.5">Manage free bootcamp banners shown on the ICT Skilling page.</p>
         </div>
-        <button onClick={() => setModal('create')}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#E11D48] text-white text-sm font-bold hover:bg-rose-700 transition-colors shadow-sm">
-          <Plus className="w-4 h-4" /> New Bootcamp
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={handleBackfill} disabled={backfilling}
+            title="Enroll all existing accepted free-bootcamp applicants in Python Programming"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-60">
+            {backfilling ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserCheck className="w-4 h-4" />}
+            Enroll Existing
+          </button>
+          <button onClick={() => setModal('create')}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#E11D48] text-white text-sm font-bold hover:bg-rose-700 transition-colors shadow-sm">
+            <Plus className="w-4 h-4" /> New Bootcamp
+          </button>
+        </div>
       </div>
+
+      {backfillMsg && (
+        <div className="flex items-center justify-between gap-3 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 text-sm text-emerald-700 font-medium">
+          <span><UserCheck className="inline w-4 h-4 mr-1.5" />{backfillMsg}</span>
+          <button onClick={() => setBackfillMsg('')} className="text-emerald-400 hover:text-emerald-600"><X className="w-3.5 h-3.5" /></button>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">

@@ -305,6 +305,7 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
           'Artificial Intelligence & Machine Learning': ['ai', 'machine learning', 'artificial'],
           'Graphic Design':                           ['design', 'graphic'],
           'Digital Marketing':                        ['marketing', 'digital'],
+          'Free Bootcamp: Python Programming':        ['python'],
         };
 
         // Collect keywords for all selected programs
@@ -312,28 +313,44 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
           (p: string) => programToCategoryKeywords[p] ?? [p.toLowerCase()]
         );
 
+        const courseIdsToEnroll = new Set<string>();
+
+        // Keyword-based matching
         if (keywords.length > 0) {
           const allCourses = await prisma.course.findMany({
             where: { status: 'PUBLISHED' },
             select: { id: true, category: true, title: true },
           });
 
-          const matchingCourseIds = allCourses
+          allCourses
             .filter((c: { id: string; category: string | null; title: string }) => {
               const hay = `${c.category ?? ''} ${c.title}`.toLowerCase();
               return keywords.some((kw: string) => hay.includes(kw));
             })
-            .map((c: { id: string }) => c.id);
+            .forEach((c: { id: string }) => courseIdsToEnroll.add(c.id));
+        }
 
-          if (matchingCourseIds.length > 0) {
-            await prisma.enrollment.createMany({
-              data: matchingCourseIds.map((courseId: string) => ({
-                userId:  newUser.id,
-                courseId,
-                status:  'ACTIVE',
-              })),
-            });
-          }
+        // Direct enroll for Free Bootcamp: Python Programming (exact title lookup)
+        const hasBootcamp = application.programs.some(
+          (p: string) => p.includes('Free Bootcamp') || p.toLowerCase().includes('python')
+        );
+        if (hasBootcamp) {
+          const pythonCourse = await prisma.course.findFirst({
+            where: { title: { contains: 'Python', mode: 'insensitive' }, status: 'PUBLISHED' },
+            select: { id: true },
+          });
+          if (pythonCourse) courseIdsToEnroll.add(pythonCourse.id);
+        }
+
+        if (courseIdsToEnroll.size > 0) {
+          await prisma.enrollment.createMany({
+            data: [...courseIdsToEnroll].map((courseId: string) => ({
+              userId:  newUser.id,
+              courseId,
+              status:  'ACTIVE',
+            })),
+            skipDuplicates: true,
+          });
         }
 
         // In-app notification for the new student
@@ -386,6 +403,55 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
     res.json({ application: updated });
   } catch (err) {
     console.error('[apply PATCH status]', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ── POST /api/apply/backfill-bootcamp (admin only) ───────────────────────────
+// Enrolls all existing accepted free-bootcamp applicants in the Python course.
+router.post('/backfill-bootcamp', requireAuth, requireRole('ADMIN'), async (_req: AuthRequest, res: Response) => {
+  try {
+    const pythonCourse = await prisma.course.findFirst({
+      where: { title: { contains: 'Python', mode: 'insensitive' }, status: 'PUBLISHED' },
+      select: { id: true },
+    });
+    if (!pythonCourse) {
+      res.status(404).json({ error: 'Python Programming course not found or not published.' });
+      return;
+    }
+
+    // All accepted applications that selected a free bootcamp program and have a linked user
+    const applications = await prisma.application.findMany({
+      where: {
+        status: 'ACCEPTED',
+        userId: { not: null },
+      },
+      select: { userId: true, programs: true },
+    });
+
+    const bootcampUserIds = applications
+      .filter((a: { userId: string | null; programs: string[] }) =>
+        a.programs.some((p: string) => p.includes('Free Bootcamp') || p.toLowerCase().includes('python'))
+      )
+      .map((a: { userId: string | null }) => a.userId as string);
+
+    if (bootcampUserIds.length === 0) {
+      res.json({ enrolled: 0, message: 'No matching accepted applications found.' });
+      return;
+    }
+
+    const result = await prisma.enrollment.createMany({
+      data: bootcampUserIds.map((userId: string) => ({
+        userId,
+        courseId: pythonCourse.id,
+        status:   'ACTIVE',
+      })),
+      skipDuplicates: true,
+    });
+
+    res.json({ enrolled: result.count, message: `Enrolled ${result.count} student(s) in Python Programming.` });
+  } catch (err) {
+    console.error('[apply backfill-bootcamp]', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
