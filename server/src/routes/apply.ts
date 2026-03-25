@@ -251,8 +251,9 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
         });
         userId = existing.id;
       } else {
-        tempPassword = (application as any).tempPassword ?? generateTempPassword();
-        const hashedPassword = await bcrypt.hash(tempPassword, 12);
+        const rawPassword: string = (application as any).tempPassword ?? generateTempPassword();
+        tempPassword = rawPassword;
+        const hashedPassword = await bcrypt.hash(rawPassword, 12);
 
         const newUser = await prisma.user.create({
           data: {
@@ -341,14 +342,21 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
       }
 
       if (courseIdsToEnroll.size > 0 && userId) {
-        await prisma.enrollment.createMany({
-          data: [...courseIdsToEnroll].map((courseId: string) => ({
-            userId:  userId as string,
-            courseId,
-            status:  'ACTIVE',
-          })),
-          skipDuplicates: true,
+        const existing = await prisma.enrollment.findMany({
+          where: { userId: userId as string, courseId: { in: [...courseIdsToEnroll] } },
+          select: { courseId: true },
         });
+        const existingSet = new Set(existing.map((e: { courseId: string }) => e.courseId));
+        const newEnrollments = [...courseIdsToEnroll].filter(id => !existingSet.has(id));
+        if (newEnrollments.length > 0) {
+          await prisma.enrollment.createMany({
+            data: newEnrollments.map((courseId: string) => ({
+              userId:  userId as string,
+              courseId,
+              status:  'ACTIVE',
+            })),
+          });
+        }
       }
 
       // In-app notification
@@ -439,13 +447,25 @@ router.post('/backfill-bootcamp', requireAuth, requireRole('ADMIN'), async (_req
       return;
     }
 
+    // Filter out users already enrolled (MongoDB doesn't support skipDuplicates)
+    const alreadyEnrolled = await prisma.enrollment.findMany({
+      where: { courseId: pythonCourse.id, userId: { in: bootcampUserIds } },
+      select: { userId: true },
+    });
+    const alreadySet = new Set(alreadyEnrolled.map((e: { userId: string }) => e.userId));
+    const toEnroll = bootcampUserIds.filter((id: string) => !alreadySet.has(id));
+
+    if (toEnroll.length === 0) {
+      res.json({ enrolled: 0, message: 'All matching students are already enrolled.' });
+      return;
+    }
+
     const result = await prisma.enrollment.createMany({
-      data: bootcampUserIds.map((userId: string) => ({
+      data: toEnroll.map((userId: string) => ({
         userId,
         courseId: pythonCourse.id,
         status:   'ACTIVE',
       })),
-      skipDuplicates: true,
     });
 
     res.json({ enrolled: result.count, message: `Enrolled ${result.count} student(s) in Python Programming.` });
