@@ -224,7 +224,8 @@ export default function ApplyPage() {
       if (!res.ok) throw new Error(body?.error ?? 'Invalid code');
       setOtpVerified(true);
       setOtpMode(false);
-      setStep(2);
+      // Now actually submit the application
+      await doSubmit();
     } catch (e) {
       setOtpError(e instanceof Error ? e.message : 'Verification failed');
     } finally { setOtpLoading(false); }
@@ -248,15 +249,6 @@ export default function ApplyPage() {
     const err = validateStep(step);
     if (err) { setStepError(err); return; }
     setStepError('');
-
-    // After step 1, require email OTP verification (unless already verified)
-    if (step === 1 && !otpVerified) {
-      setOtpMode(true);
-      setOtpError('');
-      sendOtp();
-      return;
-    }
-
     setStep(s => Math.min(STEPS.length, s + 1));
   };
 
@@ -288,11 +280,8 @@ export default function ApplyPage() {
     '20+ heures (Temps plein)': '10_plus',
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!form.declaration) { setError('Please accept the declaration before submitting.'); return; }
-    if (form.programs.length === 0) { setError('Please select at least one program.'); return; }
-
+  // Called after OTP is verified — does the actual API submission
+  const doSubmit = async () => {
     setLoading(true); setError('');
     try {
       const payload = {
@@ -328,7 +317,20 @@ export default function ApplyPage() {
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again or email us directly.');
+      setOtpMode(false); // go back to form on submit error
     } finally { setLoading(false); }
+  };
+
+  // Called when user clicks "Submit Application" on step 7
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!form.declaration) { setError('Please accept the declaration before submitting.'); return; }
+    if (form.programs.length === 0) { setError('Please select at least one program.'); return; }
+    setError('');
+    setOtpDigits(['', '', '', '', '', '']);
+    setOtpError('');
+    setOtpMode(true);
+    sendOtp();
   };
 
   if (submitted) {
@@ -370,8 +372,8 @@ export default function ApplyPage() {
                 <Mail className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="text-xs font-bold text-primary-blue uppercase tracking-[0.12em]">Step 1 of 2</p>
-                <h2 className="font-display text-lg font-bold text-gray-900">Check your inbox</h2>
+                <p className="text-xs font-bold text-primary-blue uppercase tracking-[0.12em]">Final Step</p>
+                <h2 className="font-display text-lg font-bold text-gray-900">Verify your email</h2>
               </div>
             </div>
 
@@ -423,10 +425,10 @@ export default function ApplyPage() {
               <button
                 onClick={verifyOtp}
                 disabled={otpLoading || otpDigits.join('').length !== 6}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-primary-blue text-white font-bold text-sm hover:bg-blue-900 transition-all disabled:opacity-60"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-primary-red text-white font-bold text-sm hover:bg-rose-700 transition-all disabled:opacity-60"
               >
                 {otpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
-                Verify &amp; Continue
+                {otpLoading ? 'Submitting…' : 'Verify & Submit Application'}
               </button>
 
               <div className="text-center">
