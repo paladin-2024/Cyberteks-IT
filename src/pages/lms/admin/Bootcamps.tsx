@@ -1,9 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Rocket, Plus, Pencil, Trash2, ExternalLink, X, Loader2,
-  Calendar, CheckCircle2, XCircle, Clock, Link2,
+  Calendar, CheckCircle2, XCircle, ImagePlus, Link2,
 } from 'lucide-react';
 import { api } from '@/lib/api';
+
+const API_BASE = (import.meta.env.VITE_API_URL ?? '') + '/api';
 
 interface Bootcamp {
   id: string;
@@ -66,10 +68,37 @@ function BootcampModal({
         }
       : { ...BLANK, expiresAt: twoWeeksFromNow() }
   );
-  const [saving, setSaving] = useState(false);
-  const [err, setErr] = useState('');
+  const [saving, setSaving]       = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr]             = useState('');
+  const fileRef                   = useRef<HTMLInputElement>(null);
 
   const set = (k: string, v: string | boolean) => setForm(f => ({ ...f, [k]: v }));
+
+  const handleImagePick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setErr('');
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE}/upload/cover`, {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: fd,
+      });
+      if (!res.ok) throw new Error('Upload failed');
+      const data = await res.json() as { url: string };
+      set('bannerImage', data.url);
+    } catch {
+      setErr('Image upload failed. Try again.');
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = '';
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,10 +158,31 @@ function BootcampModal({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Banner Image URL</label>
-            <input value={form.bannerImage} onChange={e => set('bannerImage', e.target.value)}
-              placeholder="https://... (optional)"
-              className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#023064] focus:ring-2 focus:ring-[#023064]/10" />
+            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Banner Image</label>
+            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImagePick} />
+            {form.bannerImage ? (
+              <div className="relative rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+                <img src={`${import.meta.env.VITE_API_URL ?? ''}${form.bannerImage}`}
+                  alt="Banner preview" className="w-full h-36 object-cover" />
+                <button type="button" onClick={() => set('bannerImage', '')}
+                  className="absolute top-2 right-2 p-1 rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+                <button type="button" onClick={() => fileRef.current?.click()}
+                  className="absolute bottom-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/60 text-white text-xs font-medium hover:bg-black/80 transition-colors">
+                  <ImagePlus className="w-3.5 h-3.5" /> Change
+                </button>
+              </div>
+            ) : (
+              <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}
+                className="w-full h-28 rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-2 text-gray-400 hover:border-[#023064] hover:text-[#023064] transition-colors disabled:opacity-60">
+                {uploading
+                  ? <Loader2 className="w-5 h-5 animate-spin" />
+                  : <ImagePlus className="w-5 h-5" />}
+                <span className="text-xs font-medium">{uploading ? 'Uploading...' : 'Click to upload banner image'}</span>
+                <span className="text-[10px] text-gray-300">JPG, PNG, WebP · max 5 MB</span>
+              </button>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -279,7 +329,12 @@ export default function AdminBootcamps() {
             const live    = bc.isActive && days > 0;
             const expired = days <= 0;
             return (
-              <div key={bc.id} className={`bg-card border rounded-2xl p-5 flex gap-4 ${live ? 'border-emerald-200' : 'border-border opacity-60'}`}>
+              <div key={bc.id} className={`bg-card border rounded-2xl overflow-hidden ${live ? 'border-emerald-200' : 'border-border opacity-60'}`}>
+                {bc.bannerImage && (
+                  <img src={`${import.meta.env.VITE_API_URL ?? ''}${bc.bannerImage}`}
+                    alt={bc.title} className="w-full h-28 object-cover" />
+                )}
+                <div className="p-5 flex gap-4">
                 <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${live ? 'bg-emerald-50' : 'bg-gray-100'}`}>
                   <Rocket className={`w-5 h-5 ${live ? 'text-emerald-600' : 'text-gray-400'}`} />
                 </div>
@@ -333,6 +388,7 @@ export default function AdminBootcamps() {
                     <Trash2 className="w-4 h-4 text-red-500" />
                   </button>
                 </div>
+                </div>{/* end p-5 */}
               </div>
             );
           })}
