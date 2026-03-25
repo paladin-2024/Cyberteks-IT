@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Clock, CheckCircle, Globe, ShieldCheck, Network, Database, Brain } from 'lucide-react';
+import { BookOpen, Clock, CheckCircle, Globe, ShieldCheck, Network, Database, Brain, Plus, Loader2, Rocket } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { api } from '@/lib/api';
 
@@ -15,6 +15,18 @@ const categoryConfig: Record<string, { gradient: string; Icon: React.ElementType
 
 function getCategoryConfig(category: string | null) {
   return categoryConfig[category ?? ''] ?? { gradient: 'from-[#023064] to-blue-800', Icon: BookOpen };
+}
+
+interface FreeCourse {
+  id: string;
+  title: string;
+  description: string | null;
+  category: string | null;
+  duration: string | null;
+  level: string | null;
+  coverImage: string | null;
+  _count: { sections: number };
+  teacher: { id: string; name: string };
 }
 
 interface Enrollment {
@@ -39,15 +51,35 @@ export default function StudentCoursesPage() {
   const { t } = useLanguage();
   const d = t.lms.student.courses;
 
-  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [enrollments, setEnrollments]   = useState<Enrollment[]>([]);
+  const [freeCourses, setFreeCourses]   = useState<FreeCourse[]>([]);
+  const [loading, setLoading]           = useState(true);
+  const [enrollingId, setEnrollingId]   = useState<string | null>(null);
 
-  useEffect(() => {
-    api.get<{ enrollments: Enrollment[] }>('/enrollments')
-      .then(({ enrollments }) => setEnrollments(enrollments))
-      .catch(() => setEnrollments([]))
+  const loadAll = () => {
+    setLoading(true);
+    Promise.all([
+      api.get<{ enrollments: Enrollment[] }>('/enrollments'),
+      api.get<{ freeCourses: FreeCourse[] }>('/enrollments/free-courses'),
+    ])
+      .then(([{ enrollments }, { freeCourses }]) => {
+        setEnrollments(enrollments);
+        setFreeCourses(freeCourses);
+      })
+      .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  };
+
+  useEffect(() => { loadAll(); }, []);
+
+  const handleSelfEnroll = async (courseId: string) => {
+    setEnrollingId(courseId);
+    try {
+      await api.post('/enrollments/self-enroll', { courseId });
+      loadAll();
+    } catch { /* silent */ }
+    finally { setEnrollingId(null); }
+  };
 
   const statusCls: Record<string, string> = {
     ACTIVE:    'bg-blue-100 text-blue-700 border border-blue-200',
@@ -100,7 +132,7 @@ export default function StudentCoursesPage() {
           </div>
           <p className="font-heading font-semibold text-foreground mb-1">No courses yet</p>
           <p className="text-sm text-muted-foreground max-w-xs">
-            You haven't been enrolled in any courses. Contact an admin to get started.
+            You haven't been enrolled in any courses yet. Check out the free courses below!
           </p>
         </div>
       ) : (
@@ -179,6 +211,52 @@ export default function StudentCoursesPage() {
               </div>
             );
           })}
+        </div>
+      )}
+      {/* Free courses available to add */}
+      {freeCourses.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Rocket className="w-4 h-4 text-[#E11D48]" />
+            <h2 className="font-heading text-base font-bold text-foreground">Free Courses Available</h2>
+            <span className="text-xs bg-[#E11D48]/10 text-[#E11D48] font-semibold px-2 py-0.5 rounded-full">Free</span>
+          </div>
+          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
+            {freeCourses.map((c) => {
+              const { gradient, Icon } = getCategoryConfig(c.category);
+              const isEnrolling = enrollingId === c.id;
+              return (
+                <div key={c.id} className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col hover:shadow-md transition-all">
+                  <div className={`h-28 bg-gradient-to-br ${gradient} flex items-center justify-center relative`}>
+                    {c.coverImage
+                      ? <img src={c.coverImage} alt={c.title} className="absolute inset-0 w-full h-full object-cover" />
+                      : <Icon className="w-12 h-12 text-white/80" />}
+                    <span className="absolute top-3 left-3 text-[10px] font-bold bg-[#E11D48] text-white px-2 py-0.5 rounded-full uppercase tracking-wide">Free</span>
+                  </div>
+                  <div className="p-5 flex flex-col flex-1">
+                    <h3 className="font-heading font-semibold text-foreground mb-1 leading-snug line-clamp-2">{c.title}</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      {c.teacher.name}{c.category ? ` · ${c.category}` : ''}{c.level ? ` · ${c.level}` : ''}
+                    </p>
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground mb-4">
+                      <span>{c._count.sections} sections</span>
+                      {c.duration && <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{c.duration}</span>}
+                    </div>
+                    <div className="mt-auto">
+                      <button
+                        onClick={() => handleSelfEnroll(c.id)}
+                        disabled={isEnrolling}
+                        className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-semibold bg-[#E11D48] text-white rounded-xl hover:bg-rose-700 transition-colors disabled:opacity-60"
+                      >
+                        {isEnrolling ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+                        Add to My Courses
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

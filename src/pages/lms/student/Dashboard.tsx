@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  BookOpen, Award, Eye, MoreVertical, Inbox, MessageCircle, Rocket,
+  BookOpen, Award, Eye, MoreVertical, Inbox, MessageCircle, Rocket, Plus, Loader2,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
@@ -17,6 +17,7 @@ interface ActiveBootcamp {
   description: string;
   groupChatLink: string | null;
   expiresAt: string;
+  courseId: string | null;
 }
 
 interface EnrollmentRow {
@@ -123,6 +124,8 @@ export default function StudentDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [bootcamps, setBootcamps] = useState<ActiveBootcamp[]>([]);
+  const [enrollingId, setEnrollingId] = useState<string | null>(null);
+  const [enrolledIds, setEnrolledIds] = useState<Set<string>>(new Set());
 
   const todayIndex = new Date().getDay();
   const dayOrder = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -130,7 +133,7 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     api.get<StudentDashboardData>('/dashboard/student')
-      .then(setData)
+      .then(d => { setData(d); setEnrolledIds(new Set(d.enrollments.map(e => e.courseId))); })
       .catch((err) => setError(err.message ?? 'Failed to load dashboard'))
       .finally(() => setLoading(false));
 
@@ -139,6 +142,17 @@ export default function StudentDashboard() {
       .then(d => setBootcamps(d.bootcamps ?? []))
       .catch(() => {});
   }, []);
+
+  const handleEnroll = async (courseId: string, bootcampId: string) => {
+    setEnrollingId(bootcampId);
+    try {
+      await api.post('/enrollments/self-enroll', { courseId });
+      setEnrolledIds(prev => new Set([...prev, courseId]));
+      const d = await api.get<StudentDashboardData>('/dashboard/student');
+      setData(d);
+    } catch { /* silent */ }
+    finally { setEnrollingId(null); }
+  };
 
   // ── Loading ────────────────────────────────────────────────────────────────
   if (loading) {
@@ -214,26 +228,48 @@ export default function StudentDashboard() {
       </div>
 
       {/* Free Bootcamp WhatsApp banner */}
-      {bootcamps.map(bc => (
-        <div key={bc.id} className="rounded-2xl bg-gradient-to-r from-[#023064] to-[#0a1f5c] p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-[#E11D48] flex items-center justify-center shrink-0">
-            <Rocket className="w-5 h-5 text-white" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-[10px] font-bold bg-[#E11D48] text-white px-2 py-0.5 rounded-full uppercase tracking-wide">Free Bootcamp</span>
+      {bootcamps.map(bc => {
+        const alreadyEnrolled = bc.courseId ? enrolledIds.has(bc.courseId) : false;
+        const isEnrolling = enrollingId === bc.id;
+        return (
+          <div key={bc.id} className="rounded-2xl bg-gradient-to-r from-[#023064] to-[#0a1f5c] p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-[#E11D48] flex items-center justify-center shrink-0">
+              <Rocket className="w-5 h-5 text-white" />
             </div>
-            <p className="font-bold text-white text-sm">{bc.title}</p>
-            <p className="text-blue-200 text-xs mt-0.5 line-clamp-1">{bc.description}</p>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="text-[10px] font-bold bg-[#E11D48] text-white px-2 py-0.5 rounded-full uppercase tracking-wide">Free Bootcamp</span>
+              </div>
+              <p className="font-bold text-white text-sm">{bc.title}</p>
+              <p className="text-blue-200 text-xs mt-0.5 line-clamp-1">{bc.description}</p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0 flex-wrap">
+              {bc.courseId && (
+                alreadyEnrolled ? (
+                  <span className="flex items-center gap-1.5 bg-white/10 text-white text-xs font-semibold px-4 py-2.5 rounded-xl whitespace-nowrap">
+                    ✓ Course Added
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => handleEnroll(bc.courseId!, bc.id)}
+                    disabled={isEnrolling}
+                    className="flex items-center gap-2 bg-white text-[#023064] hover:bg-blue-50 text-xs font-bold px-4 py-2.5 rounded-xl transition-colors whitespace-nowrap disabled:opacity-60"
+                  >
+                    {isEnrolling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                    Add Course
+                  </button>
+                )
+              )}
+              {bc.groupChatLink && (
+                <a href={bc.groupChatLink} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1da851] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors whitespace-nowrap">
+                  <MessageCircle className="w-4 h-4" /> Join WhatsApp Group
+                </a>
+              )}
+            </div>
           </div>
-          {bc.groupChatLink && (
-            <a href={bc.groupChatLink} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1da851] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors whitespace-nowrap shrink-0">
-              <MessageCircle className="w-4 h-4" /> Join WhatsApp Group
-            </a>
-          )}
-        </div>
-      ))}
+        );
+      })}
 
       {/* Row 1, Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

@@ -21,7 +21,20 @@ router.get('/', async (_req: Request, res: Response) => {
       where: { isActive: true, expiresAt: { gt: new Date() } },
       orderBy: { createdAt: 'desc' },
     });
-    res.json({ bootcamps });
+
+    // Attach the matching free course ID to each bootcamp (for self-enroll)
+    const enriched = await Promise.all(bootcamps.map(async (bc) => {
+      // Extract keywords from bootcamp title (e.g. "Python Programming Bootcamp" → "Python")
+      const words = bc.title.split(/\s+/).filter(w => w.length > 3 && !['bootcamp', 'programming', 'free'].includes(w.toLowerCase()));
+      if (words.length === 0) return { ...bc, courseId: null };
+      const course = await prisma.course.findFirst({
+        where: { status: 'PUBLISHED', price: 0, title: { contains: words[0], mode: 'insensitive' } },
+        select: { id: true },
+      });
+      return { ...bc, courseId: course?.id ?? null };
+    }));
+
+    res.json({ bootcamps: enriched });
   } catch (err) {
     console.error('[bootcamps GET]', err);
     res.status(500).json({ error: 'Internal server error' });
