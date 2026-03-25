@@ -550,7 +550,7 @@ export default function ApplyPage() {
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary-red text-white text-sm font-bold hover:bg-rose-700 transition-all shadow-sm shadow-red-900/20 disabled:opacity-70"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileCheck className="w-4 h-4" />}
-                  {loading ? 'Submitting…' : 'Submit Application'}
+                  <span>{loading ? 'Submitting…' : 'Submit Application'}</span>
                 </button>
               )}
             </div>
