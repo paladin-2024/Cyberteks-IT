@@ -3,6 +3,12 @@ import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { sendEmail } from '../lib/email';
+import {
+  adminNewApplicationEmail,
+  applicantConfirmationEmail,
+  applicantAcceptedEmail,
+  applicantRejectedEmail,
+} from '../lib/emailTemplates';
 import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
 
 const router = Router();
@@ -91,52 +97,18 @@ router.post('/', async (req: Request, res: Response) => {
       },
     });
 
-    // Email admin (non-blocking — don't fail the submission if email fails)
+    // Email admin (non-blocking)
     sendEmail({
-      to: process.env.ADMIN_EMAIL ?? 'info@cyberteks-it.com',
-      subject: `New Training Application — ${data.fullName}`,
-      html: `
-        <div style="font-family: sans-serif; max-width: 640px; margin: 0 auto;">
-          <div style="background: #102a83; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0;">
-            <h2 style="margin: 0;">New Skills Development Application</h2>
-          </div>
-          <div style="padding: 24px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 8px 8px;">
-            <h3 style="color: #102a83;">Personal Information</h3>
-            <p><b>Name:</b> ${esc(data.fullName)}</p>
-            <p><b>Email:</b> ${esc(data.email)}</p>
-            <p><b>Phone:</b> ${esc(data.phoneNumber)}</p>
-            <p><b>Location:</b> ${esc(data.cityCountry)}</p>
-            <p><b>Education:</b> ${esc(educationLabels[data.educationLevel] ?? data.educationLevel)}</p>
-            <h3 style="color: #102a83;">Programs Selected</h3>
-            <ul>${data.programs.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
-            <h3 style="color: #102a83;">Motivation</h3>
-            <p>${esc(data.motivation).replace(/\n/g, '<br/>')}</p>
-            <p><b>Career goals:</b> ${esc(data.careerGoals).replace(/\n/g, '<br/>')}</p>
-            <p><b>Hours/week:</b> ${esc(hoursLabels[data.hoursPerWeek] ?? data.hoursPerWeek)}</p>
-            <p style="margin-top: 16px;"><a href="${process.env.CLIENT_URL ?? 'http://localhost:5173'}/lms/admin/applications" style="background:#102a83;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;">Review Application</a></p>
-          </div>
-        </div>
-      `,
+      to:      process.env.ADMIN_EMAIL ?? 'info@cyberteks-it.com',
+      subject: `New Application — ${data.fullName}`,
+      html:    adminNewApplicationEmail(data),
     }).catch(err => console.error('[apply] admin email failed:', err));
 
     // Confirmation email to applicant (non-blocking)
     sendEmail({
       to:      data.email,
       subject: 'Application Received — CyberteksIT Skills Development Program',
-      html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-          <div style="background: #102a83; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0;">
-            <h2 style="margin: 0;">Application Received!</h2>
-          </div>
-          <div style="padding: 24px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 8px 8px;">
-            <p>Dear ${esc(data.fullName)},</p>
-            <p>Thank you for applying to the CyberteksIT Skills Development Program. Our team will review your application within <strong>2–3 business days</strong>.</p>
-            <p>We will contact you at <strong>${esc(data.email)}</strong> with next steps.</p>
-            <p>Your programs: <strong>${data.programs.map(p => esc(p)).join(', ')}</strong></p>
-            <p style="margin-top: 24px;">Best regards,<br/><strong>The CyberteksIT Team</strong></p>
-          </div>
-        </div>
-      `,
+      html:    applicantConfirmationEmail({ fullName: data.fullName, email: data.email, programs: data.programs }),
     }).catch(err => console.error('[apply] applicant email failed:', err));
 
     // Notify admins in-app
@@ -271,30 +243,14 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
         // Send welcome email with credentials (non-blocking)
         sendEmail({
           to:      application.email,
-          subject: 'Welcome to CyberteksIT LMS — Your Account is Ready!',
-          html: `
-            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-              <div style="background: #102a83; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0;">
-                <h2 style="margin: 0;">Congratulations, ${esc(application.fullName)}!</h2>
-              </div>
-              <div style="padding: 24px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 8px 8px;">
-                <p>Your application to the <strong>CyberteksIT Skills Development Program</strong> has been <strong style="color: #16a34a;">accepted</strong>!</p>
-                <p>Your student account has been created. Use the credentials below to log in:</p>
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin: 16px 0;">
-                  <p style="margin: 4px 0;"><b>Login URL:</b> <a href="${process.env.CLIENT_URL ?? 'http://localhost:5173'}/login">${process.env.CLIENT_URL ?? 'http://localhost:5173'}/login</a></p>
-                  <p style="margin: 4px 0;"><b>Email:</b> ${esc(application.email)}</p>
-                  <p style="margin: 4px 0;"><b>Temporary Password:</b> <code style="background:#e2e8f0;padding:2px 6px;border-radius:4px;">${tempPassword}</code></p>
-                </div>
-                <p style="color: #dc2626;"><strong>Please change your password immediately after your first login.</strong></p>
-                ${reviewNotes ? `<p><b>Note from the team:</b> ${esc(reviewNotes)}</p>` : ''}
-                <p>Programs enrolled: <strong>${application.programs.map((p: string) => esc(p)).join(', ')}</strong></p>
-                <p style="margin-top: 24px;">
-                  <a href="${process.env.CLIENT_URL ?? 'http://localhost:5173'}/login" style="background:#102a83;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600;">Login to LMS</a>
-                </p>
-                <p style="margin-top: 24px;">Welcome aboard!<br/><strong>The CyberteksIT Team</strong></p>
-              </div>
-            </div>
-          `,
+          subject: '🎉 You\'re In — Welcome to CyberteksIT LMS!',
+          html:    applicantAcceptedEmail({
+            fullName:     application.fullName,
+            email:        application.email,
+            tempPassword: tempPassword!,
+            programs:     application.programs,
+            reviewNotes:  reviewNotes,
+          }),
         }).catch(err => console.error('[apply] welcome email failed:', err));
       }
 
@@ -378,20 +334,7 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
       sendEmail({
         to:      application.email,
         subject: 'Update on Your CyberteksIT Application',
-        html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: #102a83; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0;">
-              <h2 style="margin: 0;">Application Update</h2>
-            </div>
-            <div style="padding: 24px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 8px 8px;">
-              <p>Dear ${esc(application.fullName)},</p>
-              <p>Thank you for your interest in the CyberteksIT Skills Development Program. After careful review, we are unable to accept your application at this time.</p>
-              ${reviewNotes ? `<p><b>Feedback:</b> ${esc(reviewNotes)}</p>` : ''}
-              <p>We encourage you to apply again in the future as we open new cohorts.</p>
-              <p style="margin-top: 24px;">Best regards,<br/><strong>The CyberteksIT Team</strong></p>
-            </div>
-          </div>
-        `,
+        html:    applicantRejectedEmail({ fullName: application.fullName, reviewNotes }),
       }).catch(err => console.error('[apply] rejection email failed:', err));
     }
 
