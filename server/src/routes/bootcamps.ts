@@ -75,7 +75,7 @@ router.patch('/:id', requireAuth, requireRole('ADMIN'), async (req: AuthRequest,
     }
     const d = result.data;
     const bootcamp = await prisma.freeBootcamp.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
       data: {
         ...(d.title         !== undefined && { title: d.title }),
         ...(d.description   !== undefined && { description: d.description }),
@@ -95,7 +95,7 @@ router.patch('/:id', requireAuth, requireRole('ADMIN'), async (req: AuthRequest,
 // ── DELETE /api/bootcamps/:id — admin only ───────────────────────────────────
 router.delete('/:id', requireAuth, requireRole('ADMIN'), async (req: AuthRequest, res: Response) => {
   try {
-    await prisma.freeBootcamp.delete({ where: { id: req.params.id } });
+    await prisma.freeBootcamp.delete({ where: { id: req.params.id as string } });
     res.json({ success: true });
   } catch (err) {
     console.error('[bootcamps DELETE]', err);
