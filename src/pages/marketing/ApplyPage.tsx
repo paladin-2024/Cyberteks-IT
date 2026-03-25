@@ -1,8 +1,8 @@
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useRef } from 'react';
 import {
   User, GraduationCap, BookOpen, Target, Clock,
   Monitor, FileCheck, ChevronRight, ChevronLeft,
-  CheckCircle2, AlertCircle, Loader2, ArrowRight,
+  CheckCircle2, AlertCircle, Loader2, ArrowRight, Mail,
 } from 'lucide-react';
 import PhoneInput, { type Country } from '@/components/ui/PhoneInput';
 import { cn } from '@/lib/utils';
@@ -128,6 +128,16 @@ export default function ApplyPage() {
   const [error, setError] = useState('');
   const [stepError, setStepError] = useState('');
 
+  // OTP state — shown between step 1 (personal info) and step 2
+  const [otpMode, setOtpMode] = useState(false);       // is the OTP screen visible?
+  const [otpVerified, setOtpVerified] = useState(false); // has OTP been confirmed?
+  const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', '']);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+
   const STEPS = [
     { id: 1, title: t.apply.steps[0], icon: User },
     { id: 2, title: t.apply.steps[1], icon: GraduationCap },
@@ -178,10 +188,75 @@ export default function ApplyPage() {
     }
   };
 
+  const API = import.meta.env.VITE_API_URL ?? '';
+
+  const sendOtp = async () => {
+    setOtpLoading(true); setOtpError('');
+    try {
+      const res = await fetch(`${API}/api/apply/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body?.error ?? 'Failed to send code');
+      setOtpSent(true);
+      setOtpDigits(['', '', '', '', '', '']);
+      // Start 60-second cooldown
+      setResendCooldown(60);
+      const t = setInterval(() => setResendCooldown(c => { if (c <= 1) { clearInterval(t); return 0; } return c - 1; }), 1000);
+    } catch (e) {
+      setOtpError(e instanceof Error ? e.message : 'Failed to send code');
+    } finally { setOtpLoading(false); }
+  };
+
+  const verifyOtp = async () => {
+    const code = otpDigits.join('');
+    if (code.length !== 6) { setOtpError('Please enter all 6 digits.'); return; }
+    setOtpLoading(true); setOtpError('');
+    try {
+      const res = await fetch(`${API}/api/apply/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, otp: code }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body?.error ?? 'Invalid code');
+      setOtpVerified(true);
+      setOtpMode(false);
+      setStep(2);
+    } catch (e) {
+      setOtpError(e instanceof Error ? e.message : 'Verification failed');
+    } finally { setOtpLoading(false); }
+  };
+
+  const handleOtpInput = (index: number, value: string) => {
+    const digit = value.replace(/\D/g, '').slice(-1);
+    const next = [...otpDigits];
+    next[index] = digit;
+    setOtpDigits(next);
+    if (digit && index < 5) otpRefs.current[index + 1]?.focus();
+  };
+
+  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !otpDigits[index] && index > 0) {
+      otpRefs.current[index - 1]?.focus();
+    }
+  };
+
   const goNext = () => {
     const err = validateStep(step);
     if (err) { setStepError(err); return; }
     setStepError('');
+
+    // After step 1, require email OTP verification (unless already verified)
+    if (step === 1 && !otpVerified) {
+      setOtpMode(true);
+      setOtpError('');
+      sendOtp();
+      return;
+    }
+
     setStep(s => Math.min(STEPS.length, s + 1));
   };
 
@@ -270,6 +345,117 @@ export default function ApplyPage() {
           <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-primary-blue text-white rounded-xl font-semibold text-sm hover:bg-blue-900 transition-all">
             {t.apply.success.home} <ArrowRight className="w-4 h-4" />
           </a>
+        </div>
+      </div>
+    );
+  }
+
+  // OTP verification screen
+  if (otpMode) {
+    return (
+      <div className="min-h-screen bg-gray-50 pb-20">
+        <div className="bg-primary-blue text-white py-10 sm:py-14 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.18em] text-blue-300 mb-3">Email Verification</span>
+            <h1 className="font-display text-3xl sm:text-4xl font-extrabold mb-4 leading-tight">Verify your email</h1>
+            <p className="text-blue-200 text-lg max-w-xl mx-auto">One step before we continue your application</p>
+          </div>
+        </div>
+
+        <div className="max-w-md mx-auto px-4 sm:px-6 -mt-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center gap-4 px-6 py-5 border-b border-gray-100 bg-gray-50/50">
+              <div className="w-12 h-12 rounded-2xl bg-primary-blue flex items-center justify-center shrink-0">
+                <Mail className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-primary-blue uppercase tracking-[0.12em]">Step 1 of 2</p>
+                <h2 className="font-display text-lg font-bold text-gray-900">Check your inbox</h2>
+              </div>
+            </div>
+
+            <div className="px-6 py-8 space-y-6">
+              <p className="text-sm text-gray-600 leading-relaxed">
+                We've sent a <strong className="text-gray-900">6-digit verification code</strong> to{' '}
+                <strong className="text-primary-blue">{form.email}</strong>.
+                Enter it below to continue.
+              </p>
+
+              {/* 6-box OTP input */}
+              <div className="flex gap-2.5 justify-center">
+                {otpDigits.map((digit, i) => (
+                  <input
+                    key={i}
+                    ref={el => { otpRefs.current[i] = el; }}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={e => handleOtpInput(i, e.target.value)}
+                    onKeyDown={e => handleOtpKeyDown(i, e)}
+                    onPaste={i === 0 ? (e) => {
+                      const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+                      if (pasted.length) {
+                        e.preventDefault();
+                        const next = [...otpDigits];
+                        pasted.split('').forEach((c, idx) => { if (idx < 6) next[idx] = c; });
+                        setOtpDigits(next);
+                        otpRefs.current[Math.min(pasted.length, 5)]?.focus();
+                      }
+                    } : undefined}
+                    className={cn(
+                      'w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 outline-none transition-all',
+                      digit ? 'border-primary-blue bg-blue-50 text-primary-blue' : 'border-gray-200 bg-white text-gray-900',
+                      'focus:border-primary-blue focus:ring-2 focus:ring-primary-blue/10',
+                    )}
+                  />
+                ))}
+              </div>
+
+              {otpError && (
+                <div className="flex items-center gap-2 text-sm text-primary-red bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  {otpError}
+                </div>
+              )}
+
+              <button
+                onClick={verifyOtp}
+                disabled={otpLoading || otpDigits.join('').length !== 6}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-primary-blue text-white font-bold text-sm hover:bg-blue-900 transition-all disabled:opacity-60"
+              >
+                {otpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+                Verify &amp; Continue
+              </button>
+
+              <div className="text-center">
+                <p className="text-xs text-gray-400 mb-1">Didn't receive the code?</p>
+                {resendCooldown > 0 ? (
+                  <p className="text-xs text-gray-400 font-semibold">Resend in {resendCooldown}s</p>
+                ) : (
+                  <button
+                    onClick={sendOtp}
+                    disabled={otpLoading}
+                    className="text-xs font-semibold text-primary-blue hover:underline disabled:opacity-50"
+                  >
+                    Resend code
+                  </button>
+                )}
+              </div>
+
+              <button
+                onClick={() => { setOtpMode(false); setOtpError(''); }}
+                className="w-full text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                ← Back to fix my email
+              </button>
+            </div>
+          </div>
+
+          <p className="text-center text-xs text-gray-400 mt-6 pb-4">
+            Questions? Email <a href="mailto:info@cyberteks-it.com" className="text-primary-blue hover:underline">info@cyberteks-it.com</a>
+          </p>
         </div>
       </div>
     );

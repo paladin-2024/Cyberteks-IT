@@ -13,6 +13,127 @@ import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
 
 const router = Router();
 
+// ── In-memory OTP store ───────────────────────────────────────────────────────
+interface OtpEntry { otp: string; expiresAt: number; verified: boolean }
+const otpStore = new Map<string, OtpEntry>();
+
+function generateOtp(): string {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+function otpEmailHtml(email: string, otp: string): string {
+  const CLIENT_URL = process.env.CLIENT_URL ?? 'https://cyberteks-it.com';
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:'Segoe UI',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;padding:32px 16px;">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+      <tr>
+        <td style="background:linear-gradient(135deg,#102a83,#1e3fa8);border-radius:16px 16px 0 0;padding:32px 40px;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td>
+              <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.65);">Email Verification</p>
+              <h1 style="margin:0;font-size:26px;font-weight:800;color:#ffffff;line-height:1.2;">Verify Your Email</h1>
+            </td>
+            <td align="right" valign="middle" style="padding-left:16px;">
+              <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:10px 16px;display:inline-block;">
+                <span style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-0.5px;">Cyber<span style="color:#f87171;">teks</span>IT</span>
+              </div>
+            </td>
+          </tr></table>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#ffffff;padding:36px 40px;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;">
+          <p style="margin:0 0 20px;font-size:15px;color:#475569;">You're applying to the <strong style="color:#1e293b;">CyberteksIT Skills Development Program</strong>.</p>
+          <p style="margin:0 0 28px;font-size:14px;color:#475569;line-height:1.7;">Use the verification code below to confirm your email address <strong>${email}</strong>. The code expires in <strong>10 minutes</strong>.</p>
+          <div style="background:#f0f4ff;border:2px dashed #c7d2fe;border-radius:16px;padding:28px 40px;text-align:center;margin-bottom:28px;">
+            <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#6366f1;">Your verification code</p>
+            <p style="margin:0;font-size:42px;font-weight:900;color:#102a83;letter-spacing:0.25em;">${otp}</p>
+          </div>
+          <p style="margin:0;font-size:13px;color:#94a3b8;">If you did not request this, please ignore this email.</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#f8fafc;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 16px 16px;padding:24px 40px;">
+          <p style="margin:0;font-size:13px;color:#64748b;">© ${new Date().getFullYear()} CyberteksIT · Plot 722 Namuli Rd, Bukoto, Kampala — Uganda</p>
+          <p style="margin:4px 0 0;font-size:12px;color:#94a3b8;"><a href="${CLIENT_URL}" style="color:#102a83;text-decoration:none;">cyberteks-it.com</a></p>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>`;
+}
+
+// ── POST /api/apply/send-otp (public) ────────────────────────────────────────
+router.post('/send-otp', async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body as { email?: string };
+    if (!email || !z.string().email().safeParse(email).success) {
+      res.status(400).json({ error: 'Valid email is required' });
+      return;
+    }
+
+    // Rate-limit: block if a valid (non-expired) OTP already exists
+    const existing = otpStore.get(email.toLowerCase());
+    if (existing && existing.expiresAt > Date.now()) {
+      const secsLeft = Math.ceil((existing.expiresAt - Date.now()) / 1000);
+      res.status(429).json({ error: `Please wait ${secsLeft}s before requesting a new code.` });
+      return;
+    }
+
+    const otp = generateOtp();
+    otpStore.set(email.toLowerCase(), { otp, expiresAt: Date.now() + 10 * 60 * 1000, verified: false });
+
+    await sendEmail({
+      to:      email,
+      subject: `${otp} is your CyberteksIT verification code`,
+      html:    otpEmailHtml(email, otp),
+    });
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[apply/send-otp]', err);
+    res.status(500).json({ error: 'Failed to send verification code' });
+  }
+});
+
+// ── POST /api/apply/verify-otp (public) ──────────────────────────────────────
+router.post('/verify-otp', async (req: Request, res: Response) => {
+  try {
+    const { email, otp } = req.body as { email?: string; otp?: string };
+    if (!email || !otp) {
+      res.status(400).json({ error: 'Email and code are required' });
+      return;
+    }
+
+    const entry = otpStore.get(email.toLowerCase());
+    if (!entry) {
+      res.status(400).json({ error: 'No verification code found. Please request a new one.' });
+      return;
+    }
+    if (entry.expiresAt < Date.now()) {
+      otpStore.delete(email.toLowerCase());
+      res.status(400).json({ error: 'Verification code has expired. Please request a new one.' });
+      return;
+    }
+    if (entry.otp !== otp.trim()) {
+      res.status(400).json({ error: 'Invalid verification code.' });
+      return;
+    }
+
+    entry.verified = true;
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[apply/verify-otp]', err);
+    res.status(500).json({ error: 'Verification failed' });
+  }
+});
+
 const applySchema = z.object({
   fullName:            z.string().min(2),
   dateOfBirth:         z.string().min(1),
@@ -66,6 +187,15 @@ router.post('/', async (req: Request, res: Response) => {
     }
 
     const data = result.data;
+
+    // Require verified OTP for this email
+    const otpEntry = otpStore.get(data.email.toLowerCase());
+    if (!otpEntry || !otpEntry.verified) {
+      res.status(400).json({ error: 'Email not verified. Please verify your email before submitting.' });
+      return;
+    }
+    // Clean up after use
+    otpStore.delete(data.email.toLowerCase());
 
     // Generate default password at application time so admin can see it
     const tempPassword = generateTempPassword();
