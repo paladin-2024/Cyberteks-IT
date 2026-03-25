@@ -185,17 +185,31 @@ export default function ApplyPage() {
   };
 
   const educationMap: Record<string, string> = {
-    'High School': 'high_school',
-    'Diploma / Certificate': 'diploma_certificate',
-    'Undergraduate Degree': 'undergraduate',
-    'Graduate Degree': 'graduate',
-    'Other': 'other',
+    // English options
+    'Primary': 'high_school',
+    'O-Level (S4)': 'high_school',
+    'A-Level (S6)': 'high_school',
+    'Certificate / Diploma': 'diploma_certificate',
+    "Bachelor's Degree": 'undergraduate',
+    "Master's / PhD": 'graduate',
+    // French options
+    'Primaire': 'high_school',
+    'Certificat / Diplôme': 'diploma_certificate',
+    'Licence': 'undergraduate',
+    'Master / Doctorat': 'graduate',
   };
 
   const hoursMap: Record<string, string> = {
-    '2–4 Hours': '2_4',
-    '5–10 Hours': '5_10',
-    '10+ Hours': '10_plus',
+    // English options
+    'Less than 5 hours': '2_4',
+    '5–10 hours': '5_10',
+    '10–20 hours': '10_plus',
+    '20+ hours (Full-time)': '10_plus',
+    // French options
+    'Moins de 5 heures': '2_4',
+    '5–10 heures': '5_10',
+    '10–20 heures': '10_plus',
+    '20+ heures (Temps plein)': '10_plus',
   };
 
   const handleSubmit = async (e: FormEvent) => {
