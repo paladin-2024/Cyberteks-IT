@@ -239,19 +239,19 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
     let userId = application.userId;
 
     if (status === 'ACCEPTED' && !application.userId) {
-      // Create student account
+      // Create or reactivate student account
       const existing = await prisma.user.findUnique({ where: { email: application.email } });
 
+      let tempPassword: string | null = null;
+
       if (existing) {
-        // Reactivate existing account
         await prisma.user.update({
           where: { id: existing.id },
           data: { isActive: true, role: 'STUDENT' },
         });
         userId = existing.id;
       } else {
-        // Use the password generated at application time (visible to admin in dashboard)
-        const tempPassword = (application as any).tempPassword ?? generateTempPassword();
+        tempPassword = (application as any).tempPassword ?? generateTempPassword();
         const hashedPassword = await bcrypt.hash(tempPassword, 12);
 
         const newUser = await prisma.user.create({
@@ -286,7 +286,7 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
                 </div>
                 <p style="color: #dc2626;"><strong>Please change your password immediately after your first login.</strong></p>
                 ${reviewNotes ? `<p><b>Note from the team:</b> ${esc(reviewNotes)}</p>` : ''}
-                <p>Programs enrolled: <strong>${application.programs.map(p => esc(p)).join(', ')}</strong></p>
+                <p>Programs enrolled: <strong>${application.programs.map((p: string) => esc(p)).join(', ')}</strong></p>
                 <p style="margin-top: 24px;">
                   <a href="${process.env.CLIENT_URL ?? 'http://localhost:5173'}/login" style="background:#102a83;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600;">Login to LMS</a>
                 </p>
@@ -295,68 +295,67 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
             </div>
           `,
         }).catch(err => console.error('[apply] welcome email failed:', err));
+      }
 
-        // Auto-enroll in matching courses based on selected programs
-        const programToCategoryKeywords: Record<string, string[]> = {
-          'Web Development':                          ['development', 'web'],
-          'Cybersecurity':                            ['security', 'cyber'],
-          'IT Support & Networking':                  ['networking', 'network', 'it support'],
-          'Data Analysis':                            ['data'],
-          'Artificial Intelligence & Machine Learning': ['ai', 'machine learning', 'artificial'],
-          'Graphic Design':                           ['design', 'graphic'],
-          'Digital Marketing':                        ['marketing', 'digital'],
-          'Free Bootcamp: Python Programming':        ['python'],
-        };
+      // ── Auto-enroll in courses (runs for both new AND existing users) ────────
+      const programToCategoryKeywords: Record<string, string[]> = {
+        'Web Development':                          ['development', 'web'],
+        'Cybersecurity':                            ['security', 'cyber'],
+        'IT Support & Networking':                  ['networking', 'network', 'it support'],
+        'Data Analysis':                            ['data'],
+        'Artificial Intelligence & Machine Learning': ['ai', 'machine learning', 'artificial'],
+        'Graphic Design':                           ['design', 'graphic'],
+        'Digital Marketing':                        ['marketing', 'digital'],
+        'Free Bootcamp: Python Programming':        ['python'],
+      };
 
-        // Collect keywords for all selected programs
-        const keywords = application.programs.flatMap(
-          (p: string) => programToCategoryKeywords[p] ?? [p.toLowerCase()]
-        );
+      const keywords = application.programs.flatMap(
+        (p: string) => programToCategoryKeywords[p] ?? [p.toLowerCase()]
+      );
 
-        const courseIdsToEnroll = new Set<string>();
+      const courseIdsToEnroll = new Set<string>();
 
-        // Keyword-based matching
-        if (keywords.length > 0) {
-          const allCourses = await prisma.course.findMany({
-            where: { status: 'PUBLISHED' },
-            select: { id: true, category: true, title: true },
-          });
+      if (keywords.length > 0) {
+        const allCourses = await prisma.course.findMany({
+          where: { status: 'PUBLISHED' },
+          select: { id: true, category: true, title: true },
+        });
+        allCourses
+          .filter((c: { id: string; category: string | null; title: string }) => {
+            const hay = `${c.category ?? ''} ${c.title}`.toLowerCase();
+            return keywords.some((kw: string) => hay.includes(kw));
+          })
+          .forEach((c: { id: string }) => courseIdsToEnroll.add(c.id));
+      }
 
-          allCourses
-            .filter((c: { id: string; category: string | null; title: string }) => {
-              const hay = `${c.category ?? ''} ${c.title}`.toLowerCase();
-              return keywords.some((kw: string) => hay.includes(kw));
-            })
-            .forEach((c: { id: string }) => courseIdsToEnroll.add(c.id));
-        }
+      // Direct lookup for free bootcamp
+      const hasBootcamp = application.programs.some(
+        (p: string) => p.includes('Free Bootcamp') || p.toLowerCase().includes('python')
+      );
+      if (hasBootcamp) {
+        const pythonCourse = await prisma.course.findFirst({
+          where: { title: { contains: 'Python', mode: 'insensitive' }, status: 'PUBLISHED' },
+          select: { id: true },
+        });
+        if (pythonCourse) courseIdsToEnroll.add(pythonCourse.id);
+      }
 
-        // Direct enroll for Free Bootcamp: Python Programming (exact title lookup)
-        const hasBootcamp = application.programs.some(
-          (p: string) => p.includes('Free Bootcamp') || p.toLowerCase().includes('python')
-        );
-        if (hasBootcamp) {
-          const pythonCourse = await prisma.course.findFirst({
-            where: { title: { contains: 'Python', mode: 'insensitive' }, status: 'PUBLISHED' },
-            select: { id: true },
-          });
-          if (pythonCourse) courseIdsToEnroll.add(pythonCourse.id);
-        }
+      if (courseIdsToEnroll.size > 0 && userId) {
+        await prisma.enrollment.createMany({
+          data: [...courseIdsToEnroll].map((courseId: string) => ({
+            userId:  userId as string,
+            courseId,
+            status:  'ACTIVE',
+          })),
+          skipDuplicates: true,
+        });
+      }
 
-        if (courseIdsToEnroll.size > 0) {
-          await prisma.enrollment.createMany({
-            data: [...courseIdsToEnroll].map((courseId: string) => ({
-              userId:  newUser.id,
-              courseId,
-              status:  'ACTIVE',
-            })),
-            skipDuplicates: true,
-          });
-        }
-
-        // In-app notification for the new student
+      // In-app notification
+      if (userId) {
         await prisma.notification.create({
           data: {
-            userId:  newUser.id,
+            userId:  userId as string,
             title:   'Welcome to CyberteksIT LMS!',
             body:    'Your application has been accepted. Your courses are ready — check your dashboard.',
             type:    'SUCCESS',
