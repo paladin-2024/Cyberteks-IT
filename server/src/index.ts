@@ -23,6 +23,7 @@ import uploadRouter        from './routes/upload';
 import getStartedRouter    from './routes/get-started';
 import sectionsRouter      from './routes/sections';
 import newsletterRouter    from './routes/newsletter';
+import bootcampsRouter     from './routes/bootcamps';
 
 const app  = express();
 const PORT = process.env.PORT ?? 3001;
@@ -67,6 +68,7 @@ app.use('/api/upload',       uploadRouter);
 app.use('/api/get-started',  getStartedRouter);
 app.use('/api/sections',     sectionsRouter);
 app.use('/api/newsletter',   newsletterRouter);
+app.use('/api/bootcamps',    bootcampsRouter);
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {

@@ -4,7 +4,7 @@ import {
   LayoutDashboard, BookOpen, Users, FileText, MessageSquare,
   Bell, Award, Settings, ChevronLeft, ChevronRight, LogOut,
   GraduationCap, Briefcase, Map, BarChart3, Calendar,
-  ClipboardList, UserCheck, PieChart, X, HelpCircle, UserCircle, ListOrdered, Headphones, Mail,
+  ClipboardList, UserCheck, PieChart, X, HelpCircle, UserCircle, ListOrdered, Headphones, Mail, Rocket,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
@@ -41,10 +41,15 @@ const adminNavGroups: NavGroup[] = [
     ],
   },
   {
+    label: 'PROGRAMMES',
+    items: [
+      { key: 'bootcamps', href: '/admin/bootcamps', icon: Rocket },
+    ],
+  },
+  {
     label: 'SYSTEM',
     items: [
-
-      { key: 'settings',      href: '/admin/settings',      icon: Settings },
+      { key: 'settings', href: '/admin/settings', icon: Settings },
     ],
   },
 ];
@@ -123,6 +128,7 @@ const extraLabels: Record<string, string> = {
   notifications: 'Notifications',
   itSupport:     'IT Support',
   newsletter:    'Newsletter',
+  bootcamps:     'Free Bootcamps',
 };
 
 function getInitials(name: string | null | undefined): string {

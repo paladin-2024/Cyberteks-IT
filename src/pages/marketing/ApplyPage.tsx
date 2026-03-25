@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 
 const PROGRAMS = [
+  'Free Bootcamp: Python Programming',
   'Prompt Engineering',
   'Augmented Reality',
   'Virtual Reality',

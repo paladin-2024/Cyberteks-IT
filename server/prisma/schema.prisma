@@ -611,3 +611,21 @@ model NewsletterSubscriber {
 
   @@map("newsletter_subscribers")
 }
+
+// ────────────────────────────────────────────────────────────────────────────
+// FREE BOOTCAMP
+// ────────────────────────────────────────────────────────────────────────────
+
+model FreeBootcamp {
+  id            String   @id @map("_id") @default(cuid())
+  title         String
+  description   String
+  bannerImage   String?
+  expiresAt     DateTime
+  isActive      Boolean  @default(true)
+  groupChatLink String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("free_bootcamps")
+}

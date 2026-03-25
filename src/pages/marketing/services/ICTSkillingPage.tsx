@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 import {
@@ -6,7 +6,17 @@ import {
   ArrowRight, Phone, Mail, Play, MessageCircle, Clock, Tag,
   Star, Zap, Globe, Shield, Brain, Monitor,
   Code2, BarChart2, Wifi, Palette, Bot, ChevronDown, ChevronUp,
+  Rocket, Calendar, ExternalLink,
 } from 'lucide-react';
+
+interface Bootcamp {
+  id: string;
+  title: string;
+  description: string;
+  bannerImage: string | null;
+  expiresAt: string;
+  groupChatLink: string | null;
+}
 
 const ONLINE_COURSES = [
   { id: 1,  title: 'Prompt Engineering',       price: 750000,  duration: '2 Months',   category: 'AI',          level: 'Beginner',     icon: Bot,       desc: 'Master the art of communicating with AI models to automate tasks, generate content, and build AI-powered solutions for any industry.' },
@@ -125,13 +135,25 @@ function VideoCard({ src, title, tag }: { src: string; title: string; tag: strin
   );
 }
 
-type Tab = 'online' | 'corporate' | 'vacation';
+type Tab = 'online' | 'corporate' | 'vacation' | 'bootcamp';
+
+function daysLeft(expiresAt: string): number {
+  return Math.max(0, Math.ceil((new Date(expiresAt).getTime() - Date.now()) / 86400000));
+}
 
 export default function ICTSkillingPage() {
   const { t } = useLanguage();
   const [tab, setTab] = useState<Tab>('online');
   const [selected, setSelected] = useState<number | null>(null);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
+  const [bootcamps, setBootcamps] = useState<Bootcamp[]>([]);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/bootcamps`)
+      .then(r => r.json())
+      .then(d => setBootcamps(d.bootcamps ?? []))
+      .catch(() => {});
+  }, []);
 
   const selectedCourse = ONLINE_COURSES.find(c => c.id === selected) ?? null;
 
@@ -201,9 +223,10 @@ export default function ICTSkillingPage() {
           {/* Tab switcher */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
             {([
-              { key: 'online' as Tab,    label: 'Online Skilling',    icon: Globe,       count: '11 Courses' },
-              { key: 'corporate' as Tab, label: 'Corporate Training',  icon: Building2,   count: '5 Programs' },
+              { key: 'online' as Tab,    label: 'Online Skilling',    icon: Globe,         count: '11 Courses' },
+              { key: 'corporate' as Tab, label: 'Corporate Training',  icon: Building2,     count: '5 Programs' },
               { key: 'vacation' as Tab,  label: 'Vacation Programs',   icon: GraduationCap, count: 'P7 · S4 · S6' },
+              { key: 'bootcamp' as Tab,  label: 'Free Bootcamp',       icon: Rocket,        count: '🔥 Free' },
             ]).map(({ key, label, icon: Icon, count }) => (
               <button key={key} onClick={() => { setTab(key); setSelected(null); }}
                 className={`group inline-flex flex-col items-center gap-1 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-sm transition-all border-2 ${
@@ -427,6 +450,73 @@ export default function ICTSkillingPage() {
               </div>
             </div>
           )}
+          {/* ── FREE BOOTCAMP ── */}
+          {tab === 'bootcamp' && (
+            <div>
+              <div className="text-center mb-10">
+                <span className="inline-block bg-[#E11D48] text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-3">100% Free</span>
+                <p className="text-gray-600 max-w-xl mx-auto text-sm leading-relaxed">
+                  No fees, no barriers. Join our ongoing free bootcamps and kickstart your tech career today.
+                </p>
+              </div>
+
+              {bootcamps.length === 0 ? (
+                <div className="text-center py-16 text-gray-400">
+                  <Rocket className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                  <p className="font-semibold">No active bootcamps right now.</p>
+                  <p className="text-sm mt-1">Check back soon or follow us on social media for announcements.</p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {bootcamps.map(bc => {
+                    const days = daysLeft(bc.expiresAt);
+                    const urgent = days <= 3;
+                    return (
+                      <div key={bc.id} className="relative bg-gradient-to-br from-[#023064] to-[#0a1f5c] rounded-3xl overflow-hidden shadow-2xl">
+                        {/* FREE badge */}
+                        <div className="absolute top-5 right-5 bg-[#E11D48] text-white text-xs font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full z-10">
+                          FREE
+                        </div>
+                        {bc.bannerImage && (
+                          <img src={bc.bannerImage} alt={bc.title} className="w-full h-48 object-cover opacity-20" />
+                        )}
+                        <div className="p-7 sm:p-10">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Rocket className="w-5 h-5 text-[#E11D48]" />
+                            <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">Free Bootcamp</span>
+                          </div>
+                          <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-white mb-3">{bc.title}</h3>
+                          <p className="text-blue-200 text-sm sm:text-base leading-relaxed mb-6 max-w-2xl">{bc.description}</p>
+
+                          {/* Expiry countdown */}
+                          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-6 ${
+                            urgent ? 'bg-red-500/20 text-red-300 border border-red-500/30' : 'bg-white/10 text-blue-200 border border-white/20'
+                          }`}>
+                            <Calendar className="w-3.5 h-3.5" />
+                            {days === 0 ? 'Expires today!' : urgent ? `Only ${days} day${days > 1 ? 's' : ''} left!` : `Open for ${days} more days`}
+                          </div>
+
+                          <div className="flex flex-wrap gap-3">
+                            <Link to="/apply"
+                              className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-6 py-3 rounded-xl transition-all hover:scale-105 hover:shadow-lg text-sm">
+                              Apply for Free <ArrowRight className="w-4 h-4" />
+                            </Link>
+                            {bc.groupChatLink && (
+                              <a href={bc.groupChatLink} target="_blank" rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-6 py-3 rounded-xl transition-all hover:scale-105 text-sm">
+                                <MessageCircle className="w-4 h-4" /> Join WhatsApp Group
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
       </section>
 

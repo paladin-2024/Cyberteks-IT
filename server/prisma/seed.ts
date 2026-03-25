@@ -87,6 +87,14 @@ const COURSE_CATALOGUE = [
     tags: ['Networking', 'TCP/IP', 'CompTIA', 'Cisco'],
   },
   {
+    title: 'Python Programming',
+    slug:  'python-programming',
+    description: 'A hands-on introduction to Python — the world\'s most popular programming language. Learn variables, data structures, functions, file handling, APIs, and build real projects from day one. Perfect for beginners with zero coding experience.',
+    price: 0, duration: '6 weeks', level: 'Beginner',
+    category: 'Development', coverImage: '/assets/web design.jpeg',
+    tags: ['Python', 'Programming', 'Free', 'Bootcamp'],
+  },
+  {
     title: 'Cloud (Azure / AWS)',
     slug:  'cloud-azure-aws',
     description: 'Get hands-on with cloud computing using Microsoft Azure and Amazon Web Services. Learn cloud infrastructure, deployment, storage, databases, security, and cost management.',
@@ -150,6 +158,24 @@ async function main() {
   }
 
   console.log(`Courses seeded: ${COURSE_CATALOGUE.length}`);
+
+  // ── Free Bootcamp — Python Programming (expires 2 weeks from seed date) ───
+  const twoWeeksFromNow = new Date();
+  twoWeeksFromNow.setDate(twoWeeksFromNow.getDate() + 14);
+
+  await (prisma as any).freeBootcamp.upsert({
+    where:  { id: 'seed-python-bootcamp' },
+    update: {},
+    create: {
+      id:            'seed-python-bootcamp',
+      title:         'Python Programming Bootcamp',
+      description:   'A free 6-week hands-on Python bootcamp for beginners. No prior coding experience required. Learn programming fundamentals, build real projects, and join a community of learners. Limited spots available!',
+      expiresAt:     twoWeeksFromNow,
+      isActive:      true,
+      groupChatLink: 'https://chat.whatsapp.com/DJ3zRjjc5QO4QiMr6RLiWR',
+    },
+  });
+  console.log('Free bootcamp seeded');
 
   console.log('\nSeed complete!');
   console.log('\nLogin credentials:');

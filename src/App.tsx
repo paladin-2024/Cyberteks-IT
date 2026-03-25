@@ -43,6 +43,7 @@ import AdminSettings from './pages/lms/admin/Settings';
 import AdminMessages from './pages/lms/admin/Messages';
 import AdminITSupport from './pages/lms/admin/ITSupport';
 import AdminNewsletter from './pages/lms/admin/Newsletter';
+import AdminBootcamps from './pages/lms/admin/Bootcamps';
 
 // Shared pages
 import Profile from './pages/lms/shared/Profile';
@@ -136,6 +137,7 @@ export default function App() {
           <Route path="messages" element={<AdminMessages />} />
           <Route path="it-support" element={<AdminITSupport />} />
           <Route path="newsletter" element={<AdminNewsletter />} />
+          <Route path="bootcamps" element={<AdminBootcamps />} />
           <Route path="profile" element={<Profile />} />
         </Route>
 
