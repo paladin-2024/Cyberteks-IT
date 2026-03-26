@@ -546,7 +546,7 @@ export default function ICTSkillingPage() {
                   </li>
                 ))}
               </ul>
-              <a href="https://chat.whatsapp.com/Be367mq8OWpK3lI7kwqBWw?mode=gi_t"
+              <a href="https://chat.whatsapp.com/DJ3zRjjc5QO4QiMr6RLiWR?mode=gi_t"
                 target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-6 py-3.5 rounded-xl transition-all hover:scale-105 w-full justify-center">
                 <MessageCircle className="w-5 h-5" /> Join WhatsApp Community
@@ -578,9 +578,9 @@ export default function ICTSkillingPage() {
                   <span className="px-3 py-1.5 bg-white/10 rounded-lg text-xs text-white font-medium">🏦 Bank Transfer</span>
                 </div>
               </div>
-              <a href="mailto:info@cyberteks-it.com?subject=Mentorship Hub Membership Inquiry"
+              <a href="https://chat.whatsapp.com/Be367mq8OWpK3lI7kwqBWw?mode=gi_t"
                 className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-6 py-3.5 rounded-xl transition-all hover:scale-105 w-full justify-center">
-                <Mail className="w-5 h-5" /> Join Mentorship Hub
+                <MessageCircle className="w-5 h-5" /> Join Mentorship Hub
               </a>
             </div>
           </div>
