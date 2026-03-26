@@ -603,7 +603,7 @@ export default function ICTSkillingPage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <a href="https://chat.whatsapp.com/Be367mq8OWpK3lI7kwqBWw?mode=gi_t"
+            <a href="https://chat.whatsapp.com/DJ3zRjjc5QO4QiMr6RLiWR?mode=gi_t"
               target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 border-2 border-[#023064] text-[#023064] font-bold px-7 py-3.5 rounded-xl hover:bg-[#023064] hover:text-white transition-all">
               <MessageCircle className="w-4 h-4" /> Join Group to See More Content
