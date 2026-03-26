@@ -82,11 +82,8 @@ const WHY_CHOOSE = [
 
 const VIDEOS = [
   { src: '/videos/session-1.webm', title: 'Augmented Reality',     tag: 'Augmented Reality' },
-  { src: '', title: 'Corporate Cyber Security Training',  tag: 'Corporate' },
   { src: '/videos/session-4.webm', title: 'Programming Fundamentals Class',     tag: 'Programming' },
-  { src: '/videos/session-3.webm', title: 'Data Analytics Bootcamp',            tag: 'Data Analytics' },
   { src: '/videos/session-5.webm', title: 'Web Design & Development Class',     tag: 'Web Design' },
-  { src: '/videos/session-6.webm', title: 'Cloud Computing Session',            tag: 'Cloud' },
 
 ];
 
