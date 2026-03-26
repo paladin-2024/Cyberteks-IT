@@ -179,7 +179,7 @@ export default function ICTSkillingPage() {
                 className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-7 py-3.5 rounded-xl transition-all hover:scale-105 hover:shadow-lg">
                 Apply Now <ArrowRight className="w-4 h-4" />
               </Link>
-              <a href="https://chat.whatsapp.com/Be367mq8OWpK3lI7kwqBWw?mode=gi_t"
+              <a href="https://chat.whatsapp.com/DJ3zRjjc5QO4QiMr6RLiWR?mode=gi_t"
                 target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-7 py-3.5 rounded-xl transition-all hover:scale-105 hover:shadow-lg">
                 <MessageCircle className="w-4 h-4" /> Join WhatsApp Community
@@ -305,7 +305,7 @@ export default function ICTSkillingPage() {
                           className="inline-flex items-center gap-2 border-2 border-[#023064] text-[#023064] font-bold px-6 py-3 rounded-xl hover:bg-[#023064] hover:text-white transition-all">
                           <Phone className="w-4 h-4" /> Enquire
                         </a>
-                        <a href="https://chat.whatsapp.com/Be367mq8OWpK3lI7kwqBWw?mode=gi_t"
+                        <a href="https://chat.whatsapp.com/DJ3zRjjc5QO4QiMr6RLiWR?mode=gi_t"
                           target="_blank" rel="noopener noreferrer"
                           className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#1da851] transition-all">
                           <MessageCircle className="w-4 h-4" /> Ask via WhatsApp
