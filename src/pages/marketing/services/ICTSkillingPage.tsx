@@ -81,15 +81,13 @@ const WHY_CHOOSE = [
 ];
 
 const VIDEOS = [
-  { src: '/videos/session-1.webm', title: 'AI & Robotics Training Session',     tag: 'AI & Robotics' },
-  { src: '/videos/session-2.webm', title: 'Networking & Security Workshop',     tag: 'Networking' },
-  { src: '/videos/session-3.webm', title: 'Corporate Cyber Security Training',  tag: 'Corporate' },
-  { src: '/videos/session-4.webm', title: 'Data Analytics Bootcamp',            tag: 'Data Analytics' },
+  { src: '/videos/session-1.webm', title: 'Augmented Reality',     tag: 'Augmented Reality' },
+  { src: '', title: 'Corporate Cyber Security Training',  tag: 'Corporate' },
+  { src: '/videos/session-4.webm', title: 'Programming Fundamentals Class',     tag: 'Programming' },
+  { src: '/videos/session-3.webm', title: 'Data Analytics Bootcamp',            tag: 'Data Analytics' },
   { src: '/videos/session-5.webm', title: 'Web Design & Development Class',     tag: 'Web Design' },
   { src: '/videos/session-6.webm', title: 'Cloud Computing Session',            tag: 'Cloud' },
-  { src: '/videos/session-7.webm', title: 'Graphic Design Workshop',            tag: 'Design' },
-  { src: '/videos/session-8.webm', title: 'Programming Fundamentals Class',     tag: 'Programming' },
-  { src: '/videos/session-9.webm', title: 'Cyber Security Live Demo',           tag: 'Cyber Security' },
+
 ];
 
 const fmt = (n: number) => 'UGX ' + n.toLocaleString();
