@@ -27,7 +27,7 @@ router.get('/', async (req: AuthRequest, res: Response) => {
   }
 });
 
-// POST /api/curriculum/weeks — create a new week
+// POST /api/curriculum/weeks
 router.post('/weeks', async (req: AuthRequest, res: Response) => {
   try {
     const { courseId, weekNumber, title } = req.body as { courseId: string; weekNumber: number; title: string };
@@ -38,7 +38,6 @@ router.post('/weeks', async (req: AuthRequest, res: Response) => {
       return;
     }
 
-    // Verify course belongs to teacher
     const course = await prisma.course.findFirst({ where: { id: courseId, teacherId } });
     if (!course) { res.status(403).json({ error: 'Course not found' }); return; }
 
@@ -97,11 +96,15 @@ router.delete('/weeks/:id', async (req: AuthRequest, res: Response) => {
   }
 });
 
-// POST /api/curriculum/topics — add topic to a week
+// POST /api/curriculum/topics
 router.post('/topics', async (req: AuthRequest, res: Response) => {
   try {
-    const { weekId, title, description, duration, type } = req.body as {
+    const {
+      weekId, title, description, duration, type,
+      attachmentUrl, attachmentName, dueDate, maxScore,
+    } = req.body as {
       weekId: string; title: string; description?: string; duration?: string; type?: string;
+      attachmentUrl?: string; attachmentName?: string; dueDate?: string; maxScore?: number;
     };
     const teacherId = req.user!.id;
 
@@ -117,14 +120,37 @@ router.post('/topics', async (req: AuthRequest, res: Response) => {
       where: { weekId }, orderBy: { order: 'desc' },
     });
 
+    const topicType = type || 'lecture';
+
+    // If assignment type + dueDate, create an Assignment record first
+    let assignmentId: string | null = null;
+    if (topicType === 'assignment' && dueDate) {
+      const assignment = await prisma.assignment.create({
+        data: {
+          title: title.trim(),
+          courseId: week.courseId,
+          teacherId,
+          dueDate: new Date(dueDate),
+          maxScore: maxScore ?? 100,
+          status: 'DRAFT',
+        },
+      });
+      assignmentId = assignment.id;
+    }
+
     const topic = await prisma.curriculumTopic.create({
       data: {
         weekId,
         title: title.trim(),
         description: description?.trim() || null,
         duration: duration?.trim() || null,
-        type: type || 'lecture',
+        type: topicType,
         order: (lastTopic?.order ?? -1) + 1,
+        attachmentUrl: attachmentUrl || null,
+        attachmentName: attachmentName || null,
+        dueDate: dueDate ? new Date(dueDate) : null,
+        maxScore: maxScore ?? null,
+        assignmentId,
       },
     });
 
@@ -139,8 +165,14 @@ router.post('/topics', async (req: AuthRequest, res: Response) => {
 router.patch('/topics/:id', async (req: AuthRequest, res: Response) => {
   try {
     const id = req.params.id as string;
-    const { title, description, duration, type, order } = req.body as {
+    const {
+      title, description, duration, type, order,
+      meetLink, meetScheduledAt,
+      attachmentUrl, attachmentName, dueDate, maxScore,
+    } = req.body as {
       title?: string; description?: string; duration?: string; type?: string; order?: number;
+      meetLink?: string; meetScheduledAt?: string;
+      attachmentUrl?: string; attachmentName?: string; dueDate?: string; maxScore?: number;
     };
     const teacherId = req.user!.id;
 
@@ -149,7 +181,17 @@ router.patch('/topics/:id', async (req: AuthRequest, res: Response) => {
     });
     if (!topic) { res.status(404).json({ error: 'Topic not found' }); return; }
 
-    const { meetLink, meetScheduledAt } = req.body as { meetLink?: string; meetScheduledAt?: string };
+    // If it has a linked assignment, sync the changes
+    if (topic.assignmentId) {
+      await prisma.assignment.updateMany({
+        where: { id: topic.assignmentId, teacherId },
+        data: {
+          ...(title?.trim() ? { title: title.trim() } : {}),
+          ...(dueDate !== undefined ? { dueDate: dueDate ? new Date(dueDate) : undefined } : {}),
+          ...(maxScore !== undefined ? { maxScore } : {}),
+        },
+      });
+    }
 
     const updated = await prisma.curriculumTopic.update({
       where: { id },
@@ -161,6 +203,10 @@ router.patch('/topics/:id', async (req: AuthRequest, res: Response) => {
         ...(order !== undefined ? { order } : {}),
         ...(meetLink !== undefined ? { meetLink: meetLink.trim() || null } : {}),
         ...(meetScheduledAt !== undefined ? { meetScheduledAt: meetScheduledAt ? new Date(meetScheduledAt) : null } : {}),
+        ...(attachmentUrl !== undefined ? { attachmentUrl: attachmentUrl || null } : {}),
+        ...(attachmentName !== undefined ? { attachmentName: attachmentName || null } : {}),
+        ...(dueDate !== undefined ? { dueDate: dueDate ? new Date(dueDate) : null } : {}),
+        ...(maxScore !== undefined ? { maxScore } : {}),
       },
     });
 
@@ -181,6 +227,11 @@ router.delete('/topics/:id', async (req: AuthRequest, res: Response) => {
       where: { id, week: { teacherId } },
     });
     if (!topic) { res.status(404).json({ error: 'Topic not found' }); return; }
+
+    // Delete linked assignment if exists
+    if (topic.assignmentId) {
+      await prisma.assignment.deleteMany({ where: { id: topic.assignmentId, teacherId } });
+    }
 
     await prisma.curriculumTopic.delete({ where: { id } });
     res.json({ success: true });

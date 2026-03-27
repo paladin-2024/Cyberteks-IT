@@ -488,6 +488,11 @@ model CurriculumTopic {
   order           Int       @default(0)
   meetLink        String?
   meetScheduledAt DateTime?
+  attachmentUrl   String?
+  attachmentName  String?
+  dueDate         DateTime?
+  maxScore        Int?
+  assignmentId    String?
   createdAt       DateTime  @default(now())
 
   week CurriculumWeek @relation(fields: [weekId], references: [id], onDelete: Cascade)
