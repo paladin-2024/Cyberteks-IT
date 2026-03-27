@@ -28,18 +28,34 @@ const PROGRAMS = [
 
 const PROGRAM_PRICES: Record<string, number> = {
   'Free Bootcamp: Python Programming': 0,
-  'Prompt Engineering':                250000,
-  'Augmented Reality':                 300000,
-  'Virtual Reality':                   300000,
-  'Programming (Any Language)':        250000,
-  'AI & Robotics':                     300000,
-  'Web Design':                        200000,
-  'Graphic Design':                    200000,
-  'Cyber Security':                    300000,
-  'Data Analytics':                    250000,
-  'Computer Networking':               250000,
-  'Cloud (Azure / AWS)':               300000,
-  'Other':                             250000,
+  'Prompt Engineering':                750000,
+  'Augmented Reality':                 750000,
+  'Virtual Reality':                   750000,
+  'Programming (Any Language)':        1500000,
+  'AI & Robotics':                     1500000,
+  'Web Design':                        650000,
+  'Graphic Design':                    650000,
+  'Cyber Security':                    1500000,
+  'Data Analytics':                    1500000,
+  'Computer Networking':               1500000,
+  'Cloud (Azure / AWS)':               1500000,
+  'Other':                             750000,
+};
+
+const PROGRAM_DURATION: Record<string, string> = {
+  'Free Bootcamp: Python Programming': '—',
+  'Prompt Engineering':                '2 Months',
+  'Augmented Reality':                 '2 Months',
+  'Virtual Reality':                   '2 Months',
+  'Programming (Any Language)':        '3 Months',
+  'AI & Robotics':                     '3 Months',
+  'Web Design':                        '2 Months',
+  'Graphic Design':                    '2 Months',
+  'Cyber Security':                    '3 Months',
+  'Data Analytics':                    '2 Months',
+  'Computer Networking':               '3 Months',
+  'Cloud (Azure / AWS)':               '3 Months',
+  'Other':                             '—',
 };
 
 function priceOf(program: string): number {
@@ -811,13 +827,15 @@ export default function ApplyPage() {
                             <thead>
                               <tr className="bg-gray-50 border-b border-gray-200">
                                 <th className="text-left px-4 py-3 font-semibold text-gray-600">Program</th>
-                                <th className="text-right px-4 py-3 font-semibold text-gray-600">Amount</th>
+                                <th className="text-center px-4 py-3 font-semibold text-gray-600 hidden sm:table-cell">Duration</th>
+                                <th className="text-right px-4 py-3 font-semibold text-gray-600">Fee (UGX)</th>
                               </tr>
                             </thead>
                             <tbody>
                               {form.programs.map(p => (
                                 <tr key={p} className="border-b border-gray-100 last:border-0">
                                   <td className="px-4 py-3 text-gray-700">{p}</td>
+                                  <td className="px-4 py-3 text-center text-gray-400 text-xs hidden sm:table-cell">{PROGRAM_DURATION[p] ?? '—'}</td>
                                   <td className="px-4 py-3 text-right font-medium">
                                     {isFreeProgram(p)
                                       ? <span className="text-green-600 font-bold">FREE</span>
@@ -829,7 +847,7 @@ export default function ApplyPage() {
                             </tbody>
                             <tfoot>
                               <tr className="bg-primary-blue/5 border-t-2 border-primary-blue/20">
-                                <td className="px-4 py-3 font-bold text-gray-900">TOTAL DUE</td>
+                                <td colSpan={2} className="px-4 py-3 font-bold text-gray-900">TOTAL DUE</td>
                                 <td className="px-4 py-3 text-right font-extrabold text-primary-blue text-base">{formatUGX(totalUGX)}</td>
                               </tr>
                             </tfoot>
