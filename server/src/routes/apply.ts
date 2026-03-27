@@ -188,15 +188,6 @@ router.post('/', async (req: Request, res: Response) => {
 
     const data = result.data;
 
-    // Require verified OTP for this email
-    const otpEntry = otpStore.get(data.email.toLowerCase());
-    if (!otpEntry || !otpEntry.verified) {
-      res.status(400).json({ error: 'Email not verified. Please verify your email before submitting.' });
-      return;
-    }
-    // Clean up after use
-    otpStore.delete(data.email.toLowerCase());
-
     // Generate default password at application time so admin can see it
     const tempPassword = generateTempPassword();
 
