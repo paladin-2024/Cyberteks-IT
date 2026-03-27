@@ -69,7 +69,7 @@ export default function FileUploader({
       const form = new FormData();
       form.append('file', file);
 
-      const res = await fetch(endpoint, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}${endpoint}`, {
         method: 'POST',
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: form,

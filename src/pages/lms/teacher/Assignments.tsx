@@ -545,7 +545,7 @@ function AssignmentDrawer({
       const fd = new FormData();
       fd.append('file', file);
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/upload/submission', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/upload/submission`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: fd,

@@ -554,7 +554,7 @@ function CourseModal({
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const res = await fetch('/api/upload/cover', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/upload/cover`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: formData,

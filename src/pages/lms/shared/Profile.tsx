@@ -142,7 +142,7 @@ export default function ProfilePage() {
       const token = localStorage.getItem('token');
       const form = new FormData();
       form.append('file', file);
-      const res = await fetch('/api/upload/avatar', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/upload/avatar`, {
         method: 'POST',
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: form,
