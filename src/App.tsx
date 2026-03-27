@@ -44,6 +44,7 @@ import AdminMessages from './pages/lms/admin/Messages';
 import AdminITSupport from './pages/lms/admin/ITSupport';
 import AdminNewsletter from './pages/lms/admin/Newsletter';
 import AdminBootcamps from './pages/lms/admin/Bootcamps';
+import AdminStudents from './pages/lms/admin/Students';
 
 // Shared pages
 import Profile from './pages/lms/shared/Profile';
@@ -128,6 +129,7 @@ export default function App() {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="users" element={<AdminUsers />} />
+          <Route path="students" element={<AdminStudents />} />
           <Route path="courses" element={<AdminCourses />} />
           <Route path="applications" element={<AdminApplications />} />
           <Route path="invoices" element={<AdminInvoices />} />

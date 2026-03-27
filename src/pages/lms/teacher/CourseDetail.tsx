@@ -2,33 +2,37 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   ArrowLeft, Plus, Trash2, Edit3, Save, X, ChevronDown, ChevronRight,
-  Video, FileText, ClipboardList, BookOpen, Users, Clock, Tag,
-  GripVertical, Check, AlertCircle, Loader2,
+  Video, FileText, BookOpen, Users, Clock, Tag,
+  GripVertical, Check, AlertCircle, Loader2, Presentation,
+  Paperclip, UploadCloud, Calendar, Link2,
 } from 'lucide-react';
 import { api } from '@/lib/api';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type LessonType = 'VIDEO' | 'DOCUMENT' | 'QUIZ' | 'ASSIGNMENT' | 'LIVE_SESSION';
+type TopicType = 'lecture' | 'lab' | 'video' | 'document' | 'assignment' | 'live_session';
 
-interface Lesson {
+interface Topic {
   id: string;
   title: string;
   description: string | null;
-  type: LessonType;
-  content: string | null;
-  duration: number | null;
+  duration: string | null;
+  type: TopicType;
   order: number;
-  isFree: boolean;
-  sectionId: string;
+  weekId: string;
+  attachmentUrl: string | null;
+  attachmentName: string | null;
+  meetLink: string | null;
+  dueDate: string | null;
+  maxScore: number | null;
+  assignmentId: string | null;
 }
 
-interface Section {
+interface Week {
   id: string;
+  weekNumber: number;
   title: string;
-  order: number;
-  courseId: string;
-  lessons: Lesson[];
+  topics: Topic[];
 }
 
 interface Course {
@@ -39,39 +43,103 @@ interface Course {
   level: string | null;
   duration: string | null;
   status: string;
-  coverImage: string | null;
   _count: { enrollments: number; sections: number };
   teacher: { id: string; name: string };
-  sections: Section[];
 }
 
-// ── Lesson type meta ──────────────────────────────────────────────────────────
+// ── Topic type meta ────────────────────────────────────────────────────────────
 
-const LESSON_TYPES: { value: LessonType; label: string; icon: React.ElementType; color: string }[] = [
-  { value: 'VIDEO',        label: 'Video',       icon: Video,       color: 'text-blue-500' },
-  { value: 'DOCUMENT',     label: 'Document',    icon: FileText,    color: 'text-emerald-500' },
-  { value: 'QUIZ',         label: 'Quiz',        icon: ClipboardList, color: 'text-purple-500' },
-  { value: 'ASSIGNMENT',   label: 'Assignment',  icon: BookOpen,    color: 'text-amber-500' },
-  { value: 'LIVE_SESSION', label: 'Live Session',icon: Users,       color: 'text-rose-500' },
+const TOPIC_TYPES: { value: TopicType; label: string; icon: React.ElementType; color: string }[] = [
+  { value: 'lecture',      label: 'Lecture',      icon: Presentation, color: 'text-blue-500'    },
+  { value: 'lab',          label: 'Lab',          icon: BookOpen,     color: 'text-teal-500'    },
+  { value: 'video',        label: 'Video',        icon: Video,        color: 'text-rose-500'    },
+  { value: 'document',     label: 'Document',     icon: FileText,     color: 'text-emerald-500' },
+  { value: 'assignment',   label: 'Assignment',   icon: BookOpen,     color: 'text-amber-500'   },
+  { value: 'live_session', label: 'Live Session', icon: Users,        color: 'text-purple-500'  },
 ];
 
-function getLessonIcon(type: LessonType) {
-  const found = LESSON_TYPES.find((t) => t.value === type);
+function getTopicIcon(type: TopicType) {
+  const found = TOPIC_TYPES.find((t) => t.value === type);
   if (!found) return null;
   const Icon = found.icon;
   return <Icon className={`w-3.5 h-3.5 ${found.color}`} />;
 }
 
-// ── Inline editable text ──────────────────────────────────────────────────────
+// ── Upload helper ──────────────────────────────────────────────────────────────
+
+async function uploadFile(file: File): Promise<{ url: string; fileName: string }> {
+  const token = localStorage.getItem('token');
+  const fd = new FormData();
+  fd.append('file', file);
+  const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/upload/submission`, {
+    method: 'POST',
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: fd,
+  });
+  if (!res.ok) throw new Error('Upload failed');
+  const data = await res.json() as { url: string; fileName: string };
+  return { url: data.url, fileName: file.name };
+}
+
+// ── File upload field ──────────────────────────────────────────────────────────
+
+function FileUploadField({
+  url, name, onChange, label = 'Attach document',
+}: {
+  url: string; name: string;
+  onChange: (url: string, name: string) => void;
+  label?: string;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handle = async (file: File) => {
+    setUploading(true); setError('');
+    try {
+      const result = await uploadFile(file);
+      onChange(result.url, result.fileName);
+    } catch {
+      setError('Upload failed. Please try again.');
+    } finally { setUploading(false); }
+  };
+
+  if (url) {
+    return (
+      <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-muted/40 text-sm">
+        <Paperclip className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+        <span className="flex-1 truncate text-foreground text-xs">{name || 'Attached file'}</span>
+        <a href={url} target="_blank" rel="noopener noreferrer" className="text-[#023064] text-xs hover:underline shrink-0">View</a>
+        <button type="button" onClick={() => onChange('', '')} className="text-muted-foreground hover:text-red-400 transition-colors">
+          <X className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <input ref={ref} type="file" className="sr-only" onChange={e => { const f = e.target.files?.[0]; if (f) handle(f); }} />
+      <button
+        type="button"
+        onClick={() => ref.current?.click()}
+        disabled={uploading}
+        className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border-2 border-dashed border-border hover:border-[#023064]/40 transition-all text-xs font-semibold text-muted-foreground hover:text-[#023064] disabled:opacity-50"
+      >
+        {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <UploadCloud className="w-3.5 h-3.5" />}
+        {uploading ? 'Uploading…' : label}
+      </button>
+      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+    </div>
+  );
+}
+
+// ── Inline editable text ───────────────────────────────────────────────────────
 
 function InlineEdit({
-  value,
-  onSave,
-  className = '',
+  value, onSave, className = '',
 }: {
-  value: string;
-  onSave: (v: string) => Promise<void>;
-  className?: string;
+  value: string; onSave: (v: string) => Promise<void>; className?: string;
 }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
@@ -115,23 +183,24 @@ function InlineEdit({
   );
 }
 
-// ── Lesson Editor Panel ───────────────────────────────────────────────────────
+// ── Topic Editor Panel ─────────────────────────────────────────────────────────
 
-function LessonEditorPanel({
-  lesson,
-  onUpdate,
-  onClose,
+function TopicEditorPanel({
+  topic, onUpdate, onClose,
 }: {
-  lesson: Lesson;
-  onUpdate: (updated: Lesson) => void;
-  onClose: () => void;
+  topic: Topic; onUpdate: (updated: Topic) => void; onClose: () => void;
 }) {
-  const [title, setTitle] = useState(lesson.title);
-  const [type, setType] = useState<LessonType>(lesson.type);
-  const [description, setDescription] = useState(lesson.description ?? '');
-  const [content, setContent] = useState(lesson.content ?? '');
-  const [duration, setDuration] = useState(lesson.duration?.toString() ?? '');
-  const [isFree, setIsFree] = useState(lesson.isFree);
+  const [title, setTitle] = useState(topic.title);
+  const [type, setType] = useState<TopicType>(topic.type);
+  const [description, setDescription] = useState(topic.description ?? '');
+  const [duration, setDuration] = useState(topic.duration ?? '');
+  const [meetLink, setMeetLink] = useState(topic.meetLink ?? '');
+  const [attachmentUrl, setAttachmentUrl] = useState(topic.attachmentUrl ?? '');
+  const [attachmentName, setAttachmentName] = useState(topic.attachmentName ?? '');
+  const [dueDate, setDueDate] = useState(
+    topic.dueDate ? new Date(topic.dueDate).toISOString().slice(0, 16) : ''
+  );
+  const [maxScore, setMaxScore] = useState(topic.maxScore?.toString() ?? '100');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -139,22 +208,25 @@ function LessonEditorPanel({
     if (!title.trim()) return;
     setSaving(true);
     try {
-      const { lesson: updated } = await api.patch<{ lesson: Lesson }>(
-        `/sections/lessons/${lesson.id}`,
+      const { topic: updated } = await api.patch<{ topic: Topic }>(
+        `/curriculum/topics/${topic.id}`,
         {
           title: title.trim(),
           type,
           description: description.trim() || null,
-          content: content.trim() || null,
-          duration: duration ? parseInt(duration) : null,
-          isFree,
+          duration: duration.trim() || null,
+          meetLink: meetLink.trim() || null,
+          attachmentUrl: attachmentUrl || null,
+          attachmentName: attachmentName || null,
+          dueDate: dueDate || null,
+          maxScore: maxScore ? parseInt(maxScore) : null,
         }
       );
       onUpdate(updated);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch {
-      // silently fail, user can retry
+      // user can retry
     } finally {
       setSaving(false);
     }
@@ -163,8 +235,8 @@ function LessonEditorPanel({
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100">
-        <h3 className="font-heading font-semibold text-foreground text-sm">Edit Lesson</h3>
-        <button onClick={onClose} className="text-muted-foreground hover:text-muted-foreground">
+        <h3 className="font-heading font-semibold text-foreground text-sm">Edit Topic</h3>
+        <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
           <X className="w-4 h-4" />
         </button>
       </div>
@@ -172,7 +244,7 @@ function LessonEditorPanel({
       <div className="flex-1 overflow-y-auto p-5 space-y-4">
         {/* Title */}
         <div>
-          <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Lesson Title</label>
+          <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Topic Title</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -183,9 +255,9 @@ function LessonEditorPanel({
 
         {/* Type */}
         <div>
-          <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Lesson Type</label>
+          <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Topic Type</label>
           <div className="grid grid-cols-2 gap-2">
-            {LESSON_TYPES.map((t) => {
+            {TOPIC_TYPES.map((t) => {
               const Icon = t.icon;
               return (
                 <button
@@ -213,53 +285,91 @@ function LessonEditorPanel({
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
             className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064] focus:ring-1 focus:ring-[#023064]/20 resize-none"
-            placeholder="Brief overview of this lesson…"
+            placeholder="Brief overview of this topic…"
           />
         </div>
 
-        {/* Content */}
+        {/* Duration */}
         <div>
-          <label className="block text-xs font-semibold text-muted-foreground mb-1.5">
-            {type === 'VIDEO' ? 'Video URL / Embed Code' : type === 'LIVE_SESSION' ? 'Meeting Link' : 'Notes & Content'}
-          </label>
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            rows={type === 'DOCUMENT' || type === 'ASSIGNMENT' ? 8 : 4}
-            className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064] focus:ring-1 focus:ring-[#023064]/20 resize-none font-mono"
-            placeholder={
-              type === 'VIDEO' ? 'https://youtube.com/watch?v=...' :
-              type === 'LIVE_SESSION' ? 'https://meet.google.com/...' :
-              'Write your notes, instructions, or content here…'
-            }
+          <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Duration</label>
+          <input
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+            className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064]"
+            placeholder="e.g. 45 min"
           />
         </div>
 
-        {/* Duration + Free */}
-        <div className="flex gap-3">
-          <div className="flex-1">
-            <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Duration (minutes)</label>
-            <input
-              type="number"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064]"
-              placeholder="30"
-              min={0}
+        {/* Meet link for lecture / lab / live_session */}
+        {(type === 'lecture' || type === 'lab' || type === 'live_session') && (
+          <div>
+            <label className="block text-xs font-semibold text-muted-foreground mb-1.5">
+              {type === 'live_session' ? 'Meeting Link' : 'Meet Link (optional)'}
+            </label>
+            <div className="flex items-center gap-2">
+              <Link2 className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+              <input
+                value={meetLink}
+                onChange={(e) => setMeetLink(e.target.value)}
+                className="flex-1 text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064]"
+                placeholder="https://meet.google.com/..."
+              />
+            </div>
+          </div>
+        )}
+
+        {/* File uploader for document */}
+        {type === 'document' && (
+          <div>
+            <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Document File</label>
+            <FileUploadField
+              url={attachmentUrl}
+              name={attachmentName}
+              onChange={(url, name) => { setAttachmentUrl(url); setAttachmentName(name); }}
+              label="Attach document"
             />
           </div>
-          <div className="flex items-end pb-2">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <div
-                onClick={() => setIsFree(!isFree)}
-                className={`w-9 h-5 rounded-full transition-all relative ${isFree ? 'bg-emerald-500' : 'bg-slate-200'}`}
-              >
-                <div className={`absolute top-0.5 w-4 h-4 bg-card rounded-full shadow transition-all ${isFree ? 'left-4' : 'left-0.5'}`} />
+        )}
+
+        {/* Assignment extra fields */}
+        {type === 'assignment' && (
+          <>
+            <div>
+              <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Assignment File / Instructions</label>
+              <FileUploadField
+                url={attachmentUrl}
+                name={attachmentName}
+                onChange={(url, name) => { setAttachmentUrl(url); setAttachmentName(name); }}
+                label="Upload assignment document"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Due Date</label>
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                  <input
+                    type="datetime-local"
+                    value={dueDate}
+                    onChange={(e) => setDueDate(e.target.value)}
+                    className="flex-1 text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064]"
+                  />
+                </div>
               </div>
-              <span className="text-xs font-medium text-muted-foreground">Free preview</span>
-            </label>
-          </div>
-        </div>
+              <div>
+                <label className="block text-xs font-semibold text-muted-foreground mb-1.5">Max Score</label>
+                <input
+                  type="number"
+                  min={1}
+                  value={maxScore}
+                  onChange={(e) => setMaxScore(e.target.value)}
+                  className="w-full text-sm border border-border rounded-lg px-3 py-2 outline-none focus:border-[#023064]"
+                  placeholder="100"
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Save button */}
@@ -277,133 +387,124 @@ function LessonEditorPanel({
   );
 }
 
-// ── Main Page ─────────────────────────────────────────────────────────────────
+// ── Main Page ──────────────────────────────────────────────────────────────────
 
 export default function TeacherCourseDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course | null>(null);
+  const [weeks, setWeeks] = useState<Week[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   // UI state
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
-  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+  const [expandedWeeks, setExpandedWeeks] = useState<Set<string>>(new Set());
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
-  // Add section form
-  const [addingSection, setAddingSection] = useState(false);
-  const [newSectionTitle, setNewSectionTitle] = useState('');
-  const [savingSection, setSavingSection] = useState(false);
+  // Add week form
+  const [addingWeek, setAddingWeek] = useState(false);
+  const [newWeekTitle, setNewWeekTitle] = useState('');
+  const [savingWeek, setSavingWeek] = useState(false);
 
-  // Add lesson form
-  const [addingLessonFor, setAddingLessonFor] = useState<string | null>(null);
-  const [newLessonTitle, setNewLessonTitle] = useState('');
-  const [newLessonType, setNewLessonType] = useState<LessonType>('VIDEO');
-  const [savingLesson, setSavingLesson] = useState(false);
+  // Add topic form
+  const [addingTopicFor, setAddingTopicFor] = useState<string | null>(null);
+  const [newTopicTitle, setNewTopicTitle] = useState('');
+  const [newTopicType, setNewTopicType] = useState<TopicType>('lecture');
+  const [savingTopic, setSavingTopic] = useState(false);
 
   useEffect(() => {
     if (!id) return;
-    api.get<{ course: Course }>(`/courses/${id}`)
-      .then(({ course }) => {
+    Promise.all([
+      api.get<{ course: Course }>(`/courses/${id}`),
+      api.get<{ weeks: Week[] }>(`/curriculum?courseId=${id}`),
+    ])
+      .then(([{ course }, { weeks }]) => {
         setCourse(course);
-        if (course.sections.length > 0) {
-          setExpandedSections(new Set([course.sections[0].id]));
-        }
+        setWeeks(weeks);
+        if (weeks.length > 0) setExpandedWeeks(new Set([weeks[0].id]));
       })
       .catch(() => setError('Failed to load course'))
       .finally(() => setLoading(false));
   }, [id]);
 
-  const toggleSection = (sectionId: string) => {
-    setExpandedSections((prev) => {
+  const toggleWeek = (weekId: string) => {
+    setExpandedWeeks((prev) => {
       const next = new Set(prev);
-      if (next.has(sectionId)) next.delete(sectionId); else next.add(sectionId);
+      if (next.has(weekId)) next.delete(weekId); else next.add(weekId);
       return next;
     });
   };
 
-  const handleAddSection = async () => {
-    if (!newSectionTitle.trim() || !course) return;
-    setSavingSection(true);
+  const handleAddWeek = async () => {
+    if (!newWeekTitle.trim() || !id) return;
+    setSavingWeek(true);
     try {
-      const { section } = await api.post<{ section: Section }>('/sections', {
-        courseId: course.id,
-        title: newSectionTitle.trim(),
-        order: course.sections.length,
+      const { week } = await api.post<{ week: Week }>('/curriculum/weeks', {
+        courseId: id,
+        title: newWeekTitle.trim(),
+        weekNumber: weeks.length + 1,
       });
-      setCourse((prev) => prev ? { ...prev, sections: [...prev.sections, section] } : prev);
-      setExpandedSections((prev) => new Set([...prev, section.id]));
-      setNewSectionTitle('');
-      setAddingSection(false);
+      setWeeks((prev) => [...prev, week]);
+      setExpandedWeeks((prev) => new Set([...prev, week.id]));
+      setNewWeekTitle('');
+      setAddingWeek(false);
     } finally {
-      setSavingSection(false);
+      setSavingWeek(false);
     }
   };
 
-  const handleDeleteSection = async (sectionId: string) => {
-    if (!confirm('Delete this section and all its lessons?')) return;
-    await api.delete(`/sections/${sectionId}`);
-    setCourse((prev) => prev ? { ...prev, sections: prev.sections.filter((s) => s.id !== sectionId) } : prev);
-    if (selectedLesson?.sectionId === sectionId) setSelectedLesson(null);
+  const handleDeleteWeek = async (weekId: string) => {
+    if (!confirm('Delete this week and all its topics?')) return;
+    await api.delete(`/curriculum/weeks/${weekId}`);
+    setWeeks((prev) => prev.filter((w) => w.id !== weekId));
+    if (selectedTopic?.weekId === weekId) setSelectedTopic(null);
   };
 
-  const handleRenameSection = async (sectionId: string, title: string) => {
-    await api.patch(`/sections/${sectionId}`, { title });
-    setCourse((prev) => prev ? {
-      ...prev,
-      sections: prev.sections.map((s) => s.id === sectionId ? { ...s, title } : s),
-    } : prev);
+  const handleRenameWeek = async (weekId: string, title: string) => {
+    await api.patch(`/curriculum/weeks/${weekId}`, { title });
+    setWeeks((prev) => prev.map((w) => w.id === weekId ? { ...w, title } : w));
   };
 
-  const handleAddLesson = async (sectionId: string) => {
-    if (!newLessonTitle.trim()) return;
-    setSavingLesson(true);
+  const handleAddTopic = async (weekId: string) => {
+    if (!newTopicTitle.trim()) return;
+    setSavingTopic(true);
     try {
-      const section = course?.sections.find((s) => s.id === sectionId);
-      const { lesson } = await api.post<{ lesson: Lesson }>(`/sections/${sectionId}/lessons`, {
-        title: newLessonTitle.trim(),
-        type: newLessonType,
-        order: section?.lessons.length ?? 0,
+      const week = weeks.find((w) => w.id === weekId);
+      const { topic } = await api.post<{ topic: Topic }>('/curriculum/topics', {
+        weekId,
+        title: newTopicTitle.trim(),
+        type: newTopicType,
+        order: week?.topics.length ?? 0,
       });
-      setCourse((prev) => prev ? {
-        ...prev,
-        sections: prev.sections.map((s) =>
-          s.id === sectionId ? { ...s, lessons: [...s.lessons, lesson] } : s
-        ),
-      } : prev);
-      setNewLessonTitle('');
-      setAddingLessonFor(null);
-      setSelectedLesson(lesson);
+      setWeeks((prev) => prev.map((w) =>
+        w.id === weekId ? { ...w, topics: [...w.topics, topic] } : w
+      ));
+      setNewTopicTitle('');
+      setAddingTopicFor(null);
+      setSelectedTopic(topic);
     } finally {
-      setSavingLesson(false);
+      setSavingTopic(false);
     }
   };
 
-  const handleDeleteLesson = async (sectionId: string, lessonId: string) => {
-    if (!confirm('Delete this lesson?')) return;
-    await api.delete(`/sections/lessons/${lessonId}`);
-    setCourse((prev) => prev ? {
-      ...prev,
-      sections: prev.sections.map((s) =>
-        s.id === sectionId ? { ...s, lessons: s.lessons.filter((l) => l.id !== lessonId) } : s
-      ),
-    } : prev);
-    if (selectedLesson?.id === lessonId) setSelectedLesson(null);
+  const handleDeleteTopic = async (weekId: string, topicId: string) => {
+    if (!confirm('Delete this topic?')) return;
+    await api.delete(`/curriculum/topics/${topicId}`);
+    setWeeks((prev) => prev.map((w) =>
+      w.id === weekId ? { ...w, topics: w.topics.filter((t) => t.id !== topicId) } : w
+    ));
+    if (selectedTopic?.id === topicId) setSelectedTopic(null);
   };
 
-  const handleLessonUpdate = (updated: Lesson) => {
-    setSelectedLesson(updated);
-    setCourse((prev) => prev ? {
-      ...prev,
-      sections: prev.sections.map((s) =>
-        s.id === updated.sectionId ? {
-          ...s,
-          lessons: s.lessons.map((l) => l.id === updated.id ? updated : l),
-        } : s
-      ),
-    } : prev);
+  const handleTopicUpdate = (updated: Topic) => {
+    setSelectedTopic(updated);
+    setWeeks((prev) => prev.map((w) =>
+      w.id === updated.weekId
+        ? { ...w, topics: w.topics.map((t) => t.id === updated.id ? updated : t) }
+        : w
+    ));
   };
 
-  // ── Loading / Error ───────────────────────────────────────────────────────
+  // ── Loading / Error ────────────────────────────────────────────────────────
 
   if (loading) {
     return (
@@ -423,9 +524,9 @@ export default function TeacherCourseDetailPage() {
     );
   }
 
-  const totalLessons = course.sections.reduce((sum, s) => sum + s.lessons.length, 0);
+  const totalTopics = weeks.reduce((sum, w) => sum + w.topics.length, 0);
 
-  // ── Render ────────────────────────────────────────────────────────────────
+  // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <div className="max-w-7xl flex flex-col gap-5">
@@ -451,49 +552,49 @@ export default function TeacherCourseDetailPage() {
           </div>
           <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" /> {course._count.enrollments} students</span>
-            <span className="flex items-center gap-1"><BookOpen className="w-3.5 h-3.5" /> {course.sections.length} sections · {totalLessons} lessons</span>
+            <span className="flex items-center gap-1"><BookOpen className="w-3.5 h-3.5" /> {weeks.length} week{weeks.length !== 1 ? 's' : ''} · {totalTopics} topic{totalTopics !== 1 ? 's' : ''}</span>
             {course.duration && <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {course.duration}</span>}
             {course.category && <span className="flex items-center gap-1"><Tag className="w-3.5 h-3.5" /> {course.category}</span>}
           </div>
         </div>
       </div>
 
-      {/* Body, split: sidebar + editor */}
+      {/* Body: sidebar + editor */}
       <div className="grid lg:grid-cols-[340px_1fr] gap-5 items-start">
 
-        {/* Left: Sections & Lessons sidebar */}
+        {/* Left: Weeks & Topics */}
         <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Course Content</span>
             <button
-              onClick={() => setAddingSection(true)}
+              onClick={() => setAddingWeek(true)}
               className="flex items-center gap-1 text-xs font-semibold text-[#023064] hover:text-[#012550] transition-colors"
             >
-              <Plus className="w-3.5 h-3.5" /> Add Section
+              <Plus className="w-3.5 h-3.5" /> Add Week
             </button>
           </div>
 
-          {/* Add section input */}
-          {addingSection && (
+          {/* Add week input */}
+          {addingWeek && (
             <div className="px-4 py-3 border-b border-slate-100 bg-blue-50/40">
               <input
                 autoFocus
-                value={newSectionTitle}
-                onChange={(e) => setNewSectionTitle(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') handleAddSection(); if (e.key === 'Escape') { setAddingSection(false); setNewSectionTitle(''); } }}
+                value={newWeekTitle}
+                onChange={(e) => setNewWeekTitle(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleAddWeek(); if (e.key === 'Escape') { setAddingWeek(false); setNewWeekTitle(''); } }}
                 className="w-full text-sm border border-blue-300 rounded-lg px-3 py-1.5 outline-none focus:border-blue-500 bg-card mb-2"
-                placeholder="Section title…"
+                placeholder="Week title…"
               />
               <div className="flex gap-2">
                 <button
-                  onClick={handleAddSection}
-                  disabled={savingSection || !newSectionTitle.trim()}
+                  onClick={handleAddWeek}
+                  disabled={savingWeek || !newWeekTitle.trim()}
                   className="flex-1 py-1.5 text-xs font-semibold bg-[#023064] text-white rounded-lg disabled:opacity-60 hover:bg-[#012550] transition-all"
                 >
-                  {savingSection ? 'Saving…' : 'Add Section'}
+                  {savingWeek ? 'Saving…' : 'Add Week'}
                 </button>
                 <button
-                  onClick={() => { setAddingSection(false); setNewSectionTitle(''); }}
+                  onClick={() => { setAddingWeek(false); setNewWeekTitle(''); }}
                   className="px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground rounded-lg border border-border hover:bg-slate-50 transition-all"
                 >
                   Cancel
@@ -503,73 +604,73 @@ export default function TeacherCourseDetailPage() {
           )}
 
           {/* Empty state */}
-          {course.sections.length === 0 && !addingSection && (
+          {weeks.length === 0 && !addingWeek && (
             <div className="py-12 flex flex-col items-center text-center px-6">
               <BookOpen className="w-8 h-8 text-slate-200 mb-3" />
-              <p className="text-sm font-medium text-muted-foreground mb-1">No sections yet</p>
-              <p className="text-xs text-muted-foreground">Click "Add Section" to start building your course</p>
+              <p className="text-sm font-medium text-muted-foreground mb-1">No weeks yet</p>
+              <p className="text-xs text-muted-foreground">Click "Add Week" to start building your course</p>
             </div>
           )}
 
-          {/* Sections list */}
+          {/* Weeks list */}
           <div className="divide-y divide-slate-50">
-            {course.sections.map((section, sIdx) => {
-              const expanded = expandedSections.has(section.id);
+            {weeks.map((week, wIdx) => {
+              const expanded = expandedWeeks.has(week.id);
               return (
-                <div key={section.id}>
-                  {/* Section header */}
+                <div key={week.id}>
+                  {/* Week header */}
                   <div className="flex items-center gap-2 px-4 py-3 group hover:bg-slate-50/60 transition-colors">
                     <GripVertical className="w-3.5 h-3.5 text-slate-200 group-hover:text-slate-300 shrink-0 cursor-grab" />
-                    <button onClick={() => toggleSection(section.id)} className="shrink-0 text-muted-foreground">
+                    <button onClick={() => toggleWeek(week.id)} className="shrink-0 text-muted-foreground">
                       {expanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
                     </button>
                     <div className="flex-1 min-w-0">
                       <InlineEdit
-                        value={section.title}
-                        onSave={(v) => handleRenameSection(section.id, v)}
+                        value={week.title}
+                        onSave={(v) => handleRenameWeek(week.id, v)}
                         className="text-sm font-semibold text-foreground"
                       />
                       <p className="text-[11px] text-muted-foreground mt-0.5">
-                        Section {sIdx + 1} · {section.lessons.length} lesson{section.lessons.length !== 1 ? 's' : ''}
+                        Week {wIdx + 1} · {week.topics.length} topic{week.topics.length !== 1 ? 's' : ''}
                       </p>
                     </div>
                     <button
-                      onClick={() => handleDeleteSection(section.id)}
+                      onClick={() => handleDeleteWeek(week.id)}
                       className="shrink-0 opacity-0 group-hover:opacity-100 text-slate-300 hover:text-red-400 transition-all"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
-                  {/* Lessons */}
+                  {/* Topics */}
                   {expanded && (
                     <div className="pb-2">
-                      {section.lessons.map((lesson) => (
+                      {week.topics.map((topic) => (
                         <button
-                          key={lesson.id}
-                          onClick={() => setSelectedLesson(selectedLesson?.id === lesson.id ? null : lesson)}
+                          key={topic.id}
+                          onClick={() => setSelectedTopic(selectedTopic?.id === topic.id ? null : topic)}
                           className={`w-full flex items-center gap-2.5 px-5 py-2.5 text-left group hover:bg-slate-50 transition-colors ${
-                            selectedLesson?.id === lesson.id ? 'bg-blue-50/60' : ''
+                            selectedTopic?.id === topic.id ? 'bg-blue-50/60' : ''
                           }`}
                         >
-                          <div className="shrink-0">{getLessonIcon(lesson.type)}</div>
+                          <div className="shrink-0">{getTopicIcon(topic.type)}</div>
                           <div className="flex-1 min-w-0">
-                            <p className={`text-xs font-medium truncate ${selectedLesson?.id === lesson.id ? 'text-[#023064]' : 'text-foreground'}`}>
-                              {lesson.title}
+                            <p className={`text-xs font-medium truncate ${selectedTopic?.id === topic.id ? 'text-[#023064]' : 'text-foreground'}`}>
+                              {topic.title}
                             </p>
-                            {lesson.duration && (
-                              <p className="text-[10px] text-muted-foreground">{lesson.duration} min</p>
+                            {topic.duration && (
+                              <p className="text-[10px] text-muted-foreground">{topic.duration}</p>
                             )}
                           </div>
                           <div className="shrink-0 flex items-center gap-1.5 opacity-0 group-hover:opacity-100">
                             <button
-                              onClick={(e) => { e.stopPropagation(); setSelectedLesson(lesson); }}
+                              onClick={(e) => { e.stopPropagation(); setSelectedTopic(topic); }}
                               className="text-slate-300 hover:text-[#023064] transition-colors"
                             >
                               <Edit3 className="w-3 h-3" />
                             </button>
                             <button
-                              onClick={(e) => { e.stopPropagation(); handleDeleteLesson(section.id, lesson.id); }}
+                              onClick={(e) => { e.stopPropagation(); handleDeleteTopic(week.id, topic.id); }}
                               className="text-slate-300 hover:text-red-400 transition-colors"
                             >
                               <Trash2 className="w-3 h-3" />
@@ -578,26 +679,26 @@ export default function TeacherCourseDetailPage() {
                         </button>
                       ))}
 
-                      {/* Add lesson */}
-                      {addingLessonFor === section.id ? (
+                      {/* Add topic */}
+                      {addingTopicFor === week.id ? (
                         <div className="px-5 py-3">
                           <input
                             autoFocus
-                            value={newLessonTitle}
-                            onChange={(e) => setNewLessonTitle(e.target.value)}
-                            onKeyDown={(e) => { if (e.key === 'Enter') handleAddLesson(section.id); if (e.key === 'Escape') { setAddingLessonFor(null); setNewLessonTitle(''); } }}
+                            value={newTopicTitle}
+                            onChange={(e) => setNewTopicTitle(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === 'Enter') handleAddTopic(week.id); if (e.key === 'Escape') { setAddingTopicFor(null); setNewTopicTitle(''); } }}
                             className="w-full text-xs border border-blue-300 rounded-lg px-2.5 py-1.5 outline-none focus:border-blue-500 mb-2"
-                            placeholder="Lesson title…"
+                            placeholder="Topic title…"
                           />
                           <div className="flex flex-wrap gap-1 mb-2">
-                            {LESSON_TYPES.map((t) => {
+                            {TOPIC_TYPES.map((t) => {
                               const Icon = t.icon;
                               return (
                                 <button
                                   key={t.value}
-                                  onClick={() => setNewLessonType(t.value)}
+                                  onClick={() => setNewTopicType(t.value)}
                                   className={`flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-medium border transition-all ${
-                                    newLessonType === t.value ? 'border-[#023064] bg-[#023064]/5 text-[#023064]' : 'border-border text-muted-foreground hover:border-slate-300'
+                                    newTopicType === t.value ? 'border-[#023064] bg-[#023064]/5 text-[#023064]' : 'border-border text-muted-foreground hover:border-slate-300'
                                   }`}
                                 >
                                   <Icon className="w-2.5 h-2.5" /> {t.label}
@@ -607,14 +708,14 @@ export default function TeacherCourseDetailPage() {
                           </div>
                           <div className="flex gap-1.5">
                             <button
-                              onClick={() => handleAddLesson(section.id)}
-                              disabled={savingLesson || !newLessonTitle.trim()}
+                              onClick={() => handleAddTopic(week.id)}
+                              disabled={savingTopic || !newTopicTitle.trim()}
                               className="flex-1 py-1.5 text-[11px] font-semibold bg-[#023064] text-white rounded-md disabled:opacity-60"
                             >
-                              {savingLesson ? 'Adding…' : 'Add Lesson'}
+                              {savingTopic ? 'Adding…' : 'Add Topic'}
                             </button>
                             <button
-                              onClick={() => { setAddingLessonFor(null); setNewLessonTitle(''); }}
+                              onClick={() => { setAddingTopicFor(null); setNewTopicTitle(''); }}
                               className="px-2.5 py-1.5 text-[11px] font-semibold text-muted-foreground rounded-md border border-border hover:bg-slate-50"
                             >
                               Cancel
@@ -623,10 +724,10 @@ export default function TeacherCourseDetailPage() {
                         </div>
                       ) : (
                         <button
-                          onClick={() => { setAddingLessonFor(section.id); setNewLessonTitle(''); setNewLessonType('VIDEO'); }}
+                          onClick={() => { setAddingTopicFor(week.id); setNewTopicTitle(''); setNewTopicType('lecture'); }}
                           className="w-full flex items-center gap-2 px-5 py-2 text-xs font-medium text-muted-foreground hover:text-[#023064] hover:bg-blue-50/40 transition-colors"
                         >
-                          <Plus className="w-3.5 h-3.5" /> Add Lesson
+                          <Plus className="w-3.5 h-3.5" /> Add Topic
                         </button>
                       )}
                     </div>
@@ -637,23 +738,23 @@ export default function TeacherCourseDetailPage() {
           </div>
         </div>
 
-        {/* Right: Lesson editor or empty state */}
+        {/* Right: Topic editor or empty state */}
         <div className="bg-card rounded-2xl shadow-sm min-h-[500px] flex flex-col overflow-hidden">
-          {selectedLesson ? (
-            <LessonEditorPanel
-              key={selectedLesson.id}
-              lesson={selectedLesson}
-              onUpdate={handleLessonUpdate}
-              onClose={() => setSelectedLesson(null)}
+          {selectedTopic ? (
+            <TopicEditorPanel
+              key={selectedTopic.id}
+              topic={selectedTopic}
+              onUpdate={handleTopicUpdate}
+              onClose={() => setSelectedTopic(null)}
             />
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-10">
               <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-4">
                 <Edit3 className="w-7 h-7 text-slate-200" />
               </div>
-              <p className="font-heading font-semibold text-foreground mb-1">Select a lesson to edit</p>
+              <p className="font-heading font-semibold text-foreground mb-1">Select a topic to edit</p>
               <p className="text-sm text-muted-foreground max-w-xs">
-                Click any lesson on the left to edit its title, type, content, and notes. Or add new sections and lessons.
+                Click any topic on the left to edit its title, type, files, and details. Or add new weeks and topics.
               </p>
             </div>
           )}

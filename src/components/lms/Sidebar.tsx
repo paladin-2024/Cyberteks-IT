@@ -28,6 +28,7 @@ const adminNavGroups: NavGroup[] = [
     label: 'MANAGEMENT',
     items: [
       { key: 'users',    href: '/admin/users',    icon: Users },
+      { key: 'studentMgmt', href: '/admin/students', icon: GraduationCap },
       { key: 'courses',  href: '/admin/courses',  icon: BookOpen },
       { key: 'invoices', href: '/admin/invoices', icon: FileText },
     ],
@@ -124,6 +125,7 @@ const extraLabels: Record<string, string> = {
   schedule:      'Schedule',
   progress:      'Progress',
   students:      'Students',
+  studentMgmt:   'Student Management',
   assignments:   'Assignments',
   notifications: 'Notifications',
   itSupport:     'IT Support',

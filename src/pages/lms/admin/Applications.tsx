@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Search, X, User, MapPin, GraduationCap, Clock, Laptop, Wifi, BookOpen, Copy, Check, KeyRound } from 'lucide-react';
+import { Search, X, User, MapPin, GraduationCap, Clock, Laptop, Wifi, BookOpen, Copy, Check, KeyRound, Receipt, ExternalLink, ImageOff } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { api } from '@/lib/api';
 
@@ -25,6 +25,9 @@ interface Application {
   createdAt: string;
   userId: string | null;
   tempPassword: string | null;
+  paymentProofUrl: string | null;
+  paymentProofName: string | null;
+  totalAmountUGX: number | null;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -304,6 +307,52 @@ export default function ApplicationsPage() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Career Goals</p>
                 <p className="text-sm text-foreground leading-relaxed">{selected.careerGoals}</p>
               </div>
+
+              {/* Payment proof */}
+              {(selected.paymentProofUrl || selected.totalAmountUGX) && (
+                <div className="rounded-xl border border-border bg-muted/30 p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Receipt className="w-4 h-4 text-[#023064] shrink-0" />
+                    <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Payment Proof</p>
+                    {selected.totalAmountUGX != null && (
+                      <span className="ml-auto text-sm font-bold text-[#023064]">
+                        {new Intl.NumberFormat('en-UG').format(selected.totalAmountUGX)} UGX
+                      </span>
+                    )}
+                  </div>
+
+                  {selected.paymentProofUrl ? (
+                    <>
+                      {/* If it's an image, show inline preview */}
+                      {/\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(selected.paymentProofUrl) ? (
+                        <a href={selected.paymentProofUrl} target="_blank" rel="noopener noreferrer">
+                          <img
+                            src={selected.paymentProofUrl}
+                            alt="Payment proof"
+                            className="w-full max-h-64 object-contain rounded-lg border border-border bg-white"
+                          />
+                        </a>
+                      ) : (
+                        /* PDF or other file — show link */
+                        <a
+                          href={selected.paymentProofUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-border bg-card hover:border-[#023064] transition-colors text-sm text-[#023064] font-medium"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                          {selected.paymentProofName ?? 'View payment proof'}
+                        </a>
+                      )}
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <ImageOff className="w-4 h-4 shrink-0" />
+                      No file uploaded
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Default password — shown to admin to send to student */}
               {selected.tempPassword && (
