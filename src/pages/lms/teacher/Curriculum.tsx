@@ -317,6 +317,15 @@ export default function CurriculumPage() {
   const [editTopicForm, setEditTopicForm] = useState<TopicForm>(EMPTY_FORM);
   const [savingEdit, setSavingEdit]       = useState(false);
 
+  // Recent activity feed
+  type ActivityEntry = { id: number; text: string; time: Date };
+  const [activity, setActivity] = useState<ActivityEntry[]>([]);
+  const activityIdRef = useRef(0);
+  const logActivity = (text: string) => {
+    const id = ++activityIdRef.current;
+    setActivity(prev => [{ id, text, time: new Date() }, ...prev].slice(0, 20));
+  };
+
   // Load courses
   useEffect(() => {
     api.get<{ courses: Course[] }>('/courses/my')
@@ -354,6 +363,7 @@ export default function CurriculumPage() {
       });
       setWeeks(w => [...w, res.week]);
       setExpanded(e => new Set([...e, res.week.id]));
+      logActivity(`Added week "${res.week.title}"`);
       setWeekTitle(''); setAddingWeek(false);
     } catch { /* noop */ } finally { setSavingWeek(false); }
   };
@@ -363,15 +373,18 @@ export default function CurriculumPage() {
     try {
       const res = await api.patch<{ week: Week }>(`/curriculum/weeks/${id}`, { title: editWeekTitle });
       setWeeks(w => w.map(x => x.id === id ? res.week : x));
+      logActivity(`Renamed week to "${res.week.title}"`);
       setEditWeekId(null);
     } catch { /* noop */ }
   };
 
   const deleteWeek = async (id: string) => {
+    const week = weeks.find(w => w.id === id);
     if (!confirm('Delete this week and all its topics?')) return;
     try {
       await api.delete(`/curriculum/weeks/${id}`);
       setWeeks(w => w.filter(x => x.id !== id));
+      if (week) logActivity(`Deleted week "${week.title}"`);
     } catch { /* noop */ }
   };
 
@@ -394,6 +407,8 @@ export default function CurriculumPage() {
         maxScore:      topicForm.type === 'assignment' ? topicForm.maxScore : undefined,
       });
       setWeeks(w => w.map(x => x.id === weekId ? { ...x, topics: [...x.topics, res.topic] } : x));
+      const weekTitle = weeks.find(w => w.id === weekId)?.title ?? '';
+      logActivity(`Added "${res.topic.title}" (${res.topic.type}) to ${weekTitle}`);
       setTopicForm(EMPTY_FORM);
       setAddingTopicWeekId(null);
     } catch { /* noop */ } finally { setSavingTopic(false); }
@@ -418,17 +433,20 @@ export default function CurriculumPage() {
         ? { ...x, topics: x.topics.map(t => t.id === topicId ? res.topic : t) }
         : x,
       ));
+      logActivity(`Updated "${res.topic.title}"`);
       setEditTopicId(null);
     } catch { /* noop */ } finally { setSavingEdit(false); }
   };
 
   const deleteTopic = async (topicId: string, weekId: string) => {
+    const topic = weeks.find(w => w.id === weekId)?.topics.find(t => t.id === topicId);
     try {
       await api.delete(`/curriculum/topics/${topicId}`);
       setWeeks(w => w.map(x => x.id === weekId
         ? { ...x, topics: x.topics.filter(t => t.id !== topicId) }
         : x,
       ));
+      if (topic) logActivity(`Removed "${topic.title}"`);
     } catch { /* noop */ }
   };
 
@@ -500,6 +518,26 @@ export default function CurriculumPage() {
             );
           })}
         </div>
+
+        {/* Recent Activity */}
+        {activity.length > 0 && (
+          <div className="mt-5">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1 mb-2">Recent Activity</h2>
+            <div className="space-y-1.5">
+              {activity.map(entry => (
+                <div key={entry.id} className="flex items-start gap-2 px-3 py-2 rounded-xl bg-card border border-border">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary-blue mt-1.5 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-xs text-foreground leading-snug">{entry.text}</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                      {entry.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ── Right: Curriculum editor ──────────────────────────────────────── */}
