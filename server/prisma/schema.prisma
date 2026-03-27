@@ -190,6 +190,10 @@ model Application {
 
   tempPassword    String?
 
+  paymentProofUrl  String?
+  paymentProofName String?
+  totalAmountUGX   Int?
+
   reviewNotes     String?
   reviewedById    String?
   reviewedAt      DateTime?

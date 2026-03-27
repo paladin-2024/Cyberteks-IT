@@ -1,10 +1,11 @@
 /**
- * CyberteksIT — Branded email templates
+ * Cyberteks-IT — Branded email templates
  * All styles are inline (email clients strip <style> tags).
  * Colors: blue #102a83 · red #E11D48 · dark #0a1a52
  */
 
 const CLIENT_URL = process.env.CLIENT_URL ?? 'https://cyberteks-it.com';
+const LOGO_URL = `${CLIENT_URL}/logo.jpg`;
 
 // ─── Shared wrapper ──────────────────────────────────────────────────────────
 
@@ -19,17 +20,17 @@ function layout(headerColor: string, headerLabel: string, title: string, body: s
 
       <!-- Header -->
       <tr>
-        <td style="background:${headerColor};border-radius:16px 16px 0 0;padding:32px 40px;">
+        <td style="background:${headerColor};border-radius:16px 16px 0 0;padding:28px 40px;">
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
-              <td>
+              <td valign="middle">
                 <p style="margin:0 0 4px 0;font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.65);">${headerLabel}</p>
-                <h1 style="margin:0;font-size:26px;font-weight:800;color:#ffffff;line-height:1.2;">${title}</h1>
+                <h1 style="margin:0;font-size:24px;font-weight:800;color:#ffffff;line-height:1.2;">${title}</h1>
               </td>
-              <td align="right" valign="middle" style="padding-left:16px;">
-                <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:10px 16px;display:inline-block;">
-                  <span style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-0.5px;">Cyber<span style="color:#f87171;">teks</span>IT</span>
-                </div>
+              <td align="right" valign="middle" style="padding-left:16px;white-space:nowrap;">
+                <img src="${LOGO_URL}" alt="Cyberteks-IT" width="52" height="52"
+                  style="border-radius:50%;border:3px solid rgba(255,255,255,0.3);display:block;margin:0 auto 6px;" />
+                <p style="margin:0;font-size:13px;font-weight:800;color:#fff;text-align:center;">Cyberteks-IT</p>
               </td>
             </tr>
           </table>
@@ -45,18 +46,23 @@ function layout(headerColor: string, headerLabel: string, title: string, body: s
 
       <!-- Footer -->
       <tr>
-        <td style="background:#f8fafc;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 16px 16px;padding:24px 40px;">
+        <td style="background:#f8fafc;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 16px 16px;padding:20px 40px;">
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
-              <td>
-                <p style="margin:0;font-size:13px;color:#64748b;">
-                  © ${new Date().getFullYear()} CyberteksIT · Plot 722 Namuli Rd, Bukoto, Kampala — Uganda
+              <td valign="middle">
+                <p style="margin:0;font-size:12px;color:#64748b;">
+                  © ${new Date().getFullYear()} <strong>Cyberteks-IT</strong> · Plot 722 Namuli Rd, Bukoto, Kampala, Uganda
                 </p>
                 <p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">
                   <a href="${CLIENT_URL}" style="color:#102a83;text-decoration:none;">cyberteks-it.com</a>
                   &nbsp;·&nbsp;
                   <a href="mailto:info@cyberteks-it.com" style="color:#102a83;text-decoration:none;">info@cyberteks-it.com</a>
+                  &nbsp;·&nbsp;+256 779 367 005
                 </p>
+              </td>
+              <td align="right" valign="middle">
+                <img src="${LOGO_URL}" alt="Cyberteks-IT" width="36" height="36"
+                  style="border-radius:50%;opacity:0.7;" />
               </td>
             </tr>
           </table>
@@ -94,6 +100,10 @@ function section(title: string, content: string): string {
   </div>`;
 }
 
+function formatUGX(n: number): string {
+  return `UGX ${n.toLocaleString('en-UG')}`;
+}
+
 // ─── Exported templates ──────────────────────────────────────────────────────
 
 const esc = (s: string) =>
@@ -112,8 +122,22 @@ export function adminNewApplicationEmail(data: {
   fullName: string; email: string; phoneNumber: string; cityCountry: string;
   educationLevel: string; programs: string[]; motivation: string;
   careerGoals: string; hoursPerWeek: string;
+  paymentProofUrl?: string; totalAmountUGX?: number;
 }): string {
   const programPills = data.programs.map(p => pill(p, '#e0e7ff', '#3730a3')).join(' ');
+  const paymentSection = data.paymentProofUrl ? `
+    ${section('Payment Proof', `
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px 20px;">
+        ${data.totalAmountUGX ? `<p style="margin:0 0 10px;font-size:14px;font-weight:700;color:#15803d;">Amount Paid: ${formatUGX(data.totalAmountUGX)}</p>` : ''}
+        <p style="margin:0 0 10px;font-size:13px;color:#166534;">Payment screenshot/receipt uploaded by applicant:</p>
+        ${data.paymentProofUrl.match(/\.(jpg|jpeg|png|webp|gif)$/i)
+          ? `<img src="${esc(data.paymentProofUrl)}" alt="Payment proof" style="max-width:100%;border-radius:8px;border:1px solid #bbf7d0;" />`
+          : `<a href="${esc(data.paymentProofUrl)}" style="color:#102a83;font-weight:600;">📎 View Payment Document</a>`
+        }
+      </div>
+    `)}
+  ` : '';
+
   const body = `
     <p style="margin:0 0 24px;font-size:15px;color:#475569;">
       A new application has been submitted and is awaiting your review.
@@ -129,6 +153,8 @@ export function adminNewApplicationEmail(data: {
     </table>`)}
 
     ${section('Programs Selected', `<p style="margin:0;line-height:1.8;">${programPills}</p>`)}
+
+    ${paymentSection}
 
     ${section('Motivation', `<p style="margin:0;font-size:14px;color:#334155;line-height:1.7;background:#f8fafc;border-left:3px solid #102a83;padding:12px 16px;border-radius:0 8px 8px 0;">${esc(data.motivation).replace(/\n/g, '<br>')}</p>`)}
 
@@ -152,7 +178,7 @@ export function applicantConfirmationEmail(data: {
     <div style="background:linear-gradient(135deg,#eff6ff,#eef2ff);border-radius:12px;padding:20px 24px;margin-bottom:24px;">
       <p style="margin:0 0 6px;font-size:14px;font-weight:700;color:#1e40af;">✅ Application Received</p>
       <p style="margin:0;font-size:14px;color:#3b4fd8;line-height:1.6;">
-        Thank you for applying to the <strong>CyberteksIT Skills Development Program</strong>. Our team will review your application within <strong>2–3 business days</strong>.
+        Thank you for applying to the <strong>Cyberteks-IT Skills Development Program</strong>. Our team will review your application within <strong>2–3 business days</strong>.
       </p>
     </div>
 
@@ -165,31 +191,115 @@ export function applicantConfirmationEmail(data: {
 
     <p style="margin-top:28px;font-size:14px;color:#64748b;">
       Warm regards,<br>
-      <strong style="color:#1e293b;">The CyberteksIT Team</strong>
+      <strong style="color:#1e293b;">The Cyberteks-IT Team</strong>
     </p>
   `;
   return layout('#102a83', 'Skills Development Program', 'Application Received!', body);
 }
 
-// 3. Applicant: accepted + login credentials
+// 3. Applicant: accepted + login credentials + payment receipt
 export function applicantAcceptedEmail(data: {
   fullName: string; email: string; tempPassword: string;
   programs: string[]; reviewNotes?: string;
+  paymentProofUrl?: string; totalAmountUGX?: number;
 }): string {
   const programList = data.programs.map(p => `<li style="padding:4px 0;color:#334155;">${esc(p)}</li>`).join('');
+  const today = new Date().toLocaleDateString('en-UG', { day: '2-digit', month: 'long', year: 'numeric' });
+  const receiptNo = `CIT-${Date.now().toString().slice(-8)}`;
+
+  // Only show receipt block if payment was made (amount > 0)
+  const receiptBlock = data.totalAmountUGX && data.totalAmountUGX > 0 ? `
+    <!-- Payment Receipt -->
+    <div style="border:2px solid #e2e8f0;border-radius:16px;overflow:hidden;margin-bottom:28px;">
+
+      <!-- Receipt Header -->
+      <div style="background:linear-gradient(135deg,#102a83,#1e3fa8);padding:20px 24px;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td valign="middle">
+              <p style="margin:0 0 2px;font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.65);">Official Receipt</p>
+              <p style="margin:0;font-size:18px;font-weight:800;color:#fff;">Payment Confirmed</p>
+            </td>
+            <td align="right" valign="middle">
+              <img src="${LOGO_URL}" alt="Cyberteks-IT" width="44" height="44"
+                style="border-radius:50%;border:2px solid rgba(255,255,255,0.4);" />
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Receipt Body -->
+      <div style="background:#fff;padding:20px 24px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
+          <tr>
+            <td style="font-size:12px;color:#64748b;">Receipt No.</td>
+            <td style="font-size:12px;color:#64748b;" align="right">Date</td>
+          </tr>
+          <tr>
+            <td style="font-size:14px;font-weight:700;color:#102a83;">${receiptNo}</td>
+            <td style="font-size:14px;font-weight:700;color:#1e293b;" align="right">${today}</td>
+          </tr>
+        </table>
+
+        <div style="background:#f8fafc;border-radius:8px;padding:14px 16px;margin-bottom:16px;">
+          <p style="margin:0 0 4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#64748b;">Received From</p>
+          <p style="margin:0;font-size:15px;font-weight:700;color:#1e293b;">${esc(data.fullName)}</p>
+          <p style="margin:2px 0 0;font-size:13px;color:#64748b;">${esc(data.email)}</p>
+        </div>
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:16px;">
+          <tr style="background:#f1f5f9;">
+            <td style="padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#64748b;">Description</td>
+            <td style="padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#64748b;" align="right">Amount</td>
+          </tr>
+          ${data.programs.filter(p => !p.toLowerCase().includes('free')).map(p => `
+          <tr style="border-top:1px solid #f1f5f9;">
+            <td style="padding:10px 14px;font-size:13px;color:#334155;">${esc(p)}</td>
+            <td style="padding:10px 14px;font-size:13px;color:#334155;" align="right">—</td>
+          </tr>`).join('')}
+          <tr style="border-top:2px solid #e2e8f0;background:#f0fdf4;">
+            <td style="padding:12px 14px;font-size:14px;font-weight:800;color:#15803d;">TOTAL RECEIVED</td>
+            <td style="padding:12px 14px;font-size:14px;font-weight:800;color:#15803d;" align="right">${formatUGX(data.totalAmountUGX)}</td>
+          </tr>
+        </table>
+
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+          <p style="margin:0;font-size:13px;color:#15803d;font-weight:600;">
+            ✅ Cyberteks-IT confirms receipt of the above payment for the Skills Development Program.
+          </p>
+        </div>
+
+        ${data.paymentProofUrl ? `
+        <div style="margin-bottom:8px;">
+          <p style="margin:0 0 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#64748b;">Payment Proof Submitted</p>
+          ${data.paymentProofUrl.match(/\.(jpg|jpeg|png|webp|gif)$/i)
+            ? `<img src="${esc(data.paymentProofUrl)}" alt="Payment receipt" style="max-width:100%;border-radius:8px;border:1px solid #e2e8f0;" />`
+            : `<a href="${esc(data.paymentProofUrl)}" style="color:#102a83;font-weight:600;font-size:13px;">📎 View Payment Document</a>`
+          }
+        </div>` : ''}
+
+        <p style="margin:16px 0 0;font-size:11px;color:#94a3b8;text-align:center;">
+          This is an official receipt from Cyberteks-IT · Plot 722 Namuli Rd, Bukoto, Kampala, Uganda
+        </p>
+      </div>
+    </div>
+  ` : '';
+
   const body = `
     <p style="margin:0 0 20px;font-size:15px;color:#475569;">Dear <strong style="color:#1e293b;">${esc(data.fullName)}</strong>,</p>
 
     <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0;border-radius:12px;padding:20px 24px;margin-bottom:24px;">
       <p style="margin:0 0 6px;font-size:15px;font-weight:800;color:#15803d;">🎉 Congratulations — You've been accepted!</p>
       <p style="margin:0;font-size:14px;color:#166534;line-height:1.6;">
-        Your application to the <strong>CyberteksIT Skills Development Program</strong> has been approved. Your student account is ready.
+        Your application to the <strong>Cyberteks-IT Skills Development Program</strong> has been approved. Your student account is ready.
       </p>
     </div>
 
     ${data.reviewNotes ? section('Note from the Team', `<p style="margin:0;font-size:14px;color:#334155;background:#fffbeb;border-left:3px solid #f59e0b;padding:12px 16px;border-radius:0 8px 8px 0;line-height:1.7;">${esc(data.reviewNotes)}</p>`) : ''}
 
     ${section('Programs Enrolled', `<ul style="margin:0;padding-left:20px;">${programList}</ul>`)}
+
+    ${receiptBlock}
 
     ${section('Your Login Credentials', `
       <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px 24px;">
@@ -208,10 +318,10 @@ export function applicantAcceptedEmail(data: {
 
     <p style="margin-top:32px;font-size:14px;color:#64748b;">
       Welcome aboard!<br>
-      <strong style="color:#1e293b;">The CyberteksIT Team</strong>
+      <strong style="color:#1e293b;">The Cyberteks-IT Team</strong>
     </p>
   `;
-  return layout('linear-gradient(135deg,#15803d,#16a34a)', 'Application Accepted', 'Welcome to CyberteksIT LMS!', body);
+  return layout('linear-gradient(135deg,#15803d,#16a34a)', 'Application Accepted', 'Welcome to Cyberteks-IT LMS!', body);
 }
 
 // 4. Applicant: rejected
@@ -222,7 +332,7 @@ export function applicantRejectedEmail(data: {
     <p style="margin:0 0 20px;font-size:15px;color:#475569;">Dear <strong style="color:#1e293b;">${esc(data.fullName)}</strong>,</p>
 
     <p style="font-size:14px;color:#475569;line-height:1.7;">
-      Thank you for your interest in the <strong>CyberteksIT Skills Development Program</strong> and for taking the time to apply. After careful review of your application, we are unfortunately unable to offer you a place in this cohort.
+      Thank you for your interest in the <strong>Cyberteks-IT Skills Development Program</strong> and for taking the time to apply. After careful review of your application, we are unfortunately unable to offer you a place in this cohort.
     </p>
 
     ${data.reviewNotes ? `
@@ -242,7 +352,7 @@ export function applicantRejectedEmail(data: {
 
     <p style="margin-top:32px;font-size:14px;color:#64748b;">
       Best regards,<br>
-      <strong style="color:#1e293b;">The CyberteksIT Team</strong>
+      <strong style="color:#1e293b;">The Cyberteks-IT Team</strong>
     </p>
   `;
   return layout('linear-gradient(135deg,#1e293b,#334155)', 'Application Update', 'Thank you for applying', body);

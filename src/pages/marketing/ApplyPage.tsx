@@ -3,11 +3,13 @@ import {
   User, GraduationCap, BookOpen, Target, Clock,
   Monitor, FileCheck, ChevronRight, ChevronLeft,
   CheckCircle2, AlertCircle, Loader2, ArrowRight, Mail,
+  CreditCard, UploadCloud, Paperclip, X, Building2, Smartphone,
 } from 'lucide-react';
 import PhoneInput, { type Country } from '@/components/ui/PhoneInput';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 
+// ── Program list + prices (UGX) ──────────────────────────────────────────────
 const PROGRAMS = [
   'Free Bootcamp: Python Programming',
   'Prompt Engineering',
@@ -24,6 +26,36 @@ const PROGRAMS = [
   'Other',
 ];
 
+const PROGRAM_PRICES: Record<string, number> = {
+  'Free Bootcamp: Python Programming': 0,
+  'Prompt Engineering':                250000,
+  'Augmented Reality':                 300000,
+  'Virtual Reality':                   300000,
+  'Programming (Any Language)':        250000,
+  'AI & Robotics':                     300000,
+  'Web Design':                        200000,
+  'Graphic Design':                    200000,
+  'Cyber Security':                    300000,
+  'Data Analytics':                    250000,
+  'Computer Networking':               250000,
+  'Cloud (Azure / AWS)':               300000,
+  'Other':                             250000,
+};
+
+function priceOf(program: string): number {
+  return PROGRAM_PRICES[program] ?? 250000;
+}
+
+function formatUGX(n: number): string {
+  return `UGX ${n.toLocaleString('en-UG')}`;
+}
+
+function isFreeProgram(p: string): boolean {
+  return priceOf(p) === 0;
+}
+
+// ── Form types ────────────────────────────────────────────────────────────────
+
 type FormData = {
   fullName: string; dob: string; gender: string; phone: string; email: string; city: string;
   education: string; occupation: string;
@@ -32,6 +64,7 @@ type FormData = {
   hoursPerWeek: string;
   hasComputer: string; deviceType: string; hasInternet: string;
   declaration: boolean; referralSource: string;
+  paymentProofUrl: string; paymentProofName: string;
 };
 
 const initial: FormData = {
@@ -42,7 +75,10 @@ const initial: FormData = {
   hoursPerWeek: '',
   hasComputer: '', deviceType: '', hasInternet: '',
   declaration: false, referralSource: '',
+  paymentProofUrl: '', paymentProofName: '',
 };
+
+// ── Small UI components ───────────────────────────────────────────────────────
 
 function FieldLabel({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
@@ -119,6 +155,8 @@ function RadioGroup({
   );
 }
 
+// ── Main component ────────────────────────────────────────────────────────────
+
 export default function ApplyPage() {
   const { t } = useLanguage();
   const [step, setStep] = useState(1);
@@ -128,15 +166,18 @@ export default function ApplyPage() {
   const [error, setError] = useState('');
   const [stepError, setStepError] = useState('');
 
-  // OTP state — shown between step 1 (personal info) and step 2
-  const [otpMode, setOtpMode] = useState(false);       // is the OTP screen visible?
-  const [otpVerified, setOtpVerified] = useState(false); // has OTP been confirmed?
+  // OTP state
+  const [otpMode, setOtpMode] = useState(false);
   const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', '']);
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpError, setOtpError] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Payment proof upload state
+  const [uploadingProof, setUploadingProof] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const proofInputRef = useRef<HTMLInputElement>(null);
 
   const STEPS = [
     { id: 1, title: t.apply.steps[0], icon: User },
@@ -146,6 +187,7 @@ export default function ApplyPage() {
     { id: 5, title: t.apply.steps[4], icon: Clock },
     { id: 6, title: t.apply.steps[5], icon: Monitor },
     { id: 7, title: t.apply.steps[6], icon: FileCheck },
+    { id: 8, title: 'Payment',        icon: CreditCard },
   ];
 
   const set = (field: keyof FormData, value: string | boolean | string[]) =>
@@ -153,6 +195,11 @@ export default function ApplyPage() {
 
   const toggleProgram = (p: string) =>
     set('programs', form.programs.includes(p) ? form.programs.filter((x) => x !== p) : [...form.programs, p]);
+
+  // Derived: which programs are paid, and total
+  const paidPrograms = form.programs.filter(p => !isFreeProgram(p));
+  const hasPayment = paidPrograms.length > 0;
+  const totalUGX = form.programs.reduce((sum, p) => sum + priceOf(p), 0);
 
   const progress = ((step - 1) / (STEPS.length - 1)) * 100;
 
@@ -183,12 +230,45 @@ export default function ApplyPage() {
         if (!form.hasComputer) return 'Please indicate if you have access to a computer.';
         if (!form.hasInternet) return 'Please indicate if you have reliable internet access.';
         return '';
+      case 7:
+        if (!form.declaration) return 'Please accept the declaration before continuing.';
+        return '';
+      case 8:
+        if (hasPayment && !form.paymentProofUrl) return 'Please upload your payment proof (screenshot or PDF).';
+        return '';
       default:
         return '';
     }
   };
 
   const API = import.meta.env.VITE_API_URL ?? '';
+
+  // ── Upload payment proof ──────────────────────────────────────────────────
+
+  const handleProofUpload = async (file: File) => {
+    setUploadingProof(true); setUploadError('');
+    try {
+      const token = localStorage.getItem('token');
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch(`${API}/api/upload/submission`, {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: fd,
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error((body as { detail?: string }).detail ?? 'Upload failed');
+      }
+      const data = await res.json() as { url: string; fileName: string };
+      set('paymentProofUrl', data.url);
+      set('paymentProofName', file.name);
+    } catch (e) {
+      setUploadError(e instanceof Error ? e.message : 'Upload failed. Please try again.');
+    } finally { setUploadingProof(false); }
+  };
+
+  // ── OTP ──────────────────────────────────────────────────────────────────
 
   const sendOtp = async () => {
     setOtpLoading(true); setOtpError('');
@@ -199,12 +279,10 @@ export default function ApplyPage() {
         body: JSON.stringify({ email: form.email }),
       });
       const body = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(body?.error ?? 'Failed to send code');
-      setOtpSent(true);
+      if (!res.ok) throw new Error((body as { error?: string }).error ?? 'Failed to send code');
       setOtpDigits(['', '', '', '', '', '']);
-      // Start 60-second cooldown
       setResendCooldown(60);
-      const t = setInterval(() => setResendCooldown(c => { if (c <= 1) { clearInterval(t); return 0; } return c - 1; }), 1000);
+      const timer = setInterval(() => setResendCooldown(c => { if (c <= 1) { clearInterval(timer); return 0; } return c - 1; }), 1000);
     } catch (e) {
       setOtpError(e instanceof Error ? e.message : 'Failed to send code');
     } finally { setOtpLoading(false); }
@@ -221,10 +299,7 @@ export default function ApplyPage() {
         body: JSON.stringify({ email: form.email, otp: code }),
       });
       const body = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(body?.error ?? 'Invalid code');
-      setOtpVerified(true);
-      setOtpMode(false);
-      // Now actually submit the application
+      if (!res.ok) throw new Error((body as { error?: string }).error ?? 'Invalid code');
       await doSubmit();
     } catch (e) {
       setOtpError(e instanceof Error ? e.message : 'Verification failed');
@@ -245,42 +320,40 @@ export default function ApplyPage() {
     }
   };
 
+  // ── Navigation ────────────────────────────────────────────────────────────
+
   const goNext = () => {
     const err = validateStep(step);
     if (err) { setStepError(err); return; }
     setStepError('');
+    // Skip payment step if all programs are free
+    if (step === 7 && !hasPayment) {
+      // No paid programs — go straight to OTP
+      setOtpDigits(['', '', '', '', '', '']);
+      setOtpError('');
+      setOtpMode(true);
+      sendOtp();
+      return;
+    }
     setStep(s => Math.min(STEPS.length, s + 1));
   };
 
+  // ── Submission maps ───────────────────────────────────────────────────────
+
   const educationMap: Record<string, string> = {
-    // English options
-    'Primary': 'high_school',
-    'O-Level (S4)': 'high_school',
-    'A-Level (S6)': 'high_school',
-    'Certificate / Diploma': 'diploma_certificate',
-    "Bachelor's Degree": 'undergraduate',
-    "Master's / PhD": 'graduate',
-    // French options
-    'Primaire': 'high_school',
-    'Certificat / Diplôme': 'diploma_certificate',
-    'Licence': 'undergraduate',
+    'Primary': 'high_school', 'O-Level (S4)': 'high_school', 'A-Level (S6)': 'high_school',
+    'Certificate / Diploma': 'diploma_certificate', "Bachelor's Degree": 'undergraduate',
+    "Master's / PhD": 'graduate', 'Primaire': 'high_school',
+    'Certificat / Diplôme': 'diploma_certificate', 'Licence': 'undergraduate',
     'Master / Doctorat': 'graduate',
   };
 
   const hoursMap: Record<string, string> = {
-    // English options
-    'Less than 5 hours': '2_4',
-    '5–10 hours': '5_10',
-    '10–20 hours': '10_plus',
-    '20+ hours (Full-time)': '10_plus',
-    // French options
-    'Moins de 5 heures': '2_4',
-    '5–10 heures': '5_10',
-    '10–20 heures': '10_plus',
-    '20+ heures (Temps plein)': '10_plus',
+    'Less than 5 hours': '2_4', '5–10 hours': '5_10', '10–20 hours': '10_plus',
+    '20+ hours (Full-time)': '10_plus', 'Moins de 5 heures': '2_4', '5–10 heures': '5_10',
+    '10–20 heures': '10_plus', '20+ heures (Temps plein)': '10_plus',
   };
 
-  // Called after OTP is verified — does the actual API submission
   const doSubmit = async () => {
     setLoading(true); setError('');
     try {
@@ -303,29 +376,32 @@ export default function ApplyPage() {
         hasInternet:         form.hasInternet.toLowerCase() as 'yes' | 'no',
         referralSource:      form.referralSource || undefined,
         declarationAccepted: true as const,
+        paymentProofUrl:     form.paymentProofUrl || undefined,
+        paymentProofName:    form.paymentProofName || undefined,
+        totalAmountUGX:      hasPayment ? totalUGX : 0,
       };
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/apply`, {
+      const res = await fetch(`${API}/api/apply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body?.error ?? 'Submission failed');
+        throw new Error((body as { error?: string }).error ?? 'Submission failed');
       }
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again or email us directly.');
-      setOtpMode(false); // go back to form on submit error
+      setOtpMode(false);
     } finally { setLoading(false); }
   };
 
-  // Called when user clicks "Submit Application" on step 7
+  // Called on step 8 submit button (or step 7 for free-only via goNext)
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!form.declaration) { setError('Please accept the declaration before submitting.'); return; }
-    if (form.programs.length === 0) { setError('Please select at least one program.'); return; }
+    const err = validateStep(step);
+    if (err) { setError(err); return; }
     setError('');
     setOtpDigits(['', '', '', '', '', '']);
     setOtpError('');
@@ -333,7 +409,8 @@ export default function ApplyPage() {
     sendOtp();
   };
 
-  // OTP verification screen
+  // ── OTP screen ────────────────────────────────────────────────────────────
+
   if (otpMode) {
     return (
       <div className="min-h-screen bg-gray-50 pb-20">
@@ -425,7 +502,7 @@ export default function ApplyPage() {
                 onClick={() => { setOtpMode(false); setOtpError(''); }}
                 className="w-full text-xs text-gray-400 hover:text-gray-600 transition-colors"
               >
-                ← Back to declaration
+                ← Back to application
               </button>
             </div>
           </div>
@@ -438,6 +515,8 @@ export default function ApplyPage() {
     );
   }
 
+  // ── Success screen ────────────────────────────────────────────────────────
+
   if (submitted) {
     return (
       <div className="min-h-screen pt-8 pb-20 bg-gray-50 flex items-center justify-center px-4">
@@ -446,9 +525,7 @@ export default function ApplyPage() {
             <CheckCircle2 className="w-10 h-10 text-green-500" />
           </div>
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-3">{t.apply.success.title}</h2>
-          <p className="text-gray-500 leading-relaxed mb-8">
-            {t.apply.success.description}
-          </p>
+          <p className="text-gray-500 leading-relaxed mb-8">{t.apply.success.description}</p>
           <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-primary-blue text-white rounded-xl font-semibold text-sm hover:bg-blue-900 transition-all">
             {t.apply.success.home} <ArrowRight className="w-4 h-4" />
           </a>
@@ -456,6 +533,8 @@ export default function ApplyPage() {
       </div>
     );
   }
+
+  // ── Main form ─────────────────────────────────────────────────────────────
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -466,9 +545,7 @@ export default function ApplyPage() {
           <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
             {t.apply.hero.title1} <br />{t.apply.hero.title2}
           </h1>
-          <p className="text-blue-200 text-lg max-w-xl mx-auto">
-            {t.apply.hero.subtitle}
-          </p>
+          <p className="text-blue-200 text-lg max-w-xl mx-auto">{t.apply.hero.subtitle}</p>
         </div>
       </div>
 
@@ -476,24 +553,21 @@ export default function ApplyPage() {
 
         {/* Step progress */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-          {/* Progress bar */}
           <div className="h-1.5 bg-gray-100 rounded-full mb-5 overflow-hidden">
             <div className="h-full bg-primary-blue rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
           </div>
-          {/* Step pills */}
           <div className="flex items-center justify-between gap-1 overflow-x-auto pb-1 scrollbar-hide">
             {STEPS.map((s) => {
               const Icon = s.icon;
               const done = step > s.id;
               const active = step === s.id;
+              // Hide step 8 pill if no paid programs yet (but still show it once on that step)
+              if (s.id === 8 && !hasPayment && step < 8) return null;
               return (
                 <button
                   key={s.id}
                   onClick={() => done && setStep(s.id)}
-                  className={cn(
-                    'flex flex-col items-center gap-1 min-w-[56px] transition-all',
-                    done ? 'cursor-pointer' : 'cursor-default',
-                  )}
+                  className={cn('flex flex-col items-center gap-1 min-w-[56px] transition-all', done ? 'cursor-pointer' : 'cursor-default')}
                 >
                   <div className={cn(
                     'w-9 h-9 rounded-xl flex items-center justify-center transition-all',
@@ -510,7 +584,8 @@ export default function ApplyPage() {
             })}
           </div>
           <p className="text-center text-xs text-gray-400 mt-3">
-            Step <span className="font-bold text-gray-700">{step}</span> of {STEPS.length}, <span className="font-semibold text-gray-600">{STEPS[step - 1].title}</span>
+            Step <span className="font-bold text-gray-700">{step}</span> of {hasPayment ? STEPS.length : STEPS.length - 1},{' '}
+            <span className="font-semibold text-gray-600">{STEPS[step - 1].title}</span>
           </p>
         </div>
 
@@ -530,7 +605,7 @@ export default function ApplyPage() {
 
             <div className="px-4 sm:px-8 py-6 sm:py-8 space-y-5">
 
-              {/* STEP 1, Personal Information */}
+              {/* STEP 1 — Personal Information */}
               {step === 1 && (
                 <>
                   <div className="grid sm:grid-cols-2 gap-5">
@@ -566,7 +641,7 @@ export default function ApplyPage() {
                 </>
               )}
 
-              {/* STEP 2, Education & Background */}
+              {/* STEP 2 — Education & Background */}
               {step === 2 && (
                 <>
                   <div>
@@ -585,7 +660,7 @@ export default function ApplyPage() {
                 </>
               )}
 
-              {/* STEP 3, Program Selection */}
+              {/* STEP 3 — Program Selection */}
               {step === 3 && (
                 <>
                   <div>
@@ -594,6 +669,7 @@ export default function ApplyPage() {
                     <div className="grid sm:grid-cols-2 gap-3">
                       {PROGRAMS.map((p) => {
                         const checked = form.programs.includes(p);
+                        const price = priceOf(p);
                         return (
                           <label key={p} className={cn(
                             'flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all',
@@ -606,7 +682,12 @@ export default function ApplyPage() {
                               {checked && <CheckCircle2 className="w-3 h-3 text-white" />}
                             </div>
                             <input type="checkbox" className="sr-only" checked={checked} onChange={() => toggleProgram(p)} />
-                            <span className="text-sm font-medium text-gray-700">{p}</span>
+                            <div className="flex-1 min-w-0">
+                              <span className="text-sm font-medium text-gray-700 block leading-snug">{p}</span>
+                              <span className={cn('text-xs font-bold mt-0.5', price === 0 ? 'text-green-600' : 'text-primary-blue')}>
+                                {price === 0 ? 'FREE' : formatUGX(price)}
+                              </span>
+                            </div>
                           </label>
                         );
                       })}
@@ -617,11 +698,20 @@ export default function ApplyPage() {
                         <Input placeholder="Describe your program of interest…" value={form.programOther} onChange={e => set('programOther', e.target.value)} />
                       </div>
                     )}
+                    {/* Price summary */}
+                    {form.programs.length > 0 && (
+                      <div className="mt-4 rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 flex items-center justify-between">
+                        <span className="text-sm text-gray-600 font-medium">{form.programs.length} program{form.programs.length > 1 ? 's' : ''} selected</span>
+                        <span className={cn('text-sm font-bold', totalUGX === 0 ? 'text-green-600' : 'text-primary-blue')}>
+                          {totalUGX === 0 ? 'All FREE' : formatUGX(totalUGX)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
 
-              {/* STEP 4, Motivation & Goals */}
+              {/* STEP 4 — Motivation & Goals */}
               {step === 4 && (
                 <>
                   <div>
@@ -635,7 +725,7 @@ export default function ApplyPage() {
                 </>
               )}
 
-              {/* STEP 5, Availability */}
+              {/* STEP 5 — Availability */}
               {step === 5 && (
                 <RadioGroup
                   label={t.apply.availability.hoursPerWeek}
@@ -646,7 +736,7 @@ export default function ApplyPage() {
                 />
               )}
 
-              {/* STEP 6, Computer & Internet Access */}
+              {/* STEP 6 — Computer & Internet Access */}
               {step === 6 && (
                 <>
                   <RadioGroup label={t.apply.computer.hasComputer} name="hasComputer" options={[t.apply.computer.yes, t.apply.computer.no]} value={form.hasComputer} onChange={v => set('hasComputer', v)} />
@@ -657,22 +747,12 @@ export default function ApplyPage() {
                 </>
               )}
 
-              {/* STEP 7, Declaration */}
-              {/* Step-level error (shown on steps 1-6) */}
-              {stepError && step < 7 && (
-                <div className="flex items-center gap-2 text-sm text-primary-red bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  {stepError}
-                </div>
-              )}
-
+              {/* STEP 7 — Declaration */}
               {step === 7 && (
                 <>
                   <div className="rounded-xl bg-blue-50 border border-blue-100 p-6">
                     <h3 className="font-display font-bold text-gray-800 mb-2">{t.apply.declaration.title}</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {t.apply.declaration.agree}
-                    </p>
+                    <p className="text-sm text-gray-600 leading-relaxed">{t.apply.declaration.agree}</p>
                   </div>
                   <div>
                     <FieldLabel>{t.apply.declaration.referral}</FieldLabel>
@@ -697,14 +777,163 @@ export default function ApplyPage() {
                       {t.apply.declaration.agree} <span className="text-primary-red">*</span>
                     </span>
                   </label>
-                  {error && (
-                    <div className="flex items-center gap-2 text-sm text-primary-red bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-                      <AlertCircle className="w-4 h-4 shrink-0" />
-                      {error}
+                  {/* Preview of what comes next */}
+                  {hasPayment && (
+                    <div className="rounded-xl bg-amber-50 border border-amber-200 p-4 flex items-start gap-3">
+                      <CreditCard className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                      <p className="text-sm text-amber-800">
+                        <strong>Next step:</strong> You will be asked to pay <strong>{formatUGX(totalUGX)}</strong> and upload your payment proof before submitting.
+                      </p>
                     </div>
                   )}
                 </>
               )}
+
+              {/* STEP 8 — Payment */}
+              {step === 8 && (
+                <>
+                  {!hasPayment ? (
+                    /* All programs are free */
+                    <div className="text-center py-8">
+                      <div className="w-16 h-16 rounded-full bg-green-50 border-2 border-green-200 flex items-center justify-center mx-auto mb-4">
+                        <CheckCircle2 className="w-8 h-8 text-green-500" />
+                      </div>
+                      <h3 className="font-display text-lg font-bold text-gray-900 mb-2">No Payment Required</h3>
+                      <p className="text-sm text-gray-500">All your selected programs are free. Click Submit to complete your application.</p>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Invoice table */}
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3">Invoice Summary</p>
+                        <div className="rounded-xl border border-gray-200 overflow-hidden">
+                          <table className="w-full text-sm">
+                            <thead>
+                              <tr className="bg-gray-50 border-b border-gray-200">
+                                <th className="text-left px-4 py-3 font-semibold text-gray-600">Program</th>
+                                <th className="text-right px-4 py-3 font-semibold text-gray-600">Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {form.programs.map(p => (
+                                <tr key={p} className="border-b border-gray-100 last:border-0">
+                                  <td className="px-4 py-3 text-gray-700">{p}</td>
+                                  <td className="px-4 py-3 text-right font-medium">
+                                    {isFreeProgram(p)
+                                      ? <span className="text-green-600 font-bold">FREE</span>
+                                      : <span className="text-gray-900">{formatUGX(priceOf(p))}</span>
+                                    }
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                            <tfoot>
+                              <tr className="bg-primary-blue/5 border-t-2 border-primary-blue/20">
+                                <td className="px-4 py-3 font-bold text-gray-900">TOTAL DUE</td>
+                                <td className="px-4 py-3 text-right font-extrabold text-primary-blue text-base">{formatUGX(totalUGX)}</td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+
+                      {/* Payment methods */}
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3">How to Pay</p>
+                        <div className="space-y-3">
+                          {/* Mobile Money */}
+                          <div className="rounded-xl border border-gray-200 p-4">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Smartphone className="w-4 h-4 text-primary-blue" />
+                              <span className="text-sm font-bold text-gray-800">Mobile Money (MTN / Airtel)</span>
+                            </div>
+                            <div className="space-y-1 pl-6">
+                              <p className="text-sm text-gray-600">
+                                Send to: <strong className="text-gray-900 font-mono">+256 779 367 005</strong>
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                or: <strong className="text-gray-900 font-mono">+256 706 911 732</strong>
+                              </p>
+                            </div>
+                          </div>
+                          {/* Bank */}
+                          <div className="rounded-xl border border-gray-200 p-4">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Building2 className="w-4 h-4 text-primary-blue" />
+                              <span className="text-sm font-bold text-gray-800">Bank Transfer — Stanbic Bank</span>
+                            </div>
+                            <div className="space-y-1 pl-6">
+                              <p className="text-sm text-gray-600">Account No.: <strong className="text-gray-900 font-mono">9030022482490</strong></p>
+                              <p className="text-sm text-gray-600">Account Name: <strong className="text-gray-900">Keneth Sansa</strong></p>
+                              <p className="text-sm text-gray-600">Branch: <strong className="text-gray-900">Aponye</strong></p>
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-2">
+                          After paying, take a screenshot or photo of the payment confirmation and upload it below.
+                        </p>
+                      </div>
+
+                      {/* Upload payment proof */}
+                      <div>
+                        <FieldLabel required>Payment Proof (screenshot or PDF)</FieldLabel>
+                        {form.paymentProofUrl ? (
+                          <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-green-200 bg-green-50">
+                            <Paperclip className="w-4 h-4 text-green-600 shrink-0" />
+                            <span className="flex-1 truncate text-sm text-green-800 font-medium">{form.paymentProofName || 'Payment proof uploaded'}</span>
+                            <button
+                              type="button"
+                              onClick={() => { set('paymentProofUrl', ''); set('paymentProofName', ''); }}
+                              className="text-green-600 hover:text-primary-red transition-colors"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <input
+                              ref={proofInputRef}
+                              type="file"
+                              accept="image/*,.pdf"
+                              className="sr-only"
+                              onChange={e => { const f = e.target.files?.[0]; if (f) handleProofUpload(f); e.target.value = ''; }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => proofInputRef.current?.click()}
+                              disabled={uploadingProof}
+                              className="w-full flex items-center justify-center gap-2 px-4 py-4 rounded-xl border-2 border-dashed border-gray-300 hover:border-primary-blue/50 hover:bg-blue-50/30 transition-all text-sm font-semibold text-gray-500 hover:text-primary-blue disabled:opacity-50"
+                            >
+                              {uploadingProof ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                              {uploadingProof ? 'Uploading…' : 'Upload screenshot or PDF of payment'}
+                            </button>
+                            {uploadError && (
+                              <p className="text-xs text-primary-red mt-1.5 flex items-center gap-1">
+                                <AlertCircle className="w-3 h-3" /> {uploadError}
+                              </p>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+
+              {/* Step-level error */}
+              {stepError && (
+                <div className="flex items-center gap-2 text-sm text-primary-red bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  {stepError}
+                </div>
+              )}
+              {error && step === 8 && (
+                <div className="flex items-center gap-2 text-sm text-primary-red bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  {error}
+                </div>
+              )}
+
             </div>
 
             {/* Footer nav */}
@@ -718,7 +947,8 @@ export default function ApplyPage() {
                 <ChevronLeft className="w-4 h-4" /> {t.apply.nav.back}
               </button>
 
-              {step < STEPS.length ? (
+              {/* Last step = 8 if paid, 7 if all free (but we skip to OTP from goNext on 7) */}
+              {step < 8 ? (
                 <button
                   type="button"
                   onClick={goNext}
@@ -729,7 +959,7 @@ export default function ApplyPage() {
               ) : (
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || uploadingProof}
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary-red text-white text-sm font-bold hover:bg-rose-700 transition-all shadow-sm shadow-red-900/20 disabled:opacity-70"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileCheck className="w-4 h-4" />}

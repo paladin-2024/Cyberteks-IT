@@ -155,6 +155,9 @@ const applySchema = z.object({
   referralSource:      z.string().optional(),
   socialHandle:        z.string().optional(),
   declarationAccepted: z.literal(true),
+  paymentProofUrl:     z.string().url().optional(),
+  paymentProofName:    z.string().optional(),
+  totalAmountUGX:      z.number().int().min(0).optional(),
 });
 
 const esc = (s: string) =>
@@ -222,6 +225,9 @@ router.post('/', async (req: Request, res: Response) => {
         referralSource:    data.referralSource,
         socialHandle:      data.socialHandle,
         tempPassword:      tempPassword,
+        paymentProofUrl:   data.paymentProofUrl,
+        paymentProofName:  data.paymentProofName,
+        totalAmountUGX:    data.totalAmountUGX,
         status:            'PENDING',
       },
     });
@@ -230,7 +236,7 @@ router.post('/', async (req: Request, res: Response) => {
     sendEmail({
       to:      process.env.ADMIN_EMAIL ?? 'info@cyberteks-it.com',
       subject: `New Application — ${data.fullName}`,
-      html:    adminNewApplicationEmail(data),
+      html:    adminNewApplicationEmail({ ...data, paymentProofUrl: data.paymentProofUrl, totalAmountUGX: data.totalAmountUGX }),
     }).catch(err => console.error('[apply] admin email failed:', err));
 
     // Confirmation email to applicant (non-blocking)
@@ -372,13 +378,15 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
         // Send welcome email with credentials (non-blocking)
         sendEmail({
           to:      application.email,
-          subject: '🎉 You\'re In — Welcome to CyberteksIT LMS!',
+          subject: '🎉 You\'re In — Welcome to Cyberteks-IT LMS!',
           html:    applicantAcceptedEmail({
-            fullName:     application.fullName,
-            email:        application.email,
-            tempPassword: tempPassword!,
-            programs:     application.programs,
-            reviewNotes:  reviewNotes,
+            fullName:        application.fullName,
+            email:           application.email,
+            tempPassword:    tempPassword!,
+            programs:        application.programs,
+            reviewNotes:     reviewNotes,
+            paymentProofUrl: (application as any).paymentProofUrl ?? undefined,
+            totalAmountUGX:  (application as any).totalAmountUGX ?? undefined,
           }),
         }).catch(err => console.error('[apply] welcome email failed:', err));
       }
