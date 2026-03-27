@@ -327,8 +327,116 @@ export default function ApplyPage() {
     if (!form.declaration) { setError('Please accept the declaration before submitting.'); return; }
     if (form.programs.length === 0) { setError('Please select at least one program.'); return; }
     setError('');
-    doSubmit();
+    setOtpDigits(['', '', '', '', '', '']);
+    setOtpError('');
+    setOtpMode(true);
+    sendOtp();
   };
+
+  // OTP verification screen
+  if (otpMode) {
+    return (
+      <div className="min-h-screen bg-gray-50 pb-20">
+        <div className="bg-primary-blue text-white py-10 sm:py-14 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.18em] text-blue-300 mb-3">Email Verification</span>
+            <h1 className="font-display text-3xl sm:text-4xl font-extrabold mb-4 leading-tight">Verify your email</h1>
+            <p className="text-blue-200 text-lg max-w-xl mx-auto">One last step before we submit your application</p>
+          </div>
+        </div>
+
+        <div className="max-w-md mx-auto px-4 sm:px-6 -mt-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="flex items-center gap-4 px-6 py-5 border-b border-gray-100 bg-gray-50/50">
+              <div className="w-12 h-12 rounded-2xl bg-primary-blue flex items-center justify-center shrink-0">
+                <Mail className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-primary-blue uppercase tracking-[0.12em]">Final Step</p>
+                <h2 className="font-display text-lg font-bold text-gray-900">Verify your email</h2>
+              </div>
+            </div>
+
+            <div className="px-6 py-8 space-y-6">
+              <p className="text-sm text-gray-600 leading-relaxed">
+                We've sent a <strong className="text-gray-900">6-digit verification code</strong> to{' '}
+                <strong className="text-primary-blue">{form.email}</strong>.
+                Enter it below to submit your application.
+              </p>
+
+              <div className="flex gap-2.5 justify-center">
+                {otpDigits.map((digit, i) => (
+                  <input
+                    key={i}
+                    ref={el => { otpRefs.current[i] = el; }}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={e => handleOtpInput(i, e.target.value)}
+                    onKeyDown={e => handleOtpKeyDown(i, e)}
+                    onPaste={i === 0 ? (e) => {
+                      const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+                      if (pasted.length) {
+                        e.preventDefault();
+                        const next = [...otpDigits];
+                        pasted.split('').forEach((c, idx) => { if (idx < 6) next[idx] = c; });
+                        setOtpDigits(next);
+                        otpRefs.current[Math.min(pasted.length, 5)]?.focus();
+                      }
+                    } : undefined}
+                    className={cn(
+                      'w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 outline-none transition-all',
+                      digit ? 'border-primary-blue bg-blue-50 text-primary-blue' : 'border-gray-200 bg-white text-gray-900',
+                      'focus:border-primary-blue focus:ring-2 focus:ring-primary-blue/10',
+                    )}
+                  />
+                ))}
+              </div>
+
+              {otpError && (
+                <div className="flex items-center gap-2 text-sm text-primary-red bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  {otpError}
+                </div>
+              )}
+
+              <button
+                onClick={verifyOtp}
+                disabled={otpLoading || otpDigits.join('').length !== 6}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-primary-red text-white font-bold text-sm hover:bg-rose-700 transition-all disabled:opacity-60"
+              >
+                {otpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+                {otpLoading ? 'Submitting…' : 'Verify & Submit Application'}
+              </button>
+
+              <div className="text-center">
+                <p className="text-xs text-gray-400 mb-1">Didn't receive the code?</p>
+                {resendCooldown > 0 ? (
+                  <p className="text-xs text-gray-400 font-semibold">Resend in {resendCooldown}s</p>
+                ) : (
+                  <button onClick={sendOtp} disabled={otpLoading} className="text-xs font-semibold text-primary-blue hover:underline disabled:opacity-50">
+                    Resend code
+                  </button>
+                )}
+              </div>
+
+              <button
+                onClick={() => { setOtpMode(false); setOtpError(''); }}
+                className="w-full text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                ← Back to declaration
+              </button>
+            </div>
+          </div>
+
+          <p className="text-center text-xs text-gray-400 mt-6 pb-4">
+            Questions? Email <a href="mailto:info@cyberteks-it.com" className="text-primary-blue hover:underline">info@cyberteks-it.com</a>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (submitted) {
     return (
