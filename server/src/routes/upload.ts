@@ -12,6 +12,12 @@ cloudinary.config({
   api_secret:  process.env.CLOUDINARY_API_SECRET,
 });
 
+console.log('[upload] Cloudinary config:', {
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME ?? '(missing)',
+  api_key: process.env.CLOUDINARY_API_KEY ? '(set)' : '(missing)',
+  api_secret: process.env.CLOUDINARY_API_SECRET ? '(set)' : '(missing)',
+});
+
 // ── Allowed types ─────────────────────────────────────────────────────────────
 const IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
 const SUBMISSION_TYPES = [
@@ -68,7 +74,8 @@ router.post('/avatar', avatarUpload.single('file'), async (req: AuthRequest, res
     const url = await uploadToCloudinary(req.file.buffer, 'avatars');
     res.json({ url, fileName: req.file.originalname, size: req.file.size });
   } catch (err) {
-    res.status(500).json({ error: 'Upload failed' });
+    console.error('[upload /avatar]', err);
+    res.status(500).json({ error: 'Upload failed', detail: (err as Error).message });
   }
 });
 
@@ -90,7 +97,8 @@ router.post('/cover', requireRole('ADMIN'), coverUpload.single('file'), async (r
     const url = await uploadToCloudinary(req.file.buffer, 'covers');
     res.json({ url, fileName: req.file.originalname, size: req.file.size });
   } catch (err) {
-    res.status(500).json({ error: 'Upload failed' });
+    console.error('[upload /cover]', err);
+    res.status(500).json({ error: 'Upload failed', detail: (err as Error).message });
   }
 });
 
@@ -113,7 +121,8 @@ router.post('/submission', submissionUpload.single('file'), async (req: AuthRequ
     const url = await uploadToCloudinary(req.file.buffer, 'submissions', resourceType);
     res.json({ url, fileName: req.file.originalname, size: req.file.size });
   } catch (err) {
-    res.status(500).json({ error: 'Upload failed' });
+    console.error('[upload /submission]', err);
+    res.status(500).json({ error: 'Upload failed', detail: (err as Error).message });
   }
 });
 
