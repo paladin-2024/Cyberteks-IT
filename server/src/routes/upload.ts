@@ -55,19 +55,26 @@ function uploadToCloudinary(
 
 // ── Upload: payment proof (no auth — marketing/public users) ─────────────────
 // POST /api/upload/payment-proof  →  { url }
+// Accept any image type (including HEIC/HEIF from iPhones) plus PDF
+const PROOF_TYPES = [
+  ...IMAGE_TYPES,
+  'image/heic', 'image/heif',
+  'application/pdf',
+];
 const paymentProofUpload = multer({
   storage: memStorage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
   fileFilter: (_req, file, cb) => {
-    if (IMAGE_TYPES.includes(file.mimetype)) cb(null, true);
-    else cb(new Error('Only image files are allowed for payment proof'));
+    if (PROOF_TYPES.includes(file.mimetype) || file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error(`File type "${file.mimetype}" not allowed. Upload a screenshot or PDF.`));
   },
 });
 
 router.post('/payment-proof', paymentProofUpload.single('file'), async (req: AuthRequest, res: Response): Promise<void> => {
   if (!req.file) { res.status(400).json({ error: 'No file uploaded' }); return; }
   try {
-    const url = await uploadToCloudinary(req.file.buffer, 'payment-proofs');
+    const resourceType = req.file.mimetype === 'application/pdf' ? 'raw' : 'image';
+    const url = await uploadToCloudinary(req.file.buffer, 'payment-proofs', resourceType);
     res.json({ url, fileName: req.file.originalname });
   } catch (err) {
     console.error('[upload /payment-proof]', err);

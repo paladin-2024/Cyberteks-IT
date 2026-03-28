@@ -153,11 +153,14 @@ function MentorshipPayModal({ onClose }: { onClose: () => void }) {
       const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/upload/payment-proof`, {
         method: 'POST', body: fd,
       });
-      if (!res.ok) throw new Error('Upload failed');
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({})) as { error?: string };
+        throw new Error(body.error ?? 'Upload failed');
+      }
       const data = await res.json() as { url: string };
       setProofUrl(data.url);
       setProofName(file.name);
-    } catch { setUploadErr('Upload failed. Please try again.'); }
+    } catch (e) { setUploadErr((e as Error).message ?? 'Upload failed. Please try again.'); }
     finally { setUploading(false); }
   };
 
