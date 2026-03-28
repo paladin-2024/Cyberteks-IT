@@ -320,7 +320,15 @@ router.get('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
         select: { lessonId: true, completed: true, watchedSecs: true },
       });
       const progressMap = Object.fromEntries(progressRecords.map((p) => [p.lessonId, p]));
-      res.json({ course, enrollment, progressMap });
+
+      // Also fetch curriculum weeks/topics so students see teacher-added content
+      const curriculumWeeks = await prisma.curriculumWeek.findMany({
+        where: { courseId: id },
+        include: { topics: { orderBy: { order: 'asc' } } },
+        orderBy: { weekNumber: 'asc' },
+      });
+
+      res.json({ course, enrollment, progressMap, curriculumWeeks });
       return;
     }
 
