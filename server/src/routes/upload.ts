@@ -53,6 +53,28 @@ function uploadToCloudinary(
   });
 }
 
+// ── Upload: payment proof (no auth — marketing/public users) ─────────────────
+// POST /api/upload/payment-proof  →  { url }
+const paymentProofUpload = multer({
+  storage: memStorage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (IMAGE_TYPES.includes(file.mimetype)) cb(null, true);
+    else cb(new Error('Only image files are allowed for payment proof'));
+  },
+});
+
+router.post('/payment-proof', paymentProofUpload.single('file'), async (req: AuthRequest, res: Response): Promise<void> => {
+  if (!req.file) { res.status(400).json({ error: 'No file uploaded' }); return; }
+  try {
+    const url = await uploadToCloudinary(req.file.buffer, 'payment-proofs');
+    res.json({ url, fileName: req.file.originalname });
+  } catch (err) {
+    console.error('[upload /payment-proof]', err);
+    res.status(500).json({ error: 'Upload failed', detail: (err as Error).message });
+  }
+});
+
 // ── All routes below require authentication ───────────────────────────────────
 router.use(requireAuth);
 
