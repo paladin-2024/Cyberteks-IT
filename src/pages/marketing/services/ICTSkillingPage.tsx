@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 import {
@@ -7,6 +7,7 @@ import {
   Star, Zap, Globe, Shield, Brain, Monitor,
   Code2, BarChart2, Wifi, Palette, Bot, ChevronDown, ChevronUp,
   Rocket, Calendar, ExternalLink,
+  UploadCloud, Paperclip, X, Loader2, Check, CreditCard,
 } from 'lucide-react';
 
 interface Bootcamp {
@@ -130,6 +131,189 @@ function VideoCard({ src, title, tag }: { src: string; title: string; tag: strin
   );
 }
 
+// ── Mentorship Hub Payment Modal ───────────────────────────────────────────────
+
+function MentorshipPayModal({ onClose }: { onClose: () => void }) {
+  const [name, setName]               = useState('');
+  const [email, setEmail]             = useState('');
+  const [proofUrl, setProofUrl]       = useState('');
+  const [proofName, setProofName]     = useState('');
+  const [uploading, setUploading]     = useState(false);
+  const [uploadErr, setUploadErr]     = useState('');
+  const [submitting, setSubmitting]   = useState(false);
+  const [invoiceNo, setInvoiceNo]     = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleUpload = async (file: File) => {
+    setUploading(true); setUploadErr('');
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/upload/submission`, {
+        method: 'POST', body: fd,
+      });
+      if (!res.ok) throw new Error('Upload failed');
+      const data = await res.json() as { url: string };
+      setProofUrl(data.url);
+      setProofName(file.name);
+    } catch { setUploadErr('Upload failed. Please try again.'); }
+    finally { setUploading(false); }
+  };
+
+  const handleSubmit = async () => {
+    if (!name.trim() || !email.trim() || !proofUrl) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/mentorship/join`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), paymentProofUrl: proofUrl }),
+      });
+      if (!res.ok) throw new Error('Failed');
+      const data = await res.json() as { invoiceNo: string };
+      setInvoiceNo(data.invoiceNo);
+    } catch { /* silent — user can retry */ }
+    finally { setSubmitting(false); }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg my-4 overflow-hidden">
+
+        {/* Header */}
+        <div className="bg-[#023064] px-6 py-5 flex items-start justify-between">
+          <div>
+            <p className="text-[#E11D48] text-xs font-bold uppercase tracking-widest mb-1">Premium Membership</p>
+            <h2 className="font-heading text-xl font-bold text-white">Cyberteks-IT Mentorship Hub</h2>
+          </div>
+          <button onClick={onClose} className="text-white/60 hover:text-white mt-0.5 transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {invoiceNo ? (
+          /* ── Success state ── */
+          <div className="py-14 px-8 flex flex-col items-center text-center">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center mb-5">
+              <Check className="w-8 h-8 text-emerald-500" />
+            </div>
+            <h3 className="font-heading text-xl font-bold text-gray-900 mb-2">Payment Received!</h3>
+            <p className="text-gray-500 text-sm mb-4 max-w-xs">
+              Welcome to the Cyberteks-IT Mentorship Hub. Your membership is now active for 3 months.
+            </p>
+            <div className="bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 mb-6 w-full">
+              <p className="text-xs text-gray-400 mb-1">Receipt Number</p>
+              <p className="font-mono font-bold text-lg text-[#023064]">{invoiceNo}</p>
+            </div>
+            <p className="text-xs text-gray-400 mb-6">Keep this number for your records. Our team will be in touch via email within 24 hours to give you access.</p>
+            <button onClick={onClose} className="w-full py-3 rounded-xl bg-[#023064] text-white font-bold hover:bg-[#012550] transition-all">
+              Done
+            </button>
+          </div>
+        ) : (
+          <div className="p-6 space-y-5">
+
+            {/* Price summary */}
+            <div className="bg-[#023064]/5 border border-[#023064]/15 rounded-2xl p-4 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-700">Membership Fee</p>
+                <p className="text-xs text-gray-400">3-month access · All mentorship benefits</p>
+              </div>
+              <p className="font-heading text-xl font-extrabold text-[#023064]">UGX 30,000</p>
+            </div>
+
+            {/* Name + Email */}
+            <div className="grid sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1.5">Full Name *</label>
+                <input
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="e.g. Aisha Nakato"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl outline-none focus:border-[#023064] focus:ring-2 focus:ring-[#023064]/10 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1.5">Email Address *</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl outline-none focus:border-[#023064] focus:ring-2 focus:ring-[#023064]/10 transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Payment details */}
+            <div>
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Pay via</p>
+              <div className="rounded-2xl border border-gray-100 divide-y divide-gray-100 overflow-hidden">
+                <div className="px-4 py-3 bg-gray-50">
+                  <p className="text-xs font-bold text-gray-700 mb-1.5">📱 Mobile Money</p>
+                  <div className="space-y-1">
+                    <p className="text-sm text-gray-600">MTN &nbsp;<span className="font-mono font-semibold text-gray-900">+256 779 367 005</span></p>
+                    <p className="text-sm text-gray-600">Airtel <span className="font-mono font-semibold text-gray-900">+256 706 911 732</span></p>
+                  </div>
+                </div>
+                <div className="px-4 py-3 bg-gray-50">
+                  <p className="text-xs font-bold text-gray-700 mb-1.5">🏦 Bank Transfer — Stanbic Bank</p>
+                  <div className="space-y-1">
+                    <p className="text-sm text-gray-600">Account &nbsp;<span className="font-mono font-semibold text-gray-900">9030022482490</span></p>
+                    <p className="text-sm text-gray-600">Name &nbsp;&nbsp;&nbsp;&nbsp;<span className="font-semibold text-gray-900">Keneth Sansa Aponye</span></p>
+                    <p className="text-sm text-gray-600">Branch &nbsp;&nbsp;<span className="font-semibold text-gray-900">Aponye</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Upload proof */}
+            <div>
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Upload Payment Receipt *</p>
+              <p className="text-xs text-gray-400 mb-3">Take a screenshot of your transaction and upload it below.</p>
+              <input ref={fileRef} type="file" className="sr-only"
+                onChange={e => { const f = e.target.files?.[0]; if (f) handleUpload(f); }} />
+              {proofUrl ? (
+                <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50">
+                  <Paperclip className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span className="flex-1 text-sm text-gray-700 truncate">{proofName}</span>
+                  <button onClick={() => { setProofUrl(''); setProofName(''); }}
+                    className="text-gray-400 hover:text-red-400 transition-colors shrink-0">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <button onClick={() => fileRef.current?.click()} disabled={uploading}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-dashed border-gray-200 hover:border-[#023064]/40 text-sm font-semibold text-gray-400 hover:text-[#023064] transition-all disabled:opacity-50">
+                  {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                  {uploading ? 'Uploading…' : 'Upload screenshot'}
+                </button>
+              )}
+              {uploadErr && <p className="text-xs text-red-500 mt-1">{uploadErr}</p>}
+            </div>
+
+            {/* Submit */}
+            <button
+              onClick={handleSubmit}
+              disabled={!name.trim() || !email.trim() || !proofUrl || submitting}
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#E11D48] hover:bg-rose-700 text-white font-bold text-sm transition-all disabled:opacity-50"
+            >
+              {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
+              {submitting ? 'Processing…' : 'Confirm Membership — UGX 30,000'}
+            </button>
+
+            <p className="text-[11px] text-center text-gray-400">
+              By submitting, you confirm that payment of UGX 30,000 has been made. Cyberteks-IT will verify and activate your membership within 24 hours.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+
 type Tab = 'online' | 'corporate' | 'vacation' | 'bootcamp';
 
 function daysLeft(expiresAt: string): number {
@@ -142,6 +326,7 @@ export default function ICTSkillingPage() {
   const [selected, setSelected] = useState<number | null>(null);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [bootcamps, setBootcamps] = useState<Bootcamp[]>([]);
+  const [showMentorshipModal, setShowMentorshipModal] = useState(false);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/bootcamps`)
@@ -578,10 +763,11 @@ export default function ICTSkillingPage() {
                   <span className="px-3 py-1.5 bg-white/10 rounded-lg text-xs text-white font-medium">🏦 Bank Transfer</span>
                 </div>
               </div>
-              <a href="https://chat.whatsapp.com/Be367mq8OWpK3lI7kwqBWw?mode=gi_t"
+              <button
+                onClick={() => setShowMentorshipModal(true)}
                 className="inline-flex items-center gap-2 bg-[#E11D48] hover:bg-[#be1239] text-white font-bold px-6 py-3.5 rounded-xl transition-all hover:scale-105 w-full justify-center">
-                <MessageCircle className="w-5 h-5" /> Join Mentorship Hub
-              </a>
+                <CreditCard className="w-5 h-5" /> Join Mentorship Hub — UGX 30,000
+              </button>
             </div>
           </div>
         </div>
@@ -712,6 +898,10 @@ export default function ICTSkillingPage() {
           </div>
         </div>
       </section>
+
+      {showMentorshipModal && (
+        <MentorshipPayModal onClose={() => setShowMentorshipModal(false)} />
+      )}
     </main>
   );
 }

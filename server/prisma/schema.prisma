@@ -387,11 +387,18 @@ model Invoice {
   dueDate   DateTime?
   paidAt    DateTime?
   notes     String?
+  type      String?       // "COURSE" | "MENTORSHIP_HUB"
 
-  userId   String
+  // Registered user (optional — guest payments won't have this)
+  userId   String?
   courseId String?
 
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Guest payment fields (for mentorship hub and future public payments)
+  guestName       String?
+  guestEmail      String?
+  paymentProofUrl String?
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   course Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())

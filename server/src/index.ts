@@ -24,6 +24,7 @@ import getStartedRouter    from './routes/get-started';
 import sectionsRouter      from './routes/sections';
 import newsletterRouter    from './routes/newsletter';
 import bootcampsRouter     from './routes/bootcamps';
+import mentorshipRouter    from './routes/mentorship';
 
 const app  = express();
 const PORT = process.env.PORT ?? 3001;
@@ -69,6 +70,7 @@ app.use('/api/get-started',  getStartedRouter);
 app.use('/api/sections',     sectionsRouter);
 app.use('/api/newsletter',   newsletterRouter);
 app.use('/api/bootcamps',    bootcampsRouter);
+app.use('/api/mentorship',   mentorshipRouter);
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {

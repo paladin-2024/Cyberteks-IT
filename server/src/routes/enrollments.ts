@@ -232,9 +232,10 @@ router.get('/admin/students', requireRole('ADMIN'), async (_req: AuthRequest, re
     const students = await prisma.user.findMany({
       where: { role: 'STUDENT' },
       select: {
-        id: true, name: true, email: true, image: true, status: true,
+        id: true, name: true, email: true, image: true,
         enrollments: {
-          include: {
+          select: {
+            id: true, status: true, progressPercent: true, startedAt: true,
             course: { select: { id: true, title: true, category: true, status: true } },
           },
           orderBy: { startedAt: 'desc' },

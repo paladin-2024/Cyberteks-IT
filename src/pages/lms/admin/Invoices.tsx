@@ -11,7 +11,11 @@ interface Invoice {
   status: string;
   dueDate: string | null;
   createdAt: string;
-  user: { id: string; name: string; email: string };
+  type: string | null;
+  guestName: string | null;
+  guestEmail: string | null;
+  paymentProofUrl: string | null;
+  user: { id: string; name: string; email: string } | null;
   course: { id: string; title: string } | null;
 }
 
@@ -109,7 +113,7 @@ export default function InvoicesPage() {
                 <tr className="border-b border-border bg-muted/40">
                   <th className="text-left px-5 py-3.5 text-muted-foreground font-semibold">{d.invoice}</th>
                   <th className="text-left px-5 py-3.5 text-muted-foreground font-semibold">{d.student}</th>
-                  <th className="text-left px-5 py-3.5 text-muted-foreground font-semibold hidden md:table-cell">{d.course}</th>
+                  <th className="text-left px-5 py-3.5 text-muted-foreground font-semibold hidden md:table-cell">Type / Course</th>
                   <th className="text-right px-5 py-3.5 text-muted-foreground font-semibold">{d.amount}</th>
                   <th className="text-left px-5 py-3.5 text-muted-foreground font-semibold">{d.status}</th>
                   <th className="text-left px-5 py-3.5 text-muted-foreground font-semibold hidden sm:table-cell">{d.due}</th>
@@ -119,29 +123,61 @@ export default function InvoicesPage() {
               <tbody>
                 {invoices.map((inv) => (
                   <tr key={inv.id} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                    {/* Invoice No */}
                     <td className="px-5 py-4 font-mono text-xs font-semibold text-foreground">{inv.invoiceNo}</td>
+
+                    {/* Name / email — registered user or guest */}
                     <td className="px-5 py-4">
-                      <p className="font-medium text-foreground">{inv.user.name}</p>
-                      <p className="text-xs text-muted-foreground">{inv.user.email}</p>
+                      <p className="font-medium text-foreground">
+                        {inv.user?.name ?? inv.guestName ?? '—'}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {inv.user?.email ?? inv.guestEmail ?? ''}
+                      </p>
                     </td>
-                    <td className="px-5 py-4 text-muted-foreground hidden md:table-cell">
-                      {inv.course?.title ?? '—'}
+
+                    {/* Type / course */}
+                    <td className="px-5 py-4 hidden md:table-cell">
+                      {inv.type === 'MENTORSHIP_HUB' ? (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#E11D48]/10 text-[#E11D48]">
+                          ⭐ Mentorship Hub
+                        </span>
+                      ) : inv.course?.title ? (
+                        <span className="text-sm text-muted-foreground">{inv.course.title}</span>
+                      ) : (
+                        <span className="text-sm text-muted-foreground">—</span>
+                      )}
                     </td>
+
+                    {/* Amount */}
                     <td className="px-5 py-4 text-right font-semibold text-foreground">
                       {inv.currency} {inv.amount.toLocaleString()}
                     </td>
+
+                    {/* Status */}
                     <td className="px-5 py-4">
                       <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusCls[inv.status] ?? 'bg-muted text-muted-foreground'}`}>
                         {statusLabel[inv.status] ?? inv.status}
                       </span>
                     </td>
+
+                    {/* Due date */}
                     <td className="px-5 py-4 text-muted-foreground hidden sm:table-cell">
                       {formatDate(inv.dueDate)}
                     </td>
+
+                    {/* Payment proof link or download */}
                     <td className="px-5 py-4">
-                      <button className="text-muted-foreground hover:text-foreground transition-colors" title={d.download}>
-                        <Download className="w-4 h-4" />
-                      </button>
+                      {inv.paymentProofUrl ? (
+                        <a href={inv.paymentProofUrl} target="_blank" rel="noopener noreferrer"
+                          className="text-muted-foreground hover:text-[#023064] transition-colors" title="View payment proof">
+                          <Download className="w-4 h-4" />
+                        </a>
+                      ) : (
+                        <button className="text-muted-foreground hover:text-foreground transition-colors opacity-30 cursor-not-allowed" title={d.download} disabled>
+                          <Download className="w-4 h-4" />
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
