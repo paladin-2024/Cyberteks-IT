@@ -416,7 +416,8 @@ export default function StudentCourseDetailPage() {
     );
   }
 
-  const useCurriculum = course.sections.length === 0 && curriculumWeeks.length > 0;
+  // Prefer curriculum weeks (teacher-managed) whenever they exist
+  const useCurriculum = curriculumWeeks.length > 0;
   const totalLessons = useCurriculum
     ? curriculumWeeks.reduce((sum, w) => sum + w.topics.length, 0)
     : course.sections.reduce((sum, s) => sum + s.lessons.length, 0);

@@ -321,12 +321,18 @@ router.get('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
       });
       const progressMap = Object.fromEntries(progressRecords.map((p) => [p.lessonId, p]));
 
-      // Also fetch curriculum weeks/topics so students see teacher-added content
-      const curriculumWeeks = await prisma.curriculumWeek.findMany({
-        where: { courseId: id },
-        include: { topics: { orderBy: { order: 'asc' } } },
-        orderBy: { weekNumber: 'asc' },
-      });
+      // Fetch curriculum weeks/topics so students see teacher-added content.
+      // Isolated try/catch so a failure here doesn't break the whole course load.
+      let curriculumWeeks: object[] = [];
+      try {
+        curriculumWeeks = await prisma.curriculumWeek.findMany({
+          where: { courseId: id },
+          include: { topics: { orderBy: { order: 'asc' } } },
+          orderBy: { weekNumber: 'asc' },
+        });
+      } catch (cwErr) {
+        console.error('[courses GET /:id] curriculum weeks fetch failed:', cwErr);
+      }
 
       res.json({ course, enrollment, progressMap, curriculumWeeks });
       return;
