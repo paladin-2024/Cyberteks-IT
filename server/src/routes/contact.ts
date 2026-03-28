@@ -31,8 +31,9 @@ router.post('/', async (req: Request, res: Response) => {
       subject: `Contact Form — ${esc(name)}${topic ? ` (${esc(topic)})` : ''}`,
       html: `
         <div style="font-family: sans-serif; max-width: 640px; margin: 0 auto;">
-          <div style="background: #023064; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0;">
+          <div style="background: #102a83; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: space-between;">
             <h2 style="margin: 0;">New Contact Message</h2>
+            <img src="https://cyberteks-it.com/logo.jpg" alt="Cyberteks-IT" width="44" height="44" style="border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); margin-left: 16px;" />
           </div>
           <div style="padding: 24px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 8px 8px;">
             <p><b>Name:</b> ${esc(name)}</p>
@@ -50,18 +51,19 @@ router.post('/', async (req: Request, res: Response) => {
     // Auto-reply to sender
     await sendEmail({
       to: email,
-      subject: 'We received your message — CyberteksIT',
+      subject: 'We received your message — Cyberteks-IT',
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-          <div style="background: #023064; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0;">
+          <div style="background: #102a83; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: space-between;">
             <h2 style="margin: 0;">Thanks for reaching out!</h2>
+            <img src="https://cyberteks-it.com/logo.jpg" alt="Cyberteks-IT" width="44" height="44" style="border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); margin-left: 16px;" />
           </div>
           <div style="padding: 24px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 8px 8px;">
             <p>Hi ${esc(name)},</p>
             <p>We've received your message and will get back to you within <strong>2 business hours</strong>.</p>
             <p>If your matter is urgent, call us directly:</p>
             <p><strong>+256 779 367 005</strong> (MTN) &nbsp;|&nbsp; <strong>+256 706 911 732</strong> (Airtel)</p>
-            <p style="margin-top: 24px;">Best regards,<br/><strong>The CyberteksIT Team</strong></p>
+            <p style="margin-top: 24px;">Best regards,<br/><strong>The Cyberteks-IT Team</strong></p>
           </div>
         </div>
       `,

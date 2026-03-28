@@ -14,8 +14,10 @@ router.get('/', requireAuth, requireRole('ADMIN'), async (req: AuthRequest, res:
     if (status && status !== 'ALL') where.status = status;
     if (search?.trim()) {
       where.OR = [
-        { invoiceNo: { contains: search.trim(), mode: 'insensitive' } },
-        { user: { name: { contains: search.trim(), mode: 'insensitive' } } },
+        { invoiceNo:   { contains: search.trim(), mode: 'insensitive' } },
+        { guestName:   { contains: search.trim(), mode: 'insensitive' } },
+        { guestEmail:  { contains: search.trim(), mode: 'insensitive' } },
+        { user: { name:  { contains: search.trim(), mode: 'insensitive' } } },
         { user: { email: { contains: search.trim(), mode: 'insensitive' } } },
       ];
     }

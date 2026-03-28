@@ -51,8 +51,9 @@ router.post('/', async (req: Request, res: Response) => {
       subject: `[IT Support] New Request — ${esc(fullName)} (${esc(urgency || 'Medium')})`,
       html: `
         <div style="font-family: sans-serif; max-width: 640px; margin: 0 auto;">
-          <div style="background: #023064; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0;">
+          <div style="background: #102a83; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: space-between;">
             <h2 style="margin: 0;">New Remote IT Support Request</h2>
+            <img src="https://cyberteks-it.com/logo.jpg" alt="Cyberteks-IT" width="44" height="44" style="border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); margin-left: 16px;" />
           </div>
           <div style="padding: 24px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 8px 8px;">
             <p><b>Name:</b> ${esc(fullName)}</p>
@@ -81,11 +82,12 @@ router.post('/', async (req: Request, res: Response) => {
     // Auto-confirm to client
     await sendEmail({
       to: email,
-      subject: 'We received your IT support request — CyberteksIT',
+      subject: 'We received your IT support request — Cyberteks-IT',
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-          <div style="background: #023064; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0;">
+          <div style="background: #102a83; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: space-between;">
             <h2 style="margin: 0;">Support Request Received</h2>
+            <img src="https://cyberteks-it.com/logo.jpg" alt="Cyberteks-IT" width="44" height="44" style="border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); margin-left: 16px;" />
           </div>
           <div style="padding: 24px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 8px 8px;">
             <p>Hi ${esc(fullName)},</p>
@@ -94,7 +96,7 @@ router.post('/', async (req: Request, res: Response) => {
             <p><b>Urgency:</b> ${esc(urgency || 'Medium')}</p>
             <p>If your matter is very urgent, contact us directly:</p>
             <p><strong>+256 779 367 005</strong> (MTN) &nbsp;|&nbsp; <strong>+256 706 911 732</strong> (Airtel)</p>
-            <p style="margin-top: 24px;">Best regards,<br/><strong>The CyberteksIT Team</strong></p>
+            <p style="margin-top: 24px;">Best regards,<br/><strong>The Cyberteks-IT Team</strong></p>
           </div>
         </div>
       `,

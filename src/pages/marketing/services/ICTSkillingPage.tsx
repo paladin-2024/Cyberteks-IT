@@ -141,6 +141,7 @@ function MentorshipPayModal({ onClose }: { onClose: () => void }) {
   const [uploading, setUploading]     = useState(false);
   const [uploadErr, setUploadErr]     = useState('');
   const [submitting, setSubmitting]   = useState(false);
+  const [submitErr, setSubmitErr]     = useState('');
   const [invoiceNo, setInvoiceNo]     = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -149,7 +150,7 @@ function MentorshipPayModal({ onClose }: { onClose: () => void }) {
     try {
       const fd = new FormData();
       fd.append('file', file);
-      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/upload/submission`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/upload/payment-proof`, {
         method: 'POST', body: fd,
       });
       if (!res.ok) throw new Error('Upload failed');
@@ -162,18 +163,22 @@ function MentorshipPayModal({ onClose }: { onClose: () => void }) {
 
   const handleSubmit = async () => {
     if (!name.trim() || !email.trim() || !proofUrl) return;
-    setSubmitting(true);
+    setSubmitting(true); setSubmitErr('');
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/mentorship/join`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim(), email: email.trim(), paymentProofUrl: proofUrl }),
       });
-      if (!res.ok) throw new Error('Failed');
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({})) as { error?: string };
+        throw new Error(err.error ?? 'Submission failed');
+      }
       const data = await res.json() as { invoiceNo: string };
       setInvoiceNo(data.invoiceNo);
-    } catch { /* silent — user can retry */ }
-    finally { setSubmitting(false); }
+    } catch (e) {
+      setSubmitErr((e as Error).message ?? 'Something went wrong. Please try again.');
+    } finally { setSubmitting(false); }
   };
 
   return (
@@ -291,6 +296,11 @@ function MentorshipPayModal({ onClose }: { onClose: () => void }) {
               )}
               {uploadErr && <p className="text-xs text-red-500 mt-1">{uploadErr}</p>}
             </div>
+
+            {/* Submit error */}
+            {submitErr && (
+              <p className="text-xs text-red-500 text-center -mb-1">{submitErr}</p>
+            )}
 
             {/* Submit */}
             <button
