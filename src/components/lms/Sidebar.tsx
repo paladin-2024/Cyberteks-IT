@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, BookOpen, Users, FileText, MessageSquare,
   Bell, Award, Settings, ChevronLeft, ChevronRight, LogOut,
-  GraduationCap, Briefcase, Map, BarChart3, Calendar,
-  ClipboardList, UserCheck, PieChart, X, HelpCircle, UserCircle, ListOrdered, Headphones, Mail, Rocket,
+  GraduationCap, Briefcase, Compass, BarChart3,
+  ClipboardList, UserCheck, X, HelpCircle, UserCircle, ListOrdered, Headphones, Mail, Rocket,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
@@ -93,9 +93,7 @@ const studentNavGroups: NavGroup[] = [
     items: [
       { key: 'myCourses',    href: '/student/courses',      icon: GraduationCap },
       { key: 'assignments',  href: '/student/assignments',  icon: ClipboardList },
-      { key: 'plan',         href: '/student/plan',         icon: Map },
-      { key: 'schedule',     href: '/student/schedule',     icon: Calendar },
-      { key: 'progress',     href: '/student/progress',     icon: PieChart },
+      { key: 'journey',      href: '/student/journey',      icon: Compass },
       { key: 'certificates', href: '/student/certificates', icon: Award },
     ],
   },
@@ -122,8 +120,7 @@ const roleConfig: Record<string, { label: string; textColor: string; bgColor: st
 
 const extraLabels: Record<string, string> = {
   analytics:     'Analytics',
-  schedule:      'Schedule',
-  progress:      'Progress',
+  journey:       'My Journey',
   students:      'Students',
   studentMgmt:   'Student Management',
   assignments:   'Assignments',

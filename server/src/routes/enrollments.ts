@@ -90,6 +90,59 @@ router.get('/progress', async (req: AuthRequest, res: Response) => {
   }
 });
 
+// GET /api/enrollments/journey — student: enrollments + curriculum weeks for the Journey page
+router.get('/journey', async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user!.id;
+
+    const enrollments = await prisma.enrollment.findMany({
+      where: { userId },
+      include: {
+        course: {
+          include: {
+            teacher: { select: { name: true } },
+            _count: { select: { sections: true } },
+          },
+        },
+      },
+      orderBy: { startedAt: 'asc' },
+    });
+
+    // Fetch curriculum weeks for all enrolled courses in one query
+    const courseIds = enrollments.map((e) => e.courseId);
+    const allWeeks = courseIds.length
+      ? await prisma.curriculumWeek.findMany({
+          where: { courseId: { in: courseIds } },
+          include: { topics: { orderBy: { order: 'asc' } } },
+          orderBy: { weekNumber: 'asc' },
+        })
+      : [];
+
+    // Group weeks by courseId
+    const weeksByCourse: Record<string, typeof allWeeks> = {};
+    for (const week of allWeeks) {
+      if (!weeksByCourse[week.courseId]) weeksByCourse[week.courseId] = [];
+      weeksByCourse[week.courseId].push(week);
+    }
+
+    const enriched = enrollments.map((e) => ({
+      ...e,
+      curriculumWeeks: weeksByCourse[e.courseId] ?? [],
+    }));
+
+    const certCount = await prisma.certificate.count({ where: { userId } });
+    const completed = enrollments.filter((e) => e.status === 'COMPLETED').length;
+    const avgProgress = enrollments.length
+      ? Math.round(enrollments.reduce((s, e) => s + e.progressPercent, 0) / enrollments.length)
+      : 0;
+
+    res.json({ enrollments: enriched, certCount, completed, avgProgress, totalEnrollments: enrollments.length });
+  } catch (err) {
+    console.error('[enrollments GET /journey]', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // GET /api/enrollments/free-courses — student: published free courses not yet enrolled
 router.get('/free-courses', async (req: AuthRequest, res: Response) => {
   try {

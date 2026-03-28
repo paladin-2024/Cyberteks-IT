@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { sendEmail } from '../lib/email';
+import { generateInvoicePDF } from '../lib/invoice-pdf';
 import {
   adminNewApplicationEmail,
   applicantConfirmationEmail,
@@ -465,6 +466,106 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
           },
         });
       }
+
+      // ── Create invoice + send PDF receipt ────────────────────────────────
+      const amountPaid: number = Number((application as any).totalAmountUGX ?? 0);
+      const invoiceNo = `CT-${Date.now().toString().slice(-8)}`;
+
+      const invoice = await prisma.invoice.create({
+        data: {
+          invoiceNo,
+          amount:         amountPaid,
+          currency:       'UGX',
+          status:         'PAID',
+          type:           'COURSE_PAYMENT',
+          notes:          `Skills Development Programme: ${application.programs.join(', ')}`,
+          userId:         userId as string | undefined,
+          paymentProofUrl: (application as any).paymentProofUrl || null,
+          paidAt:         new Date(),
+        },
+      });
+
+      // Build PDF and send receipt (fire-and-forget)
+      const programLines = application.programs.map((p: string) => ({
+        description: p,
+        amount:      amountPaid > 0 ? Math.round(amountPaid / application.programs.length) : 0,
+      }));
+      // If can't divide evenly, put the full amount on the first item
+      if (programLines.length > 1 && amountPaid > 0) {
+        const split = Math.floor(amountPaid / programLines.length);
+        programLines.forEach((l: { description: string; amount: number }, i: number) => {
+          l.amount = i === 0 ? amountPaid - split * (programLines.length - 1) : split;
+        });
+      }
+
+      generateInvoicePDF({
+        invoiceNo: invoice.invoiceNo,
+        date:      new Date(),
+        name:      application.fullName,
+        email:     application.email,
+        currency:  'UGX',
+        total:     amountPaid,
+        items:     programLines.length > 0 ? programLines : [{ description: 'Skills Development Programme', amount: amountPaid }],
+        notes:     amountPaid === 0 ? 'Free programme — no payment required.' : undefined,
+      }).then(pdfBuffer =>
+        sendEmail({
+          to:      application.email,
+          subject: `Payment Receipt — Cyberteks-IT (${invoice.invoiceNo})`,
+          html: `
+            <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;">
+              <div style="background:#102a83;color:white;padding:22px 28px;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:space-between;">
+                <div>
+                  <p style="margin:0 0 2px;font-size:12px;opacity:0.75;text-transform:uppercase;letter-spacing:1px;">Payment Receipt</p>
+                  <h2 style="margin:0;font-size:20px;font-weight:700;">Skills Development Programme</h2>
+                </div>
+                <img src="https://cyberteks-it.com/logo.jpg" alt="Cyberteks-IT" width="48" height="48"
+                  style="border-radius:50%;border:2px solid rgba(255,255,255,0.35);" />
+              </div>
+              <div style="background:white;padding:28px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;">
+                <p style="margin:0 0 20px;color:#374151;font-size:15px;">
+                  Hi <strong>${application.fullName}</strong>,<br><br>
+                  Your application has been <strong>accepted</strong> and your payment has been confirmed. Please find your official invoice attached as a PDF.
+                </p>
+                <div style="background:#f1f5f9;border-radius:10px;padding:20px 24px;margin-bottom:24px;">
+                  <h3 style="margin:0 0 14px;font-size:13px;text-transform:uppercase;letter-spacing:0.8px;color:#64748b;">Receipt Summary</h3>
+                  <table style="width:100%;border-collapse:collapse;font-size:14px;">
+                    <tr>
+                      <td style="padding:6px 0;color:#64748b;">Invoice No.</td>
+                      <td style="padding:6px 0;color:#111827;font-weight:600;text-align:right;">${invoice.invoiceNo}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:6px 0;color:#64748b;">Programme(s)</td>
+                      <td style="padding:6px 0;color:#111827;font-weight:600;text-align:right;">${application.programs.join(', ')}</td>
+                    </tr>
+                    <tr style="border-top:1px solid #cbd5e1;">
+                      <td style="padding:10px 0 6px;color:#111827;font-weight:700;font-size:15px;">Total Paid</td>
+                      <td style="padding:10px 0 6px;color:#102a83;font-weight:800;font-size:18px;text-align:right;">${amountPaid > 0 ? `UGX ${amountPaid.toLocaleString('en-UG')}` : 'FREE'}</td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" style="padding:4px 0;">
+                        <span style="display:inline-block;background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px;">✓ Confirmed</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p style="margin:0 0 8px;color:#374151;font-size:14px;">
+                  Your full invoice is attached to this email as a PDF. You can save or print it for your records.
+                </p>
+                <p style="margin:0;font-size:13px;color:#64748b;">
+                  Questions? Reply to this email or reach us at
+                  <a href="mailto:info@cyberteks-it.com" style="color:#102a83;">info@cyberteks-it.com</a>.
+                </p>
+              </div>
+              <div style="padding:16px 28px;text-align:center;">
+                <p style="margin:0;font-size:11px;color:#94a3b8;">
+                  Cyberteks-IT Ltd · Kampala, Uganda · <a href="https://cyberteks-it.com" style="color:#94a3b8;">cyberteks-it.com</a>
+                </p>
+              </div>
+            </div>
+          `,
+          attachments: [{ filename: `invoice-${invoice.invoiceNo}.pdf`, content: pdfBuffer }],
+        })
+      ).catch(err => console.error('[apply] invoice email failed:', err));
     }
 
     if (status === 'REJECTED' && application.email) {

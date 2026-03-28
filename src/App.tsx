@@ -65,9 +65,7 @@ import TeacherNotifications from './pages/lms/teacher/Notifications';
 import StudentDashboard from './pages/lms/student/Dashboard';
 import StudentCourses from './pages/lms/student/Courses';
 import StudentCourseDetail from './pages/lms/student/CourseDetail';
-import StudentPlan from './pages/lms/student/Plan';
-import StudentSchedule from './pages/lms/student/Schedule';
-import StudentProgress from './pages/lms/student/Progress';
+import StudentJourney from './pages/lms/student/Journey';
 import StudentCertificates from './pages/lms/student/Certificates';
 import StudentMessages from './pages/lms/student/Messages';
 import StudentNotifications from './pages/lms/student/Notifications';
@@ -164,9 +162,7 @@ export default function App() {
           <Route path="dashboard" element={<StudentDashboard />} />
           <Route path="courses" element={<StudentCourses />} />
           <Route path="courses/:id" element={<StudentCourseDetail />} />
-          <Route path="plan" element={<StudentPlan />} />
-          <Route path="schedule" element={<StudentSchedule />} />
-          <Route path="progress" element={<StudentProgress />} />
+          <Route path="journey" element={<StudentJourney />} />
           <Route path="certificates" element={<StudentCertificates />} />
           <Route path="messages" element={<StudentMessages />} />
           <Route path="notifications" element={<StudentNotifications />} />

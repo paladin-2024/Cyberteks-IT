@@ -5,6 +5,32 @@ import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
 const router = Router();
 router.use(requireAuth, requireRole('TEACHER'));
 
+// ── Helper: notify all enrolled students of a course ─────────────────────────
+async function notifyEnrolledStudents(
+  courseId: string,
+  title: string,
+  body: string,
+): Promise<void> {
+  try {
+    const enrollments = await prisma.enrollment.findMany({
+      where: { courseId, status: { not: 'DROPPED' } },
+      select: { userId: true },
+    });
+    if (!enrollments.length) return;
+    await prisma.notification.createMany({
+      data: enrollments.map((e) => ({
+        userId: e.userId,
+        title,
+        body,
+        link: `/student/courses/${courseId}`,
+        type: 'INFO' as const,
+      })),
+    });
+  } catch (err) {
+    console.error('[notifyEnrolledStudents]', err);
+  }
+}
+
 // GET /api/curriculum?courseId=xxx
 router.get('/', async (req: AuthRequest, res: Response) => {
   try {
@@ -45,6 +71,13 @@ router.post('/weeks', async (req: AuthRequest, res: Response) => {
       data: { courseId, teacherId, weekNumber: weekNumber || 1, title: title.trim() },
       include: { topics: true },
     });
+
+    // Notify enrolled students (fire-and-forget)
+    void notifyEnrolledStudents(
+      courseId,
+      'New week added',
+      `Week ${week.weekNumber}: "${week.title}" has been added to "${course.title}"`,
+    );
 
     res.json({ week });
   } catch (err) {
@@ -154,6 +187,22 @@ router.post('/topics', async (req: AuthRequest, res: Response) => {
       },
     });
 
+    // Notify enrolled students (fire-and-forget)
+    const courseForNotif = await prisma.course.findUnique({
+      where: { id: week.courseId },
+      select: { title: true },
+    });
+    const typeLabel =
+      topicType === 'live_session' ? 'Live session'
+      : topicType === 'assignment' ? 'Assignment'
+      : topicType === 'video' ? 'Video'
+      : 'New lesson';
+    void notifyEnrolledStudents(
+      week.courseId,
+      topicType === 'live_session' ? 'Live session added' : 'New content added',
+      `${typeLabel}: "${topic.title}" has been added to "${courseForNotif?.title ?? 'your course'}"`,
+    );
+
     res.json({ topic });
   } catch (err) {
     console.error('[curriculum POST /topics]', err);
@@ -209,6 +258,21 @@ router.patch('/topics/:id', async (req: AuthRequest, res: Response) => {
         ...(maxScore !== undefined ? { maxScore } : {}),
       },
     });
+
+    // Notify enrolled students when a live session is scheduled (fire-and-forget)
+    if (meetLink !== undefined || meetScheduledAt !== undefined) {
+      const weekForNotif = await prisma.curriculumWeek.findUnique({
+        where: { id: topic.weekId },
+        include: { course: { select: { id: true, title: true } } },
+      });
+      if (weekForNotif) {
+        void notifyEnrolledStudents(
+          weekForNotif.courseId,
+          'Live session scheduled',
+          `"${updated.title}" live session has been scheduled in "${weekForNotif.course.title}"`,
+        );
+      }
+    }
 
     res.json({ topic: updated });
   } catch (err) {
