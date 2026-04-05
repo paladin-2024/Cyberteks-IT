@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TrendingUp, Users, BookOpen, DollarSign, Target, BarChart3 } from 'lucide-react';
+import { TrendingUp, Users, BookOpen, DollarSign, Target, BarChart3, Download, FileText, Loader2, CheckCircle2, Calendar } from 'lucide-react';
 import { ChartArea, ChartBar, ChartPie } from '@/components/ui/chart';
 import { api } from '@/lib/api';
 
@@ -51,12 +51,63 @@ function SkeletonBox({ className }: { className: string }) {
   return <div className={`animate-pulse bg-slate-100 rounded-xl ${className}`} />;
 }
 
+// ─── Report months helper ─────────────────────────────────────────────────────
+
+function getLast12Months(): Array<{ year: number; month: number; label: string }> {
+  const result = [];
+  const now = new Date();
+  for (let i = 0; i < 12; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    result.push({
+      year:  d.getFullYear(),
+      month: d.getMonth() + 1,
+      label: d.toLocaleString('en-US', { month: 'long', year: 'numeric' }),
+    });
+  }
+  return result;
+}
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [downloading, setDownloading] = useState<string | null>(null);
+  const [justDownloaded, setJustDownloaded] = useState<string | null>(null);
+
+  const reportMonths = getLast12Months();
+
+  async function downloadReport(year: number, month: number) {
+    const key = `${year}-${month}`;
+    setDownloading(key);
+    try {
+      const token = localStorage.getItem('token');
+      const BASE  = (import.meta.env.VITE_API_URL ?? '') + '/api';
+      const res   = await fetch(`${BASE}/analytics/report?year=${year}&month=${month}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!res.ok) throw new Error('Failed to generate report');
+      const blob  = await res.blob();
+      const url   = URL.createObjectURL(blob);
+      const label = new Date(year, month - 1, 1)
+        .toLocaleString('en-US', { month: 'short', year: 'numeric' })
+        .replace(' ', '-').toLowerCase();
+      const a = document.createElement('a');
+      a.href     = url;
+      a.download = `cyberteks-report-${label}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setJustDownloaded(key);
+      setTimeout(() => setJustDownloaded(null), 3000);
+    } catch (e) {
+      console.error('[downloadReport]', e);
+    } finally {
+      setDownloading(null);
+    }
+  }
 
   useEffect(() => {
     api.get<AnalyticsData>('/analytics')
@@ -279,6 +330,122 @@ export default function AnalyticsPage() {
             </div>
           </>
         )}
+      </div>
+
+      {/* ── Monthly Reports ─────────────────────────────────────────────────── */}
+      <div className="bg-card border border-border rounded-2xl overflow-hidden">
+
+        {/* Section header */}
+        <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-border">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-primary-blue/10 flex items-center justify-center shrink-0">
+              <FileText className="w-4 h-4 text-primary-blue" />
+            </div>
+            <div>
+              <h2 className="font-display font-bold text-foreground text-base leading-none">Monthly Reports</h2>
+              <p className="text-xs text-muted-foreground mt-1">
+                Download professional PDF reports with KPIs, enrollment trends, revenue, and completion data.
+              </p>
+            </div>
+          </div>
+          {/* Preview badge */}
+          <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full bg-primary-blue/10 text-primary-blue shrink-0">
+            <Download className="w-3 h-3" /> PDF · Branded
+          </span>
+        </div>
+
+        {/* What's included banner */}
+        <div className="px-6 py-3 bg-slate-50 border-b border-border flex flex-wrap gap-4">
+          {[
+            'KPI Summary',
+            'Enrollment Trends (12 months)',
+            'Revenue Breakdown',
+            'Completion Rates',
+            'Program Distribution',
+            'Company Logo & Branding',
+          ].map((item) => (
+            <span key={item} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-blue shrink-0" />
+              {item}
+            </span>
+          ))}
+        </div>
+
+        {/* Month rows */}
+        <div className="divide-y divide-border">
+          {reportMonths.map(({ year, month, label }, idx) => {
+            const key        = `${year}-${month}`;
+            const isLoading  = downloading === key;
+            const isDone     = justDownloaded === key;
+            const isCurrent  = idx === 0;
+
+            return (
+              <div
+                key={key}
+                className="flex items-center justify-between gap-4 px-6 py-3.5 hover:bg-muted/30 transition-colors"
+              >
+                {/* Left: icon + label */}
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                    isCurrent ? 'bg-primary-blue text-white' : 'bg-slate-100 text-slate-500'
+                  }`}>
+                    <Calendar className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">{label}</p>
+                    {isCurrent && (
+                      <p className="text-[10px] text-primary-blue font-semibold mt-0.5">Current month</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Right: status + button */}
+                <div className="flex items-center gap-3 shrink-0">
+                  {isDone && (
+                    <span className="hidden sm:flex items-center gap-1 text-xs text-emerald-600 font-semibold">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Downloaded
+                    </span>
+                  )}
+                  <button
+                    onClick={() => downloadReport(year, month)}
+                    disabled={isLoading}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                      isDone
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        : isCurrent
+                        ? 'bg-primary-blue text-white hover:bg-primary-blue/90 shadow-sm'
+                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+                    } disabled:opacity-60 disabled:cursor-not-allowed`}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        Generating…
+                      </>
+                    ) : isDone ? (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Downloaded
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-3.5 h-3.5" />
+                        Download PDF
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Footer note */}
+        <div className="px-6 py-3 bg-slate-50 border-t border-border">
+          <p className="text-[11px] text-muted-foreground">
+            Reports include all-time platform KPIs plus data specific to the selected month. Generated in real time from live data.
+          </p>
+        </div>
       </div>
 
     </div>
