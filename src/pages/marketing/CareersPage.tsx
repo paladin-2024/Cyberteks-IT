@@ -72,7 +72,7 @@ const STEPS = [
     step: '01',
     icon: Mail,
     title: 'Send Your CV',
-    desc: 'Email your CV and a short cover letter to careers@cyberteks-it.com. Tell us who you are and why you\'d be a great fit.',
+    desc: 'Email your CV and a short cover letter to hr@cyberteks-it.com. Tell us who you are and why you\'d be a great fit.',
   },
   {
     step: '02',
