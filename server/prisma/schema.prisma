@@ -56,6 +56,7 @@ enum InvoiceStatus {
   PAID
   OVERDUE
   CANCELLED
+  PENDING_REVIEW
 }
 
 enum NotificationType {
@@ -328,6 +329,7 @@ model Enrollment {
   progressPercent Float            @default(0)
   startedAt       DateTime         @default(now())
   completedAt     DateTime?
+  accessExpiresAt DateTime?        // null = unlimited; set on payment approval
 
   userId   String
   courseId String
@@ -387,7 +389,7 @@ model Invoice {
   dueDate   DateTime?
   paidAt    DateTime?
   notes     String?
-  type      String?       // "COURSE" | "MENTORSHIP_HUB"
+  type      String?       // "COURSE_PAYMENT" | "MENTORSHIP_HUB"
 
   // Registered user (optional — guest payments won't have this)
   userId   String?
@@ -397,6 +399,12 @@ model Invoice {
   guestName       String?
   guestEmail      String?
   paymentProofUrl String?
+
+  // Admin review fields
+  reviewedAt       DateTime?
+  reviewedById     String?
+  rejectionReason  String?
+  accessDurationDays Int?     // derived from course duration on approval
 
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   course Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)

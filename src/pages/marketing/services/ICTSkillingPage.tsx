@@ -200,22 +200,42 @@ function MentorshipPayModal({ onClose }: { onClose: () => void }) {
         </div>
 
         {invoiceNo ? (
-          /* ── Success state ── */
-          <div className="py-14 px-8 flex flex-col items-center text-center">
-            <div className="w-16 h-16 rounded-full bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center mb-5">
-              <Check className="w-8 h-8 text-emerald-500" />
+          /* ── Under-review state ── */
+          <div className="py-12 px-8 flex flex-col items-center text-center">
+            {/* Animated clock icon */}
+            <div className="w-20 h-20 rounded-full bg-amber-50 border-2 border-amber-100 flex items-center justify-center mb-5">
+              <Clock className="w-9 h-9 text-amber-500" />
             </div>
-            <h3 className="font-heading text-xl font-bold text-gray-900 mb-2">Payment Received!</h3>
-            <p className="text-gray-500 text-sm mb-4 max-w-xs">
-              Welcome to the Cyberteks-IT Mentorship Hub. Your membership is now active for 3 months.
+            <h3 className="font-heading text-xl font-bold text-gray-900 mb-2">Payment Submitted!</h3>
+            <p className="text-gray-500 text-sm mb-5 max-w-xs leading-relaxed">
+              Your payment proof has been received and is <strong>under review</strong> by our team. We'll verify it and activate your membership within <strong>24 hours</strong>.
             </p>
-            <div className="bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 mb-6 w-full">
-              <p className="text-xs text-gray-400 mb-1">Receipt Number</p>
+
+            {/* Reference box */}
+            <div className="bg-amber-50 border border-amber-100 rounded-2xl px-6 py-4 mb-4 w-full">
+              <p className="text-xs text-amber-600 font-semibold mb-1">Reference Number</p>
               <p className="font-mono font-bold text-lg text-[#023064]">{invoiceNo}</p>
+              <p className="text-xs text-gray-400 mt-1">Keep this for your records</p>
             </div>
-            <p className="text-xs text-gray-400 mb-6">Keep this number for your records. Our team will be in touch via email within 24 hours to give you access.</p>
+
+            {/* Steps */}
+            <div className="w-full space-y-2.5 mb-6 text-left">
+              {[
+                { step: '1', text: 'Our team reviews your payment proof', done: false },
+                { step: '2', text: 'You receive a confirmation email with your invoice', done: false },
+                { step: '3', text: 'Your 3-month Mentorship Hub access is activated', done: false },
+              ].map(item => (
+                <div key={item.step} className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-[#023064]/10 text-[#023064] text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+                    {item.step}
+                  </div>
+                  <p className="text-sm text-gray-500">{item.text}</p>
+                </div>
+              ))}
+            </div>
+
             <button onClick={onClose} className="w-full py-3 rounded-xl bg-[#023064] text-white font-bold hover:bg-[#012550] transition-all">
-              Done
+              Got it, I'll wait for confirmation
             </button>
           </div>
         ) : (

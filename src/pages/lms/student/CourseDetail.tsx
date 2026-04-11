@@ -75,6 +75,7 @@ interface Enrollment {
   progressPercent: number;
   startedAt: string;
   completedAt: string | null;
+  accessExpiresAt: string | null;
 }
 
 interface ProgressEntry {
@@ -412,6 +413,41 @@ export default function StudentCourseDetailPage() {
         <AlertCircle className="w-10 h-10 text-red-400" />
         <p className="text-muted-foreground">{error || 'Course not found'}</p>
         <Link to="/student/courses" className="text-sm text-[#023064] hover:underline">← Back to Courses</Link>
+      </div>
+    );
+  }
+
+  // ── Access expiry gate ────────────────────────────────────────────────────
+  const isExpired = enrollment.accessExpiresAt && new Date(enrollment.accessExpiresAt) < new Date();
+  if (isExpired) {
+    return (
+      <div className="flex flex-col items-center gap-4 py-20 px-4 text-center max-w-md mx-auto">
+        <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
+          <Clock className="w-8 h-8 text-amber-500" />
+        </div>
+        <h2 className="font-heading text-xl font-bold text-foreground">Access Expired</h2>
+        <p className="text-muted-foreground text-sm leading-relaxed">
+          Your access to <strong>{course.title}</strong> expired on{' '}
+          <strong>{new Date(enrollment.accessExpiresAt!).toLocaleDateString('en-UG', { day: 'numeric', month: 'long', year: 'numeric' })}</strong>.
+          To continue learning, please renew your subscription.
+        </p>
+        <div className="bg-muted/40 border border-border rounded-2xl p-5 w-full text-left space-y-2 text-sm">
+          <p className="font-semibold text-foreground">What you still have access to:</p>
+          <ul className="space-y-1 text-muted-foreground list-disc list-inside">
+            <li>All earned certificates</li>
+            <li>Your progress history</li>
+            <li>Course achievements on your dashboard</li>
+          </ul>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Contact us at <a href="mailto:info@cyberteks-it.com" className="text-[#023064] hover:underline">info@cyberteks-it.com</a> to renew.
+        </p>
+        <Link
+          to="/student/courses"
+          className="px-6 py-2.5 rounded-xl bg-[#023064] text-white text-sm font-bold hover:bg-[#012550] transition-all"
+        >
+          ← Back to My Courses
+        </Link>
       </div>
     );
   }
