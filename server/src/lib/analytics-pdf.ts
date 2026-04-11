@@ -1,6 +1,6 @@
 import PDFDocument from 'pdfkit';
-import https from 'https';
-import http from 'http';
+import fs from 'fs';
+import path from 'path';
 
 // ── Brand colours ─────────────────────────────────────────────────────────────
 const BLUE       = '#102a83';
@@ -24,19 +24,12 @@ function monthName(month: number, year: number): string {
   return new Date(year, month - 1, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' });
 }
 
-async function fetchLogoBuffer(url: string): Promise<Buffer | null> {
-  return new Promise((resolve) => {
-    const client = url.startsWith('https') ? https : http;
-    const req = client.get(url, (res) => {
-      if (res.statusCode !== 200) { resolve(null); return; }
-      const chunks: Buffer[] = [];
-      res.on('data', (c: Buffer) => chunks.push(c));
-      res.on('end',  () => resolve(Buffer.concat(chunks)));
-      res.on('error', () => resolve(null));
-    });
-    req.on('error', () => resolve(null));
-    req.setTimeout(5000, () => { req.destroy(); resolve(null); });
-  });
+function loadLogo(): Buffer | null {
+  try {
+    return fs.readFileSync(path.join(__dirname, '../../public/logo.jpg'));
+  } catch {
+    return null;
+  }
 }
 
 // ── Public interface ──────────────────────────────────────────────────────────
@@ -59,8 +52,8 @@ export interface AnalyticsReportData {
 }
 
 // ── PDF generator ─────────────────────────────────────────────────────────────
-export async function generateAnalyticsReport(data: AnalyticsReportData): Promise<Buffer> {
-  const logoBuffer = await fetchLogoBuffer('https://cyberteks-it.com/logo.jpg');
+export function generateAnalyticsReport(data: AnalyticsReportData): Promise<Buffer> {
+  const logoBuffer = loadLogo();
 
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({

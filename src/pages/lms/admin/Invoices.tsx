@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   FileText, Download, Eye, CheckCircle, XCircle, Clock, Search,
-  X, AlertTriangle, Loader2, ExternalLink,
+  X, AlertTriangle, Loader2, ExternalLink, Award,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { api } from '@/lib/api';
@@ -399,7 +399,7 @@ export default function InvoicesPage() {
                       <td className="px-5 py-4 hidden md:table-cell">
                         {inv.type === 'MENTORSHIP_HUB' ? (
                           <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#E11D48]/10 text-[#E11D48]">
-                            ⭐ Mentorship Hub
+                            <Award className="w-3 h-3" /> Mentorship Hub
                           </span>
                         ) : inv.course?.title ? (
                           <span className="text-sm text-muted-foreground">{inv.course.title}</span>

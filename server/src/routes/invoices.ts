@@ -186,11 +186,11 @@ router.patch('/:id/approve', requireAuth, requireRole('ADMIN'), async (req: Auth
                 </div>
                 ${isMentorship ? `
                   <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:20px 24px;margin-bottom:24px;text-align:center;">
-                    <p style="margin:0 0 6px;font-size:16px;">🎉 You're in!</p>
+                    <p style="margin:0 0 6px;font-size:16px;font-weight:700;">You're in!</p>
                     <p style="margin:0 0 16px;color:#374151;font-size:14px;">Join the Mentorship Hub WhatsApp group to connect with your peers and mentors.</p>
                     <a href="https://chat.whatsapp.com/DJ3zRjjc5QO4QiMr6RLiWR?mode=gi_t"
                       style="display:inline-block;background:#25D366;color:white;font-weight:700;font-size:15px;text-decoration:none;padding:13px 32px;border-radius:10px;">
-                      📲 Join WhatsApp Group
+                      Join WhatsApp Group
                     </a>
                   </div>
                 ` : ''}

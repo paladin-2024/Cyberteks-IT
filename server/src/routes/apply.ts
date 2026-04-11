@@ -307,6 +307,9 @@ router.get('/', requireAuth, requireRole('ADMIN'), async (req: AuthRequest, res:
         createdAt: true,
         userId: true,
         tempPassword: true,
+        paymentProofUrl: true,
+        paymentProofName: true,
+        totalAmountUGX: true,
       },
     });
 

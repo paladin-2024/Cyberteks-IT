@@ -8,6 +8,7 @@ import {
   Code2, BarChart2, Wifi, Palette, Bot, ChevronDown, ChevronUp,
   Rocket, Calendar, ExternalLink,
   UploadCloud, Paperclip, X, Loader2, Check, CreditCard,
+  School, Landmark, Smartphone,
 } from 'lucide-react';
 
 interface Bootcamp {
@@ -44,21 +45,21 @@ const CORPORATE_PROGRAMS = [
 const VACATION_PROGRAMS = [
   {
     level: 'P7 Vacation',
-    emoji: '🏫',
+    icon: School,
     color: 'bg-emerald-500',
     desc: 'Introduction to computers, typing, Microsoft Office, and internet safety. Perfect for primary school leavers preparing for digital learning.',
     topics: ['Computer Basics & Typing', 'Microsoft Office Essentials', 'Internet & Email Safety', 'Introduction to Digital Literacy'],
   },
   {
     level: 'S4 Vacation',
-    emoji: '📚',
+    icon: BookOpen,
     color: 'bg-blue-500',
     desc: 'Web design, basic programming, graphic design, and career guidance for O-level leavers exploring technology careers.',
     topics: ['Basic Web Design (HTML/CSS)', 'Graphic Design Fundamentals', 'Social Media & Digital Marketing', 'Career Guidance in Tech'],
   },
   {
     level: 'S6 Vacation',
-    emoji: '🎓',
+    icon: GraduationCap,
     color: 'bg-violet-500',
     desc: 'Advanced programming, cyber security basics, and career-ready ICT skills for A-level leavers entering university or the job market.',
     topics: ['Programming Fundamentals', 'Cyber Security Basics', 'Data Analysis with Excel', 'Professional Portfolio Building'],
@@ -633,7 +634,9 @@ export default function ICTSkillingPage() {
                 {VACATION_PROGRAMS.map(vp => (
                   <div key={vp.level} className="bg-white rounded-3xl border border-gray-200 shadow-sm hover:shadow-xl transition-all overflow-hidden">
                     <div className={`${vp.color} p-6 text-center text-white`}>
-                      <div className="text-5xl mb-2">{vp.emoji}</div>
+                      <div className="flex justify-center mb-3">
+                        <vp.icon className="w-10 h-10 text-white/90" />
+                      </div>
                       <h3 className="font-heading text-xl font-bold">{vp.level} Programme</h3>
                     </div>
                     <div className="p-6">
@@ -892,12 +895,16 @@ export default function ICTSkillingPage() {
           <p className="text-gray-600 text-sm mb-8">We accept payment online and offline for your convenience.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             {[
-              { label: 'Mobile Money', desc: 'MTN MoMo / Airtel Money, instant & easy', emoji: '📱' },
-              { label: 'Bank Transfer', desc: 'Direct deposit to our bank account', emoji: '🏦' },
-              { label: 'Online Payment', desc: 'Secure card payments via our portal', emoji: '💳' },
+              { label: 'Mobile Money',   desc: 'MTN MoMo / Airtel Money, instant & easy', icon: Smartphone },
+              { label: 'Bank Transfer',  desc: 'Direct deposit to our bank account',       icon: Landmark   },
+              { label: 'Online Payment', desc: 'Secure card payments via our portal',      icon: CreditCard },
             ].map(p => (
               <div key={p.label} className="bg-white border border-gray-200 rounded-2xl p-5 text-center hover:shadow-md transition-shadow">
-                <div className="text-3xl mb-2">{p.emoji}</div>
+                <div className="flex justify-center mb-3">
+                  <div className="w-11 h-11 rounded-xl bg-[#023064]/8 flex items-center justify-center">
+                    <p.icon className="w-5 h-5 text-[#023064]" />
+                  </div>
+                </div>
                 <p className="font-bold text-gray-900 text-sm mb-1">{p.label}</p>
                 <p className="text-xs text-gray-500">{p.desc}</p>
               </div>
