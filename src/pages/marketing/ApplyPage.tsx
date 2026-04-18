@@ -28,6 +28,7 @@ const PROGRAMS = [
   'Automation & No-Code',
   'Freelancing & Online Income',
   'Cloud with Azure / AWS (Enterprise)',
+  'Machine Learning',
   'Other',
 ];
 
@@ -49,6 +50,7 @@ const PROGRAM_PRICES: Record<string, number> = {
   'Automation & No-Code':               1500000,
   'Freelancing & Online Income':        1000000,
   'Cloud with Azure / AWS (Enterprise)': 3000000,
+  'Machine Learning':                   1500000,
   'Other':                              750000,
 };
 
@@ -70,6 +72,7 @@ const PROGRAM_DURATION: Record<string, string> = {
   'Automation & No-Code':               '2 Months',
   'Freelancing & Online Income':        '1 Month',
   'Cloud with Azure / AWS (Enterprise)': '3 Months',
+  'Machine Learning':                   '3 Months',
   'Other':                              '—',
 };
 

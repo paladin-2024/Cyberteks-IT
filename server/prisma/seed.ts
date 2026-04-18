@@ -102,6 +102,14 @@ const COURSE_CATALOGUE = [
     category: 'Cloud', coverImage: '/assets/remote-it-support.jpg',
     tags: ['Azure', 'AWS', 'Cloud', 'DevOps'],
   },
+  {
+    title: 'Machine Learning',
+    slug:  'machine-learning',
+    description: 'Build intelligent systems that learn from data. Master supervised and unsupervised learning, neural networks, model evaluation, and deployment pipelines using Python, scikit-learn, and TensorFlow. Gain practical experience solving real classification, regression, and prediction problems from day one.',
+    price: 1500000, duration: '3 months', level: 'Intermediate',
+    category: 'AI', coverImage: '/assets/ict-skilling-capacity-building.jpg',
+    tags: ['Machine Learning', 'Python', 'TensorFlow', 'AI', 'Data Science'],
+  },
 ];
 
 async function main() {

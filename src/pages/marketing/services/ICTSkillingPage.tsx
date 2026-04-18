@@ -38,6 +38,7 @@ const ONLINE_COURSES = [
   { id: 15, title: 'Automation & No-Code',                price: 1500000,  duration: '2 Months',   category: 'Automation',  level: 'Beginner',     icon: Zap,       desc: 'Build powerful apps and workflows without writing code. Covers Zapier, Bubble, Glide, AI automation, and chatbot development — perfect for entrepreneurs.', badge: 'New' },
   { id: 16, title: 'Freelancing & Online Income',         price: 1000000,  duration: '1 Month',    category: 'Career',      level: 'Beginner',     icon: Rocket,    desc: 'Launch your freelance career on Upwork and Fiverr, build your personal brand, master remote work skills, and start earning online with your tech skills.', badge: 'New' },
   { id: 17, title: 'Cloud with Azure / AWS',              price: 3000000,  duration: '3 Months',   category: 'Cloud',       level: 'Advanced',     icon: Cloud,     desc: 'Deep-dive enterprise track covering advanced Azure and AWS architecture, cloud security, governance, cost optimisation, and certification preparation.', badge: 'Enterprise' },
+  { id: 18, title: 'Machine Learning',                   price: 1500000,  duration: '3 Months',   category: 'AI',          level: 'Intermediate', icon: Brain,     desc: 'Build intelligent systems that learn from data. Master supervised and unsupervised learning, neural networks, model evaluation, and deployment pipelines using Python, scikit-learn, and TensorFlow for real-world applications.', badge: 'New' },
 ];
 
 const CORPORATE_PROGRAMS = [
