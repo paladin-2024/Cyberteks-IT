@@ -8,7 +8,7 @@ import {
   Code2, BarChart2, Wifi, Palette, Bot, ChevronDown, ChevronUp,
   Rocket, Calendar, ExternalLink,
   UploadCloud, Paperclip, X, Loader2, Check, CreditCard,
-  School, Landmark, Smartphone,
+  School, Landmark, Smartphone, Cloud, Layers, Briefcase,
 } from 'lucide-react';
 
 interface Bootcamp {
@@ -21,17 +21,23 @@ interface Bootcamp {
 }
 
 const ONLINE_COURSES = [
-  { id: 1,  title: 'Prompt Engineering',       price: 750000,  duration: '2 Months',   category: 'AI',          level: 'Beginner',     icon: Bot,       desc: 'Master the art of communicating with AI models to automate tasks, generate content, and build AI-powered solutions for any industry.' },
-  { id: 2,  title: 'Augmented Reality',         price: 750000,  duration: '2 Months',   category: 'Technology',  level: 'Intermediate', icon: Globe,     desc: 'Design and develop AR experiences for mobile and enterprise apps. Learn to overlay digital content on the real world.' },
-  { id: 3,  title: 'Virtual Reality',           price: 750000,  duration: '2 Months',   category: 'Technology',  level: 'Intermediate', icon: Monitor,   desc: 'Build immersive VR environments for training, real estate, entertainment, and education using modern VR platforms.' },
-  { id: 4,  title: 'AI & Robotics',            price: 1500000, duration: '3 Months',   category: 'AI',          level: 'Intermediate', icon: Brain,     desc: 'Learn machine learning, neural networks, and robotics programming to build intelligent automated systems from scratch.' },
-  { id: 5,  title: 'Modern Networking',         price: 1000000, duration: '2.5 Months', category: 'Networking',  level: 'Intermediate', icon: Wifi,      desc: 'Configure and manage enterprise networks, routing, switching, VLANs, SD-WAN, and cloud networking fundamentals.' },
-  { id: 6,  title: 'Graphic Design',            price: 650000,  duration: '2 Months',   category: 'Design',      level: 'Beginner',     icon: Palette,   desc: 'Create compelling visual content using Adobe Suite and Canva for brands, social media, print, and digital marketing.' },
-  { id: 7,  title: 'Microsoft Office',          price: 650000,  duration: '1.5 Months', category: 'Productivity', level: 'Beginner',    icon: Monitor,   desc: 'Master Word, Excel, PowerPoint, and Outlook for professional productivity, data management, and business communication.' },
-  { id: 8,  title: 'Website Design',            price: 650000,  duration: '2 Months',   category: 'Development', level: 'Beginner',     icon: Globe,     desc: 'Build modern, responsive websites using HTML, CSS, and JavaScript. Create a real portfolio site by the end of the course.' },
-  { id: 9,  title: 'Programming',              price: 1500000, duration: '3 Months',   category: 'Development', level: 'Beginner',     icon: Code2,     desc: 'Learn programming fundamentals in Python, JavaScript, or your chosen language, from basics to real-world projects.' },
-  { id: 10, title: 'Cyber Security',            price: 1500000, duration: '3 Months',   category: 'Security',    level: 'Advanced',     icon: Shield,    desc: 'Defend digital assets with hands-on training in ethical hacking, network security, penetration testing, and incident response.' },
-  { id: 11, title: 'Data Analytics',            price: 1500000, duration: '3 Months',   category: 'Data',        level: 'Intermediate', icon: BarChart2, desc: 'Transform raw data into actionable business insights using Excel, SQL, Power BI, and Python. Build dashboards that drive decisions.' },
+  { id: 1,  title: 'Prompt Engineering',                  price: 750000,   duration: '2 Months',   category: 'AI',          level: 'Beginner',     icon: Bot,       desc: 'Master the art of communicating with AI models to automate tasks, generate content, and build AI-powered solutions for any industry.' },
+  { id: 2,  title: 'Augmented Reality',                   price: 750000,   duration: '2 Months',   category: 'Technology',  level: 'Intermediate', icon: Globe,     desc: 'Design and develop AR experiences for mobile and enterprise apps. Learn to overlay digital content on the real world.' },
+  { id: 3,  title: 'Virtual Reality',                     price: 750000,   duration: '2 Months',   category: 'Technology',  level: 'Intermediate', icon: Monitor,   desc: 'Build immersive VR environments for training, real estate, entertainment, and education using modern VR platforms.' },
+  { id: 4,  title: 'AI & Robotics',                       price: 1500000,  duration: '3 Months',   category: 'AI',          level: 'Intermediate', icon: Brain,     desc: 'Learn machine learning, neural networks, and robotics programming to build intelligent automated systems from scratch.' },
+  { id: 5,  title: 'Modern Networking',                   price: 1000000,  duration: '2.5 Months', category: 'Networking',  level: 'Intermediate', icon: Wifi,      desc: 'Configure and manage enterprise networks, routing, switching, VLANs, SD-WAN, and cloud networking fundamentals.' },
+  { id: 6,  title: 'Graphic Design',                      price: 650000,   duration: '2 Months',   category: 'Design',      level: 'Beginner',     icon: Palette,   desc: 'Create compelling visual content using Adobe Suite and Canva for brands, social media, print, and digital marketing.' },
+  { id: 7,  title: 'Microsoft Office',                    price: 650000,   duration: '1.5 Months', category: 'Productivity', level: 'Beginner',    icon: Monitor,   desc: 'Master Word, Excel, PowerPoint, and Outlook for professional productivity, data management, and business communication.' },
+  { id: 8,  title: 'Website Design',                      price: 650000,   duration: '2 Months',   category: 'Development', level: 'Beginner',     icon: Globe,     desc: 'Build modern, responsive websites using HTML, CSS, and JavaScript. Create a real portfolio site by the end of the course.' },
+  { id: 9,  title: 'Software Development (Full Stack)',   price: 2000000,  duration: '3 Months',   category: 'Development', level: 'Intermediate', icon: Layers,    desc: 'Build complete web and mobile applications end-to-end. Covers React, Node.js, Python, Flutter, and REST APIs — from frontend to backend to deployment.', badge: 'New' },
+  { id: 10, title: 'Programming (Any Language)',          price: 1500000,  duration: '3 Months',   category: 'Development', level: 'Beginner',     icon: Code2,     desc: 'Learn programming fundamentals in Python, JavaScript, or your chosen language, from basics to real-world projects.' },
+  { id: 11, title: 'Cyber Security',                      price: 1500000,  duration: '3 Months',   category: 'Security',    level: 'Advanced',     icon: Shield,    desc: 'Defend digital assets with hands-on training in ethical hacking, network security, penetration testing, and incident response.' },
+  { id: 12, title: 'Data Analytics',                      price: 1500000,  duration: '3 Months',   category: 'Data',        level: 'Intermediate', icon: BarChart2, desc: 'Transform raw data into actionable business insights using Excel, SQL, Power BI, and Python. Build dashboards that drive decisions.' },
+  { id: 13, title: 'Cloud & DevOps',                      price: 2500000,  duration: '3 Months',   category: 'Cloud',       level: 'Intermediate', icon: Cloud,     desc: 'Master AWS, Azure, Google Cloud, Docker, Kubernetes, and CI/CD pipelines. The most in-demand skill set as companies move everything to the cloud.', badge: 'New' },
+  { id: 14, title: 'Business & Digital Skills',           price: 1500000,  duration: '2 Months',   category: 'Business',    level: 'Beginner',     icon: Briefcase, desc: 'Digital marketing, SEO, social media strategy, project management (Agile/Scrum), product management, and financial literacy for the modern workplace.', badge: 'New' },
+  { id: 15, title: 'Automation & No-Code',                price: 1500000,  duration: '2 Months',   category: 'Automation',  level: 'Beginner',     icon: Zap,       desc: 'Build powerful apps and workflows without writing code. Covers Zapier, Bubble, Glide, AI automation, and chatbot development — perfect for entrepreneurs.', badge: 'New' },
+  { id: 16, title: 'Freelancing & Online Income',         price: 1000000,  duration: '1 Month',    category: 'Career',      level: 'Beginner',     icon: Rocket,    desc: 'Launch your freelance career on Upwork and Fiverr, build your personal brand, master remote work skills, and start earning online with your tech skills.', badge: 'New' },
+  { id: 17, title: 'Cloud with Azure / AWS',              price: 3000000,  duration: '3 Months',   category: 'Cloud',       level: 'Advanced',     icon: Cloud,     desc: 'Deep-dive enterprise track covering advanced Azure and AWS architecture, cloud security, governance, cost optimisation, and certification preparation.', badge: 'Enterprise' },
 ];
 
 const CORPORATE_PROGRAMS = [
@@ -465,15 +471,24 @@ export default function ICTSkillingPage() {
                   return (
                     <button key={course.id}
                       onClick={() => setSelected(isSelected ? null : course.id)}
-                      className={`p-5 rounded-2xl border-2 text-left transition-all hover:shadow-lg cursor-pointer ${
+                      className={`p-5 rounded-2xl border-2 text-left transition-all hover:shadow-lg cursor-pointer relative ${
                         isSelected
                           ? 'border-[#023064] bg-[#023064] text-white shadow-xl scale-[1.02]'
                           : 'border-gray-200 bg-white hover:border-[#023064]/40 hover:scale-[1.01]'
                       }`}>
+                      {(course as any).badge && (
+                        <span className={`absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          (course as any).badge === 'Enterprise'
+                            ? 'bg-amber-100 text-amber-700'
+                            : 'bg-emerald-100 text-emerald-700'
+                        }`}>
+                          {(course as any).badge}
+                        </span>
+                      )}
                       <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${isSelected ? 'bg-white/10' : 'bg-[#023064]/10'}`}>
                         <course.icon className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-[#023064]'}`} />
                       </div>
-                      <p className={`font-heading text-sm font-bold mb-1 ${isSelected ? 'text-white' : 'text-gray-900'}`}>
+                      <p className={`font-heading text-sm font-bold mb-1 pr-10 ${isSelected ? 'text-white' : 'text-gray-900'}`}>
                         {course.title}
                       </p>
                       <p className="text-[#E11D48] text-xs font-semibold">{fmt(course.price)}</p>

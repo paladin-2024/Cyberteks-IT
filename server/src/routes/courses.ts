@@ -1,5 +1,6 @@
 import { Router, Response } from 'express';
 import { prisma } from '../lib/prisma';
+import { sendEmail } from '../lib/email';
 import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
 
 const router = Router();
@@ -157,11 +158,13 @@ router.patch('/:id', requireAuth, requireRole('ADMIN'), async (req: AuthRequest,
       }
     }
 
+    const isBeingPublished = status === 'PUBLISHED' && existing.status !== 'PUBLISHED';
+
     const course = await prisma.course.update({
       where: { id },
       data: {
-        ...(title !== undefined      && { title: title.trim() }),
-        ...(slug !== undefined       && { slug }),
+        ...(title !== undefined       && { title: title.trim() }),
+        ...(slug !== undefined        && { slug }),
         ...(description !== undefined && { description: description.trim() }),
         ...(coverImage !== undefined  && { coverImage }),
         ...(price !== undefined       && { price }),
@@ -177,6 +180,105 @@ router.patch('/:id', requireAuth, requireRole('ADMIN'), async (req: AuthRequest,
         _count: { select: { enrollments: true, sections: true } },
       },
     });
+
+    // ── Auto-newsletter on publish ────────────────────────────────────────────
+    // When a course transitions to PUBLISHED, notify all newsletter subscribers.
+    if (isBeingPublished) {
+      (async () => {
+        const subscribers = await prisma.newsletterSubscriber.findMany({ select: { email: true } });
+        if (subscribers.length === 0) return;
+
+        const CLIENT_URL = process.env.CLIENT_URL ?? 'https://cyberteks-it.com';
+        const fmtPrice   = (n: number) => `UGX ${n.toLocaleString('en-UG')}`;
+        const coursePrice = course.price > 0 ? fmtPrice(course.price) : 'FREE';
+        const courseDuration = course.duration ?? '';
+
+        const html = `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:'Segoe UI',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;padding:32px 16px;">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+      <tr>
+        <td style="background:linear-gradient(135deg,#102a83,#1e3fa8);border-radius:16px 16px 0 0;padding:32px 40px;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td>
+              <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.6);">New Course Available</p>
+              <h1 style="margin:0;font-size:26px;font-weight:800;color:#ffffff;line-height:1.2;">${course.title}</h1>
+            </td>
+            <td align="right" valign="middle" style="padding-left:16px;">
+              <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:10px 16px;display:inline-block;">
+                <span style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-0.5px;">Cyber<span style="color:#f87171;">teks</span>IT</span>
+              </div>
+            </td>
+          </tr></table>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#E11D48;padding:8px 40px;">
+          <span style="color:#fff;font-size:13px;font-weight:700;">
+            ${coursePrice}${courseDuration ? ` &nbsp;·&nbsp; ${courseDuration}` : ''}${course.level ? ` &nbsp;·&nbsp; ${course.level}` : ''}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#ffffff;padding:36px 40px;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;">
+          <p style="margin:0 0 20px;font-size:15px;color:#475569;">
+            A new course has just launched at <strong style="color:#1e293b;">CyberteksIT</strong> — and it's now open for enrolment.
+          </p>
+          ${course.description ? `
+          <p style="margin:0 0 28px;font-size:14px;color:#64748b;line-height:1.7;background:#f8fafc;border-left:3px solid #102a83;padding:16px 20px;border-radius:0 8px 8px 0;">
+            ${course.description}
+          </p>` : ''}
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+            <tr>
+              ${coursePrice !== 'FREE' ? `<td style="background:#f0f4ff;border-radius:10px;padding:16px 20px;text-align:center;width:48%;">
+                <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6366f1;">Course Fee</p>
+                <p style="margin:0;font-size:20px;font-weight:900;color:#102a83;">${coursePrice}</p>
+              </td>` : '<td style="background:#f0fdf4;border-radius:10px;padding:16px 20px;text-align:center;width:48%;"><p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#16a34a;">Course Fee</p><p style="margin:0;font-size:20px;font-weight:900;color:#15803d;">FREE</p></td>'}
+              ${courseDuration ? `<td style="width:4%;"></td><td style="background:#fef9f0;border-radius:10px;padding:16px 20px;text-align:center;width:48%;">
+                <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#d97706;">Duration</p>
+                <p style="margin:0;font-size:20px;font-weight:900;color:#92400e;">${courseDuration}</p>
+              </td>` : ''}
+            </tr>
+          </table>
+          <div style="text-align:center;margin-bottom:28px;">
+            <a href="${CLIENT_URL}/services/ict-skilling" style="display:inline-block;background:#E11D48;color:#ffffff;font-size:15px;font-weight:700;padding:14px 36px;border-radius:10px;text-decoration:none;">
+              View Course &amp; Enrol Now
+            </a>
+          </div>
+          <p style="margin:0;font-size:13px;color:#94a3b8;text-align:center;">
+            Questions? Reply to this email or contact us at <a href="mailto:info@cyberteks-it.com" style="color:#102a83;text-decoration:none;">info@cyberteks-it.com</a>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#f8fafc;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 16px 16px;padding:20px 40px;">
+          <p style="margin:0;font-size:12px;color:#94a3b8;">
+            You're receiving this because you subscribed to CyberteksIT updates.<br/>
+            © ${new Date().getFullYear()} CyberteksIT · Kampala, Uganda &nbsp;|&nbsp;
+            <a href="${CLIENT_URL}" style="color:#102a83;text-decoration:none;">cyberteks-it.com</a>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>`;
+
+        for (const { email } of subscribers) {
+          sendEmail({
+            to:      email,
+            subject: `New Course: ${course.title} — Now Open for Enrolment`,
+            html,
+          }).catch(() => {});
+        }
+
+        console.log(`[courses] Published "${course.title}" — newsletter sent to ${subscribers.length} subscribers`);
+      })().catch(err => console.error('[courses] newsletter broadcast failed:', err));
+    }
 
     res.json({ course });
   } catch (err) {

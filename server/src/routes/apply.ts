@@ -396,14 +396,27 @@ router.patch('/:id/status', requireAuth, requireRole('ADMIN'), async (req: AuthR
 
       // ── Auto-enroll in courses (runs for both new AND existing users) ────────
       const programToCategoryKeywords: Record<string, string[]> = {
-        'Web Development':                          ['development', 'web'],
-        'Cybersecurity':                            ['security', 'cyber'],
-        'IT Support & Networking':                  ['networking', 'network', 'it support'],
-        'Data Analysis':                            ['data'],
+        'Web Development':                           ['development', 'web'],
+        'Cybersecurity':                             ['security', 'cyber'],
+        'IT Support & Networking':                   ['networking', 'network', 'it support'],
+        'Data Analysis':                             ['data'],
         'Artificial Intelligence & Machine Learning': ['ai', 'machine learning', 'artificial'],
-        'Graphic Design':                           ['design', 'graphic'],
-        'Digital Marketing':                        ['marketing', 'digital'],
-        'Free Bootcamp: Python Programming':        ['python'],
+        'Graphic Design':                            ['design', 'graphic'],
+        'Digital Marketing':                         ['marketing', 'digital'],
+        'Free Bootcamp: Python Programming':         ['python'],
+        // new programs
+        'Software Development (Full Stack)':         ['development', 'web', 'full stack'],
+        'Programming (Any Language)':                ['python', 'programming'],
+        'Cloud & DevOps':                            ['cloud', 'devops'],
+        'Cloud with Azure / AWS (Enterprise)':       ['cloud', 'azure', 'aws'],
+        'Business & Digital Skills':                 ['marketing', 'digital', 'business'],
+        'Automation & No-Code':                      ['automation'],
+        'Freelancing & Online Income':               ['freelancing'],
+        'Web Design':                                ['development', 'web'],
+        'Cyber Security':                            ['security', 'cyber'],
+        'Data Analytics':                            ['data'],
+        'Computer Networking':                       ['networking', 'network'],
+        'AI & Robotics':                             ['ai', 'machine learning'],
       };
 
       const keywords = application.programs.flatMap(
