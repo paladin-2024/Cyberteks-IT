@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { useAuth } from './context/AuthContext';
 
 // Layouts
@@ -91,6 +92,7 @@ function DashboardRedirect() {
 export default function App() {
   return (
     <BrowserRouter>
+      <Analytics />
       <Routes>
         {/* Marketing */}
         <Route element={<MarketingLayout />}>
