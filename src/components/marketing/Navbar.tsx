@@ -154,23 +154,23 @@ export default function Navbar() {
                             'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group',
                             isActive(href)
                               ? 'bg-[#023064] text-white'
-                              : 'hover:bg-[#023064]/8'
+                              : 'hover:bg-[#023064] hover:text-white'
                           )}
                         >
                           <div className={cn(
                             'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors',
                             isActive(href)
                               ? 'bg-white/20'
-                              : 'bg-[#023064]/8 group-hover:bg-[#023064]/20'
+                              : 'bg-[#023064]/8 group-hover:bg-white/20'
                           )}>
                             <Icon className={cn(
                               'w-4 h-4 transition-colors',
-                              isActive(href) ? 'text-white' : 'text-[#023064]/70 group-hover:text-[#023064]'
+                              isActive(href) ? 'text-white' : 'text-[#023064]/70 group-hover:text-white'
                             )} />
                           </div>
                           <span className={cn(
                             'text-[15px] font-medium transition-colors',
-                            isActive(href) ? 'text-white' : 'text-gray-600 group-hover:text-gray-900'
+                            isActive(href) ? 'text-white' : 'text-gray-600 group-hover:text-white'
                           )}>
                             {label}
                           </span>
