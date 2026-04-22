@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, Monitor, GraduationCap, Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
@@ -14,6 +14,10 @@ export default function Navbar() {
   const [servicesOpen, setServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { t } = useLanguage();
+  const { pathname } = useLocation();
+
+  const isActive = (to: string) =>
+    to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/');
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -100,12 +104,17 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-5">
+          <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className="text-base font-semibold text-gray-700 hover:text-[#023064] transition-colors"
+                className={cn(
+                  'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200',
+                  isActive(link.to)
+                    ? 'bg-[#023064] text-white'
+                    : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
+                )}
               >
                 {link.label}
               </Link>
@@ -117,13 +126,18 @@ export default function Navbar() {
               onMouseEnter={() => setServicesOpen(true)}
               onMouseLeave={() => setServicesOpen(false)}
             >
-              <button className="flex items-center gap-1 text-base font-semibold text-gray-700 hover:text-[#023064] transition-colors">
+              <button className={cn(
+                'flex items-center gap-1 text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200',
+                isActive('/services')
+                  ? 'bg-[#023064] text-white'
+                  : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
+              )}>
                 {t.nav.services}
                 <ChevronDown className={cn('w-3.5 h-3.5 transition-transform duration-150', servicesOpen && 'rotate-180')} />
               </button>
 
               <div className={cn(
-                'absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[460px] transition-all duration-150',
+                'absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[280px] transition-all duration-150',
                 servicesOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'
               )}>
                 <div className="bg-white border border-gray-100 rounded-2xl shadow-2xl overflow-hidden">
@@ -136,12 +150,28 @@ export default function Navbar() {
                         <Link
                           key={key}
                           to={href}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors group"
+                          className={cn(
+                            'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group',
+                            isActive(href)
+                              ? 'bg-[#023064] text-white'
+                              : 'hover:bg-[#023064]/8'
+                          )}
                         >
-                          <div className="w-8 h-8 rounded-lg bg-[#023064]/8 flex items-center justify-center shrink-0 group-hover:bg-[#023064]/15 transition-colors">
-                            <Icon className="w-4 h-4 text-[#023064]/60 group-hover:text-[#023064] transition-colors" />
+                          <div className={cn(
+                            'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors',
+                            isActive(href)
+                              ? 'bg-white/20'
+                              : 'bg-[#023064]/8 group-hover:bg-[#023064]/20'
+                          )}>
+                            <Icon className={cn(
+                              'w-4 h-4 transition-colors',
+                              isActive(href) ? 'text-white' : 'text-[#023064]/70 group-hover:text-[#023064]'
+                            )} />
                           </div>
-                          <span className="text-[15px] font-medium text-gray-600 group-hover:text-gray-900 transition-colors">
+                          <span className={cn(
+                            'text-[15px] font-medium transition-colors',
+                            isActive(href) ? 'text-white' : 'text-gray-600 group-hover:text-gray-900'
+                          )}>
                             {label}
                           </span>
                         </Link>
@@ -155,7 +185,12 @@ export default function Navbar() {
             {/* ICT Skilling link */}
             <Link
               to="/services/ict-skilling"
-              className="text-base font-semibold text-gray-700 hover:text-[#023064] transition-colors"
+              className={cn(
+                'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200',
+                isActive('/services/ict-skilling')
+                  ? 'bg-[#023064] text-white'
+                  : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
+              )}
             >
               ICT Skilling
             </Link>
@@ -163,7 +198,12 @@ export default function Navbar() {
             {/* Security link */}
             <Link
               to="/security-tips"
-              className="text-base font-semibold text-gray-700 hover:text-[#023064] transition-colors"
+              className={cn(
+                'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200',
+                isActive('/security-tips')
+                  ? 'bg-[#023064] text-white'
+                  : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
+              )}
             >
               Security
             </Link>
@@ -210,14 +250,19 @@ export default function Navbar() {
               key={link.to}
               to={link.to}
               onClick={() => setMobileOpen(false)}
-              className="block py-2.5 text-[15px] font-medium text-gray-600 hover:text-[#023064] transition-colors"
+              className={cn(
+                'block px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-200',
+                isActive(link.to)
+                  ? 'bg-[#023064] text-white'
+                  : 'text-gray-600 hover:bg-[#023064]/8 hover:text-[#023064]'
+              )}
             >
               {link.label}
             </Link>
           ))}
 
           <div className="pt-3 pb-2">
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.12em] mb-3">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.12em] mb-3 px-3">
               {t.nav.services}
             </p>
             {DROPDOWN_ITEMS.map(({ key, href, label }) => (
@@ -225,7 +270,12 @@ export default function Navbar() {
                 key={key}
                 to={href}
                 onClick={() => setMobileOpen(false)}
-                className="block py-2 pl-1 text-[15px] text-gray-500 hover:text-[#023064] transition-colors"
+                className={cn(
+                  'block px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-200',
+                  isActive(href)
+                    ? 'bg-[#023064] text-white'
+                    : 'text-gray-500 hover:bg-[#023064]/8 hover:text-[#023064]'
+                )}
               >
                 {label}
               </Link>
@@ -235,7 +285,12 @@ export default function Navbar() {
           <Link
             to="/services/ict-skilling"
             onClick={() => setMobileOpen(false)}
-            className="block py-2.5 text-[15px] font-medium text-gray-600 hover:text-[#023064] transition-colors"
+            className={cn(
+              'block px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-200',
+              isActive('/services/ict-skilling')
+                ? 'bg-[#023064] text-white'
+                : 'text-gray-600 hover:bg-[#023064]/8 hover:text-[#023064]'
+            )}
           >
             ICT Skilling
           </Link>
@@ -243,7 +298,12 @@ export default function Navbar() {
           <Link
             to="/security-tips"
             onClick={() => setMobileOpen(false)}
-            className="block py-2.5 text-[15px] font-medium text-gray-600 hover:text-[#023064] transition-colors"
+            className={cn(
+              'block px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-200',
+              isActive('/security-tips')
+                ? 'bg-[#023064] text-white'
+                : 'text-gray-600 hover:bg-[#023064]/8 hover:text-[#023064]'
+            )}
           >
             Security
           </Link>

@@ -110,19 +110,74 @@ const COURSE_CATALOGUE = [
     category: 'AI', coverImage: '/assets/ict-skilling-capacity-building.jpg',
     tags: ['Machine Learning', 'Python', 'TensorFlow', 'AI', 'Data Science'],
   },
+  {
+    title: 'Modern Networking',
+    slug:  'modern-networking',
+    description: 'Configure and manage enterprise-grade networks from the ground up. Learn routing, switching, VLANs, subnetting, SD-WAN, and cloud networking fundamentals. Build practical skills for managing real network infrastructure in any organisation.',
+    price: 1000000, duration: '2.5 months', level: 'Intermediate',
+    category: 'Networking', coverImage: '/assets/remote-it-support.jpg',
+    tags: ['Networking', 'Cisco', 'VLANs', 'SD-WAN', 'Infrastructure'],
+  },
+  {
+    title: 'Microsoft Office',
+    slug:  'microsoft-office',
+    description: 'Master the full Microsoft Office suite including Word, Excel, PowerPoint, and Outlook. Learn data management with spreadsheets, professional document creation, presentation design, and business communication skills used in every workplace.',
+    price: 650000, duration: '1.5 months', level: 'Beginner',
+    category: 'Productivity', coverImage: '/assets/ict-skilling-capacity-building.jpg',
+    tags: ['Microsoft Office', 'Excel', 'Word', 'PowerPoint', 'Productivity'],
+  },
+  {
+    title: 'Website Design',
+    slug:  'website-design',
+    description: 'Build modern, responsive websites from scratch using HTML, CSS, and JavaScript. Learn UI principles, mobile-first design, and how to publish live sites. You will complete a real portfolio website by the end of the course.',
+    price: 650000, duration: '2 months', level: 'Beginner',
+    category: 'Development', coverImage: '/assets/web design.jpeg',
+    tags: ['HTML', 'CSS', 'JavaScript', 'Responsive Design', 'Web'],
+  },
+  {
+    title: 'Software Development (Full Stack)',
+    slug:  'software-development-full-stack',
+    description: 'Build complete web and mobile applications end to end. Covers React, Node.js, Python, Flutter, databases, and REST APIs. Go from designing the frontend interface to deploying a production-ready backend, all in one comprehensive program.',
+    price: 2000000, duration: '3 months', level: 'Intermediate',
+    category: 'Development', coverImage: '/assets/web design.jpeg',
+    tags: ['React', 'Node.js', 'Flutter', 'Full Stack', 'APIs'],
+  },
+  {
+    title: 'Cloud & DevOps',
+    slug:  'cloud-devops',
+    description: 'Master cloud platforms and DevOps practices that power modern software teams. Learn AWS, Azure, Google Cloud, Docker, Kubernetes, and CI/CD pipelines. One of the most in-demand skill sets as organisations shift everything to the cloud.',
+    price: 2500000, duration: '3 months', level: 'Intermediate',
+    category: 'Cloud', coverImage: '/assets/remote-it-support.jpg',
+    tags: ['AWS', 'Azure', 'Docker', 'Kubernetes', 'CI/CD', 'DevOps'],
+  },
+  {
+    title: 'Business & Digital Skills',
+    slug:  'business-digital-skills',
+    description: 'Develop the digital and business skills needed in any modern workplace. Covers digital marketing, SEO, social media strategy, project management with Agile and Scrum, product thinking, and financial literacy for professionals and entrepreneurs.',
+    price: 1500000, duration: '2 months', level: 'Beginner',
+    category: 'Business', coverImage: '/assets/ict-skilling-capacity-building.jpg',
+    tags: ['Digital Marketing', 'SEO', 'Agile', 'Project Management', 'Business'],
+  },
+  {
+    title: 'Automation & No-Code',
+    slug:  'automation-no-code',
+    description: 'Build powerful applications and automated workflows without writing code. Learn Zapier, Bubble, Glide, AI automation tools, and chatbot development. Ideal for entrepreneurs and professionals who want to move fast and build smart.',
+    price: 1500000, duration: '2 months', level: 'Beginner',
+    category: 'Automation', coverImage: '/assets/ict-skilling-capacity-building.jpg',
+    tags: ['No-Code', 'Zapier', 'Bubble', 'Automation', 'Chatbots'],
+  },
+  {
+    title: 'Freelancing & Online Income',
+    slug:  'freelancing-online-income',
+    description: 'Launch your freelance career and start earning online with your tech skills. Learn how to set up profiles on Upwork and Fiverr, land your first clients, build your personal brand, price your services, and manage remote work professionally.',
+    price: 1000000, duration: '1 month', level: 'Beginner',
+    category: 'Career', coverImage: '/assets/ict-skilling-capacity-building.jpg',
+    tags: ['Freelancing', 'Upwork', 'Fiverr', 'Remote Work', 'Online Income'],
+  },
 ];
 
 async function main() {
   console.log('Seeding database...');
-
-  // ── Cleanup (children first to respect FK constraints) ────────────────────
-  await prisma.invoice.deleteMany({});
-  await prisma.enrollment.deleteMany({});
-  await prisma.application.deleteMany({});
-  await prisma.lesson.deleteMany({});
-  await prisma.section.deleteMany({});
-  await prisma.course.deleteMany({});
-  await prisma.user.deleteMany({});
 
   const adminPassword   = await bcrypt.hash('Admin@2026!', 12);
   const teacherPassword = await bcrypt.hash('Caleb/2006', 12);
@@ -155,7 +210,7 @@ async function main() {
     const c = COURSE_CATALOGUE[i];
     await prisma.course.upsert({
       where:  { slug: c.slug },
-      update: { price: c.price, duration: c.duration },
+      update: { title: c.title, description: c.description, price: c.price, duration: c.duration, level: c.level, category: c.category, coverImage: c.coverImage, tags: c.tags, status: CourseStatus.PUBLISHED },
       create: {
         ...c,
         teacherId: teachers[i % teachers.length].id,

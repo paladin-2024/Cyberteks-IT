@@ -3,7 +3,7 @@ import {
   Target, Eye, Shield, Zap, Users, MapPin, Phone,
   Mail, ArrowRight, CheckCircle2, Award, Globe, Heart,
   Lightbulb, Star, Monitor, GraduationCap, ChevronRight,
-  Linkedin, Twitter, Instagram,
+  Linkedin, Twitter, Instagram, Github,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -15,14 +15,53 @@ const TEAM = [
   {
     name: 'Keneth Sansa',
     role: 'Founder & CEO',
-    bio: 'Cybersecurity specialist and ICT entrepreneur with a passion for bridging Uganda\'s digital divide and delivering world-class technology solutions to African businesses.',
+    bio: 'Cybersecurity specialist and ICT entrepreneur with a passion for bridging Uganda\'s digital divide and delivering world-class technology solutions.',
     initials: 'KS',
     color: 'bg-[#023064]',
-    image: '/assets/kenneth-sansa.jpg',
+    image: '/assets/keneth.jpg',
     socials: [
-      { icon: Linkedin,  href: 'https://linkedin.com/in/kenneth-sansa',   label: 'LinkedIn' },
-      { icon: Twitter,   href: 'https://twitter.com/kennethsansa',        label: 'Twitter' },
-      { icon: Instagram, href: 'https://instagram.com/kennethsansa',      label: 'Instagram' },
+      { icon: Linkedin,  href: 'https://linkedin.com/in/kenneth-sansa', label: 'LinkedIn' },
+      { icon: Twitter,   href: 'https://twitter.com/kennethsansa',      label: 'Twitter' },
+      { icon: Instagram, href: 'https://instagram.com/kennethsansa',    label: 'Instagram' },
+    ],
+  },
+  {
+    name: 'Nzabanita Caleb',
+    role: 'Software Engineer',
+    bio: 'Full-stack software engineer with a passion for building innovative digital platforms and delivering seamless technology experiences for businesses and learners.',
+    initials: 'NC',
+    color: 'bg-[#E11D48]',
+    image: '/assets/caleb.jpg',
+    socials: [
+      { icon: Linkedin,  href: 'https://linkedin.com/in/nzabanita-caleb', label: 'LinkedIn' },
+      { icon: Github,    href: 'https://github.com/paladin-2024',                label: 'GitHub' },
+      { icon: Instagram, href: 'https://instagram.com/nzabanita',                                        label: 'Instagram' },
+    ],
+  },
+  {
+    name: 'Wenene Flava',
+    role: 'Company Secretary',
+    bio: 'Corporate governance professional with a passion for regulatory compliance and delivering the administrative excellence that keeps organisations running smoothly.',
+    initials: 'WF',
+    color: 'bg-[#023064]',
+    image: '/assets/wenene.jpg',
+    socials: [
+      { icon: Linkedin,  href: '#', label: 'LinkedIn' },
+      { icon: Twitter,   href: '#', label: 'Twitter' },
+      { icon: Instagram, href: '#', label: 'Instagram' },
+    ],
+  },
+  {
+    name: 'Yvette Itegwa',
+    role: 'Human Resources Manager',
+    bio: 'Human resources professional with a passion for nurturing talent and delivering a high-performance culture where every team member can grow and excel.',
+    initials: 'YI',
+    color: 'bg-[#023064]',
+    image: '/assets/yvette.jpg',
+    socials: [
+      { icon: Linkedin,  href: '#', label: 'LinkedIn' },
+      { icon: Twitter,   href: '#', label: 'Twitter' },
+      { icon: Instagram, href: '#', label: 'Instagram' },
     ],
   },
 ];
@@ -330,8 +369,8 @@ export default function AboutPage() {
       </section>
 
       {/* ── Team ── */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
+      <section className="py-12 sm:py-20 px-4 sm:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-[#E11D48] text-xs font-bold uppercase tracking-widest">{t.about.team.badge}</span>
             <h2 className="font-heading text-3xl font-bold text-gray-900 mt-2">{t.about.team.title}</h2>
@@ -339,47 +378,52 @@ export default function AboutPage() {
               {t.about.team.subtitle}
             </p>
           </div>
-          <div className="flex justify-center max-w-xs mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {TEAM.map((p) => (
               <div
                 key={p.name}
-                className="bg-gray-50 rounded-3xl p-8 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 w-full text-center"
+                className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col"
               >
-                {/* Photo */}
-                <div className="flex justify-center mb-5">
-                  <div className={`w-24 h-24 rounded-full overflow-hidden ${p.color} flex items-center justify-center shadow-md border-4 border-white ring-2 ring-gray-100`}>
-                    {p.image ? (
-                      <img
-                        src={p.image}
-                        alt={p.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; (e.currentTarget.nextSibling as HTMLElement).style.display = 'flex'; }}
-                      />
-                    ) : null}
-                    <span className={`text-white text-2xl font-heading font-bold ${p.image ? 'hidden' : 'flex'} items-center justify-center w-full h-full`}>
-                      {p.initials}
-                    </span>
+                {/* Photo — full-width portrait cover */}
+                <div className={`relative w-full aspect-[4/5] ${p.color} overflow-hidden`}>
+                  {p.image ? (
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).style.display = 'none';
+                        (e.currentTarget.nextSibling as HTMLElement).style.removeProperty('display');
+                      }}
+                    />
+                  ) : null}
+                  <div className={`w-full h-full items-center justify-center ${p.image ? 'hidden' : 'flex'}`}>
+                    <span className="text-white text-6xl font-heading font-bold">{p.initials}</span>
                   </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
 
-                <h3 className="font-heading text-xl font-bold text-gray-900">{p.name}</h3>
-                <p className="text-[#E11D48] text-xs font-bold uppercase tracking-wide mt-1 mb-3">{p.role}</p>
-                <p className="text-sm text-gray-600 leading-relaxed mb-5">{p.bio}</p>
+                {/* Info */}
+                <div className="px-6 py-5 text-center flex flex-col flex-1">
+                  <h3 className="font-heading text-lg font-bold text-gray-900 leading-tight">{p.name}</h3>
+                  <p className="text-[#E11D48] text-xs font-bold uppercase tracking-widest mt-1 mb-3">{p.role}</p>
+                  <p className="text-sm text-gray-500 leading-relaxed flex-1">{p.bio}</p>
 
-                {/* Socials */}
-                <div className="flex items-center justify-center gap-2">
-                  {p.socials.map(({ icon: Icon, href, label }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                      className="w-9 h-9 rounded-lg bg-[#023064]/8 border border-[#023064]/15 flex items-center justify-center hover:bg-[#023064] hover:border-[#023064] group transition-all"
-                    >
-                      <Icon className="w-4 h-4 text-[#023064] group-hover:text-white transition-colors" />
-                    </a>
-                  ))}
+                  {/* Divider + Socials */}
+                  <div className="border-t border-gray-100 mt-4 pt-4 flex items-center justify-center gap-3">
+                    {p.socials.map(({ icon: Icon, href, label }) => (
+                      <a
+                        key={label}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        className="w-9 h-9 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-[#023064] hover:border-[#023064] group/icon transition-all duration-200"
+                      >
+                        <Icon className="w-4 h-4 text-gray-500 group-hover/icon:text-white transition-colors" />
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
