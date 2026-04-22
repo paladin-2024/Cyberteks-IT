@@ -17,7 +17,9 @@ export default function Navbar() {
   const { pathname } = useLocation();
 
   const isActive = (to: string) =>
-    to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/');
+    to === '/'         ? pathname === '/' :
+    to === '/services' ? pathname === '/services' :
+    pathname === to || pathname.startsWith(to + '/');
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -110,7 +112,7 @@ export default function Navbar() {
                 key={link.to}
                 to={link.to}
                 className={cn(
-                  'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200',
+                  'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200 whitespace-nowrap',
                   isActive(link.to)
                     ? 'bg-[#023064] text-white'
                     : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
@@ -186,7 +188,7 @@ export default function Navbar() {
             <Link
               to="/services/ict-skilling"
               className={cn(
-                'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200',
+                'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200 whitespace-nowrap',
                 isActive('/services/ict-skilling')
                   ? 'bg-[#023064] text-white'
                   : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
@@ -199,7 +201,7 @@ export default function Navbar() {
             <Link
               to="/security-tips"
               className={cn(
-                'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200',
+                'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200 whitespace-nowrap',
                 isActive('/security-tips')
                   ? 'bg-[#023064] text-white'
                   : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
