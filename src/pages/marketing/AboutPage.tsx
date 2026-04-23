@@ -14,7 +14,7 @@ const VALUE_ICONS = [Shield, Heart, Star, Zap, Globe, Award];
 const TEAM = [
   {
     name: 'Keneth Sansa',
-    role: 'Founder & CEO',
+    role: 'CEO',
     bio: 'Cybersecurity specialist and ICT entrepreneur with a passion for bridging Uganda\'s digital divide and delivering world-class technology solutions.',
     initials: 'KS',
     color: 'bg-[#023064]',
@@ -53,7 +53,7 @@ const TEAM = [
   },
   {
     name: 'Yvette Itegwa',
-    role: 'Human Resources Manager',
+    role: 'HR & Administration',
     bio: 'Human resources professional with a passion for nurturing talent and delivering a high-performance culture where every team member can grow and excel.',
     initials: 'YI',
     color: 'bg-[#023064]',
