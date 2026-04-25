@@ -112,10 +112,10 @@ export default function Navbar() {
                 key={link.to}
                 to={link.to}
                 className={cn(
-                  'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200 whitespace-nowrap',
+                  'text-base font-semibold px-4 py-2 transition-colors duration-200 whitespace-nowrap',
                   isActive(link.to)
-                    ? 'bg-[#023064] text-white'
-                    : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
+                    ? 'text-[#E11D48]'
+                    : 'text-gray-700 hover:text-[#023064]'
                 )}
               >
                 {link.label}
@@ -129,10 +129,10 @@ export default function Navbar() {
               onMouseLeave={() => setServicesOpen(false)}
             >
               <button className={cn(
-                'flex items-center gap-1 text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200',
+                'flex items-center gap-1 text-base font-semibold px-4 py-2 transition-colors duration-200 whitespace-nowrap',
                 isActive('/services')
-                  ? 'bg-[#023064] text-white'
-                  : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
+                  ? 'text-[#E11D48]'
+                  : 'text-gray-700 hover:text-[#023064]'
               )}>
                 {t.nav.services}
                 <ChevronDown className={cn('w-3.5 h-3.5 transition-transform duration-150', servicesOpen && 'rotate-180')} />
@@ -152,27 +152,17 @@ export default function Navbar() {
                         <Link
                           key={key}
                           to={href}
-                          className={cn(
-                            'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group',
-                            isActive(href)
-                              ? 'bg-[#023064] text-white'
-                              : 'hover:bg-[#023064] hover:text-white'
-                          )}
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors duration-200 group hover:bg-gray-50"
                         >
-                          <div className={cn(
-                            'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors',
-                            isActive(href)
-                              ? 'bg-white/20'
-                              : 'bg-[#023064]/8 group-hover:bg-white/20'
-                          )}>
+                          <div className="w-8 h-8 rounded-lg bg-[#023064]/8 flex items-center justify-center shrink-0 group-hover:bg-[#023064]/15 transition-colors">
                             <Icon className={cn(
                               'w-4 h-4 transition-colors',
-                              isActive(href) ? 'text-white' : 'text-[#023064]/70 group-hover:text-white'
+                              isActive(href) ? 'text-[#E11D48]' : 'text-[#023064]/70 group-hover:text-[#023064]'
                             )} />
                           </div>
                           <span className={cn(
                             'text-[15px] font-medium transition-colors',
-                            isActive(href) ? 'text-white' : 'text-gray-600 group-hover:text-white'
+                            isActive(href) ? 'text-[#E11D48] font-semibold' : 'text-gray-600 group-hover:text-gray-900'
                           )}>
                             {label}
                           </span>
@@ -190,8 +180,8 @@ export default function Navbar() {
               className={cn(
                 'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200 whitespace-nowrap',
                 isActive('/services/ict-skilling')
-                  ? 'bg-[#023064] text-white'
-                  : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
+                  ? 'text-[#E11D48]'
+                  : 'text-gray-700 hover:text-[#023064]'
               )}
             >
               ICT Skilling
@@ -203,8 +193,8 @@ export default function Navbar() {
               className={cn(
                 'text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200 whitespace-nowrap',
                 isActive('/security-tips')
-                  ? 'bg-[#023064] text-white'
-                  : 'text-gray-700 hover:bg-[#023064]/8 hover:text-[#023064]'
+                  ? 'text-[#E11D48]'
+                  : 'text-gray-700 hover:text-[#023064]'
               )}
             >
               Security
@@ -253,10 +243,10 @@ export default function Navbar() {
               to={link.to}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                'block px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-200',
+                'block px-3 py-2.5 text-[15px] font-medium transition-colors duration-200',
                 isActive(link.to)
-                  ? 'bg-[#023064] text-white'
-                  : 'text-gray-600 hover:bg-[#023064]/8 hover:text-[#023064]'
+                  ? 'text-[#E11D48]'
+                  : 'text-gray-600 hover:text-[#023064]'
               )}
             >
               {link.label}
@@ -273,10 +263,10 @@ export default function Navbar() {
                 to={href}
                 onClick={() => setMobileOpen(false)}
                 className={cn(
-                  'block px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-200',
+                  'block px-3 py-2.5 text-[15px] font-medium transition-colors duration-200',
                   isActive(href)
-                    ? 'bg-[#023064] text-white'
-                    : 'text-gray-500 hover:bg-[#023064]/8 hover:text-[#023064]'
+                    ? 'text-[#E11D48]'
+                    : 'text-gray-500 hover:text-[#023064]'
                 )}
               >
                 {label}
@@ -288,10 +278,10 @@ export default function Navbar() {
             to="/services/ict-skilling"
             onClick={() => setMobileOpen(false)}
             className={cn(
-              'block px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-200',
+              'block px-3 py-2.5 text-[15px] font-medium transition-colors duration-200',
               isActive('/services/ict-skilling')
-                ? 'bg-[#023064] text-white'
-                : 'text-gray-600 hover:bg-[#023064]/8 hover:text-[#023064]'
+                ? 'text-[#E11D48]'
+                : 'text-gray-600 hover:text-[#023064]'
             )}
           >
             ICT Skilling
@@ -301,10 +291,10 @@ export default function Navbar() {
             to="/security-tips"
             onClick={() => setMobileOpen(false)}
             className={cn(
-              'block px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-200',
+              'block px-3 py-2.5 text-[15px] font-medium transition-colors duration-200',
               isActive('/security-tips')
-                ? 'bg-[#023064] text-white'
-                : 'text-gray-600 hover:bg-[#023064]/8 hover:text-[#023064]'
+                ? 'text-[#E11D48]'
+                : 'text-gray-600 hover:text-[#023064]'
             )}
           >
             Security
